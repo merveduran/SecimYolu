@@ -1,0 +1,87 @@
+﻿@using System.Linq
+@using secimyolu.Models
+@{
+    Layout = null;
+    User curUser = Current.getUser ?? new User();
+    List<vwCarList> carList = Current.Context.vwCarList.Where(w => w.IsVoluntaryService == true && w.AddUserId == curUser.Id).ToList();
+}
+
+<h2 class="section-heading text-center">Araçlarım</h2>
+@if (carList.Count > 0)
+{
+    <table id="example" class="table table-bordered table-responsive display  dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>Araç Türü</th>
+                <th>Posta Kodu</th>
+                <th>Kalkış Şehir</th>
+                <th>Kalkış Ülke</th>
+                <th>Kalkış Tarih</th>
+                <th>Varış</th>
+                <th>Kontenjan</th>
+                <th style="width: 120px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in carList)
+            {
+                <tr>
+                    <td>@(item.CarType)</td>
+                    <td>@(item.PostalCode)</td>
+                    <td>@(item.CityName)</td>
+                    <td>@(item.CountryName)</td>
+                    <td>@(item.DepartureDate.Value.ToShortDateString()) @(item.DepartureHour)</td>
+                    <td>@(item.DestinationBox)</td>
+                    <td>@(item.PassengerCount) / @(item.Qutoa.ToString())</td>
+                    <td>
+                        <a href="#" style="font-size:20px;margin-right:0;" class="btn btn-info btn-xs" title="Yolcular" data-toggle="modal" data-target="#PassengerInfo" data-carid="@item.Id"><i class="fa fa-user"></i></a>
+                        <a href="@Url.Action("EditVoluntaryCar", "Home", new {Id = item.Id})" style="font-size: 20px; margin-right: 0;" class="btn btn-info btn-xs" title="Düzenle"><i class="fa fa-pencil"></i></a>
+                        <a href="#" style="font-size: 20px; margin-right: 0;" class="btn btn-danger btn-xs" title="Sil"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="modal fade" id="PassengerInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                    <h4 class="modal-title" id="">YOLCU BİLGİLERİ</h4>
+                </div>
+                <div class="modal-body" id="PasssengerArea">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $('#PassengerInfo').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var carid = button.data('carid');
+            var editUrl = '@Url.Action("GetPassengerInfo", "Home", new { Area = "" })';
+            $.ajax({
+                url: editUrl,
+                async: false,
+                data: 'Id=' + carid,
+                type: 'GET',
+                success: function (data) {
+                    $('#PasssengerArea').html(data);
+                }
+            });
+        });
+        $('#PassengerInfo').on('hidden.bs.modal', function (event) {
+            $('#PasssengerArea').html("");
+        });
+    </script>
+}
+else
+{
+    <div style="text-align:center;" class="alert alert-warning">
+        Kayıtlı aracınız  bulunmamaktadır.
+    </div>
+}
+

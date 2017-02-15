@@ -1,0 +1,229 @@
+﻿@using secimyolu.Models
+@{
+    ViewBag.Title = "ARAÇ EKLE";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+
+    List<Country> countryList = new List<Country>();
+    int UserType = (int)Current.getUser.UserTypeId;
+    if (UserType == Constants.USER_TYPE_BSKM)
+    {
+        List<int> avaibleCountryList = Current.Context.UserCountry.Where(f => f.UserId == Current.getUserId).Select(f => (int)f.CountryId).ToList();
+        countryList = Current.Context.Country.Where(f => avaibleCountryList.Contains(f.Id)).OrderBy(f => f.Name).ToList();
+    }
+    else
+    {
+        countryList = Current.Context.Country.OrderBy(f => f.Name).ToList();
+    }
+}
+
+<script src="~/Scripts/jquery-ui.min.js"></script>
+<link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.ui.datepicker-tr.js"></script>
+
+<link href="~/Content/css/clockpicker.css" rel="stylesheet" />
+<script src="~/Scripts/clockpicker.js"></script>
+
+<style>
+    .LV_invalid {
+        color: red;
+    }
+</style>
+<form method="post" id="CarDefine" autocomplete="off">
+    <div class="page-group">
+        <div class="page-group-top">
+            <h3>@ViewBag.Title</h3>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="sel1" class="select-label">Araç Türü</label>
+                <select name="newCar.CarTypeId" class="text-input floating-label" id="carType">
+                    <option value="-1">Seçiniz</option>
+                    @foreach (var item in Current.Context.CarType.Where(f => f.Status == true).OrderBy(f => f.Name))
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <script type="text/javascript">
+                var carType = new LiveValidation('carType', { onlyOnSubmit: 'true', onValid: function () { } });
+                carType.add(Validate.Exclusion, { within: ['-1'], failureMessage: 'Araç türünü seçiniz!' });
+            </script>
+
+            <div class="paper-input">
+                
+                <input type="text" class="text-input floating-label" tabindex="1" maxlength="20" name="newCar.PostalCode" id="PostalCode">
+                <label for="PostalCode">Kalkış Şehir Posta Kodu</label>
+            </div>
+            <script type="text/javascript">
+                var PostalCode = new LiveValidation('PostalCode', { onlyOnSubmit: 'true', onValid: function () { } });
+                PostalCode.add(Validate.Presence, { failureMessage: 'Kalkış şehir posta kodunu giriniz!' });
+            </script>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="CountryId" class="select-label">Kalkış Ülke</label>
+                <select name="newCar.CountryId" id="CountryId" onchange="GetDestination(); return false;" class="text-input floating-label">
+                    <option value="-1">Seçiniz</option>
+                    @foreach (var item in countryList)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <script type="text/javascript">
+                var country = new LiveValidation('CountryId', { onlyOnSubmit: 'true', onValid: function () { } });
+                country.add(Validate.Exclusion, { within: ['-1'], failureMessage: 'Kalkış ülke seçiniz!' });
+            </script>
+
+            <div class="paper-input">
+                
+                <input type="text" class="text-input floating-label" maxlength="150" tabindex="2" name="newCar.CityName" id="CityName">
+<label for="CityName">Kalkış Şehir</label>
+            </div>
+            <script type="text/javascript">
+                var CityName = new LiveValidation('CityName', { onlyOnSubmit: 'true', onValid: function () { } });
+                CityName.add(Validate.Presence, { failureMessage: 'Kalkış şehir bilgisini giriniz!' });
+            </script>
+
+        </div>
+        <div class="col-md-12">
+            <div class="paper-input">
+                
+                <textarea class="text-input floating-label" tabindex="3" rows="3" id="Address" name="newCar.Address" maxlength="250"></textarea>
+<label for="Address">Kalkış Adres</label>
+            </div>
+
+            <script type="text/javascript">
+                var Address = new LiveValidation('Address', { onlyOnSubmit: 'true', onValid: function () { } });
+                Address.add(Validate.Presence, { failureMessage: 'Kalkış adres bilgisini giriniz!' });
+            </script>
+
+
+        </div>
+        <div class="col-md-6">
+
+            <div class="paper-input">
+               
+                <input type="text" class="text-input floating-label" id="departureDate" tabindex="4" name="newCar.DepartureDate">
+                <label for="departureDate">Kalkış Tarih</label>
+
+            </div>
+            <script type="text/javascript">
+                $('#departureDate').datepicker({
+                    autoclose: true
+                });
+                $.datepicker.setDefaults(
+                  $.extend(
+                    { 'dateFormat': 'dd/mm/yy' }
+                  )
+                );
+
+                var departureDate = new LiveValidation('departureDate', { onlyOnSubmit: 'true', onValid: function () { } });
+                departureDate.add(Validate.Presence, { failureMessage: 'Kalkış tarih bilgisini giriniz!' });
+
+            </script>
+
+            <div class="paper-input">
+                
+                <input type="text" class="text-input floating-label" tabindex="6" onkeypress="return isNumberKey(event)" maxlength="3" name="newCar.Qutoa" id="Quota">
+<label for="Quota">Araç Kontenjan</label>
+            </div>
+            <script type="text/javascript">
+                var Quota = new LiveValidation('Quota', { onlyOnSubmit: 'true', onValid: function () { } });
+                Quota.add(Validate.Presence, { failureMessage: 'Araç kontenjan bilgisini giriniz!' });
+            </script>
+
+            <div class="paper-input">
+              
+                <input type="text" class="text-input floating-label" maxlength="150" tabindex="7" name="newCar.ResponsibleName" id="ResponsibleName">
+  <label for="ResponsibleName">Sorumlu Ad Soyad</label>
+            </div>
+            <script type="text/javascript">
+                var ResponsibleName = new LiveValidation('ResponsibleName', { onlyOnSubmit: 'true', onValid: function () { } });
+                ResponsibleName.add(Validate.Presence, { failureMessage: 'Sorumlu bilgisini giriniz!' });
+            </script>
+
+        </div>
+        <div class="col-md-6">
+            <div class="paper-input">
+               
+                <input type="text" class="text-input floating-label hasPtTimeSelect" id="DepartureHour" tabindex="5" name="newCar.DepartureHour">
+ <label for="DepartureHour">Kalkış Saat</label>
+
+            </div>
+            <script type="text/javascript">
+                $('#DepartureHour').clockpicker({
+                    autoclose: 1
+                });
+
+                var DepartureHour = new LiveValidation('DepartureHour', { onlyOnSubmit: 'true', onValid: function () { } });
+                DepartureHour.add(Validate.Presence, { failureMessage: 'Kalkış saat bilgisini giriniz!' });
+            </script>
+            <div class="form-group">
+                <label for="Destination" class="select-label">Varış Noktası</label>
+                <select name="newCar.Destination" id="Destination"  class="text-input floating-label">
+                    <option value="-1">Seçiniz</option>
+                </select>
+            </div>
+
+            <script type="text/javascript">
+                var Destination = new LiveValidation('Destination', { onlyOnSubmit: 'true', onValid: function () { } });
+                Destination.add(Validate.Exclusion, { within: ['-1'], failureMessage: 'Varış noktası seçiniz!' });
+            </script>
+
+            <div class="paper-input">
+               
+                <input type="text" class="text-input floating-label" maxlength="150" tabindex="8" name="newCar.ResponsiblePhone" id="ResponsiblePhone">
+ <label for="ResponsiblePhone">Sorumlu Telefon Numarası</label>
+            </div>
+            <script type="text/javascript">
+                var ResponsiblePhone = new LiveValidation('ResponsiblePhone', { onlyOnSubmit: 'true', onValid: function () { } });
+                ResponsiblePhone.add(Validate.Presence, { failureMessage: 'Soumlu telefon numara bilgisini giriniz!' });
+            </script>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="paper-input">
+                
+                <textarea class="text-input floating-label" rows="3" id="Description" name="newCar.Description" tabindex="9" maxlength="250"></textarea>
+<label for="Description">Araç Hakkında Bilgi Notu</label>
+            </div>
+        </div>
+
+ <div class="col-md-12">
+<br />
+        <a href="javascript:void(0);" onclick="$('#CarDefine').submit();" class="btn btn-xl">Kaydet</a>
+</div>
+        <div class="clearfix"></div>
+    </div>
+
+</form>
+<script type="text/javascript">
+
+    function GetDestination() {
+        var CountryId = $('#CountryId').val();
+        var ActionUrl = '@Url.Action("GetDestinations", "Management", new { area = "" })';
+        $.ajax({
+            url: ActionUrl,
+            data: {CountryId:CountryId,SelVal:-1},
+            type: 'GET',
+            success: function (data) {
+                $('#Destination').empty();
+                $('#Destination').append(data);
+                
+            }
+        });
+
+    }
+
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode >= 48 && charCode <= 57)
+            return true;
+        return false;
+    }
+</script>

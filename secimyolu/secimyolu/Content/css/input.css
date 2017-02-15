@@ -1,0 +1,144 @@
+.paper-input{
+  position: relative;
+  /*width: 300px;*/
+    margin: 32px 0 0;
+}
+
+.paper-input span.desc{
+    color: #a1a1a1;
+    font-style: italic;
+    height: 35px;
+    position: absolute;
+    top: 50px;
+    font-size: 12px;
+    opacity:0;
+    z-index:1;
+}
+
+.paper-input:after {
+    content:'';
+    display:block;
+    clear: both;
+}
+textarea{
+  resize: none;
+  overflow: auto;
+}
+
+.text-input{
+  display: block;
+  width: 100%;
+  margin: 0;
+  background:none;
+  border: none;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  font-size: 16px;
+  color:#646464;
+  padding: 10px;
+    background-color: #fff !important;
+}
+
+
+.text-input[disabled]{
+  border-bottom: 1px dashed rgba(0,0,0, 0.12);
+  background-color: transparent;
+  color: #aaa;
+}
+
+.text-input ~ label{
+    /*background-color: #29f;
+    left: 0;
+    padding: 0 14px;
+    pointer-events: none;
+    position: absolute;
+    width: auto;*/
+    
+    font-size: 16px;
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    padding: 0 14px;
+    font-weight: 400;
+    top: 14px;
+    bottom: 0px;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.text-input.floating-label ~label{
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+.text-input:focus {
+  outline: none;
+}
+
+.text-input ~ label:after{
+  content: '';
+  background-color: #29f;
+  height: 2px;
+  width: 10px;
+  bottom: -5px;
+  left: 45%;
+  visibility: hidden;
+  position: absolute;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+.text-input:focus ~ label:after{
+  visibility: visible;
+  width: 100%;
+  left: 0;
+}
+
+.text-input.dirty ~ label{
+  visibility: hidden;
+}
+
+
+.text-input.floating-label.dirty ~ label{
+    color: #29f;
+    font-size: 14px;
+    top: -21px;
+    visibility: visible;
+    padding: 0 !important;
+    /*background-color: #999;*/
+  
+}
+
+.text-input.floating-label:invalid ~ label{
+  top: -10px;
+  font-size: 12px;
+  color: #d34336;
+}
+
+.error{
+  float: left;
+  margin-top: 3px;
+  color: #d34336;
+  font-size: 12px;
+  visibility: hidden;
+}
+
+.text-input:invalid ~label:after{
+  background-color: #d34336;
+}
+
+.text-input:invalid ~.error{
+  visibility: visible;
+}
+
+
+.text-input:invalid,.invalid_field,.validateWarnEmpty{
+    border-top: 1px solid #ec5050;
+    bottom: -17px;
+    color: #ec5050;
+    display: block;
+    font-size: 12px;
+    position: absolute;
+    width: 100%;
+}

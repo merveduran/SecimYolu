@@ -1,0 +1,49 @@
+﻿@using secimyolu.Models
+@model int
+@{
+    ViewBag.Title = "Kullanıcı Yetkileri";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+
+    List<int> RightsList = Current.Context.UserRight.Where(d => d.UserId == Model).Select(d => (int)d.RightId).ToList();
+}
+<link href="~/Content/css/checkboxes.css" rel="stylesheet" />
+<link href="~/Content/css/style.css" rel="stylesheet" />
+<form method="post" id="RightForm">
+    <input type="hidden" name="UserId" value="@(Model!=null ? Model : -1)"/>
+    <div class="page-group">
+        <div class="page-group-top">
+            <h3>Yetkiler</h3>
+        </div>
+        <div class="col-md-6">
+            <div class="scroller" data-height="470px">
+                @foreach (var item in Current.Context.Right.OrderBy(f => f.Name).ToList())
+                {
+                    <div class="paper-checkbox">
+                        <label>
+                            <input type="checkbox" @(RightsList.Contains(item.Id) ? "checked" : "") name="RightIds" value="@item.Id" id="r@(item.Id)"><span class="check"></span>
+                        </label>
+                        <label for="r@(item.Id)">@item.Name</label>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <a href="javascript:void(0);" onclick=" $('#RightForm').submit(); " class="btn btn-success pull-left">Kaydet</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</form>
+    <script type="text/javascript">
+        //scroller
+        if (document.getElementsByClassName('scroller').length > 0) {
+            var dHeight = $('.scroller').attr("data-height");
+            if (dHeight == null) {
+                dHeight = '250px';
+            }
+            if ($('.scroller').height() > 250) {
+                $('.scroller').slimScroll({
+                    height: dHeight
+                });
+            }
+        }
+    </script>

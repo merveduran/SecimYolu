@@ -1,0 +1,705 @@
+﻿@using secimyolu.Models
+@{
+    ViewBag.Title = "Part 1 - Facebook Login Button";
+    Layout = null;
+    var isDefaultTab = TempData["IsDefaultTab"] != null ? (int)TempData["IsDefaultTab"] : 1;
+    var carServiceInfo = TempData["voluntaryCar"] != null ? (CarService)TempData["voluntaryCar"] : new CarService();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Seçim Yolu</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,100,300,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBJaUThIBbkhKjEpCG3r4e_j5g0IAwy9NI&sensor=false&libraries=places&language=en"></script>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.ui.datepicker-tr.js"></script>
+    <script src="~/Scripts/livevalidation_standalone.js"></script>
+
+    <link href="~/Content/css/clockpicker.css" rel="stylesheet" />
+    <script src="~/Scripts/clockpicker.js"></script>
+
+
+    <script src="~/Content/js/utils.js"></script>
+    <link href="~/Content/css/input.css" rel="stylesheet" />
+    <script src="~/Content/js/input.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () { $("form").attr("autocomplete", "off"); });
+        var validationArray = new Array();
+    </script>
+    <style>
+        .LV_validation_message {
+            color: red;
+        }
+    </style>
+</head>
+@{
+    List<secimyolu.Models.vwServicePassenger> myReservation = ViewBag.MyReservation != null ? ViewBag.MyReservation : new List<secimyolu.Models.vwServicePassenger>();
+}
+<body id="page-top" class="index">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top"><img src="~/Content/img/logo.png" /></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#hakkinda">Hakkında</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#arama" onclick="ShowSearchCarTab();">İlan Ara</a>
+                    </li>
+                    <li id="linkReservation">
+                        <a class="page-scroll" href="#rezervasyonlar" onclick="ShowSearchCarTab();">REZERVASYONLAR</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#aracGir" onclick="ShowVoluntaryCarTab();">ARAÇ GİR</a>
+                    </li>
+                    <li id="linkLogin">
+                        <a class="page-scroll" href="javascript:void(0);" onclick="openLoginModal(); return false;">ÜYE GİRİŞİ</a>
+                    </li>
+                    @if (secimyolu.Models.Current.isLogon && (secimyolu.Models.Current.getUser.UserTypeId == secimyolu.Models.Constants.USER_TYPE_YSKM || secimyolu.Models.Current.getUser.UserTypeId == secimyolu.Models.Constants.USER_TYPE_BSKM))
+                    {
+                        <li>
+                            <a class="page-scroll" href="@Url.Action("CarList","Management")">ARAÇLAR</a>
+                        </li>
+                    }
+                    @if (secimyolu.Models.Current.isLogon && secimyolu.Models.Current.getUser.UserTypeId == secimyolu.Models.Constants.USER_TYPE_YSKM)
+                    {
+                        <li>
+                            <a class="page-scroll" href="@Url.Action("Index","User")">KULLANICILAR</a>
+                        </li>
+                    }
+                    <li id="linkProfile">
+                        <a class="page-scroll" href="@Url.Action("Edit","Account")">PROFİL</a>
+                    </li>
+                    <li id="linkLogout">
+                        <a class="page-scroll" href="@Url.Action("Logout","Account")">ÇIKIŞ</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-heading">OYUNUZU KULLANABİLMEK İÇİN SİZİ SANDIĞA GÖTÜRECEK ARAÇ BURADA</div>
+                <!--<div class="intro-lead-in" style="margin-left:0px !important; width:100% !important;">Seçmenimizi sandığa taşıyoruz. 18 ülkede vatandaşlarımız seçim için ayarlanmış araçlarımızın bilgisine buradan ulaşabilir. </div>-->
+                <a href="#arama" onclick="ShowSearchCarTab();" class="page-scroll btn btn-xl"><i class="fa fa-search" style="font-size: 35px; margin-right: 15px;"></i><span style="position: relative; top: -4px;">SEÇİM OTOBÜSÜ ARA</span></a>
+                <a href="#aracGir" onclick="ShowVoluntaryCarTab();" class="page-scroll btn btn-xl"><i class="fa fa-car" style="font-size: 35px; margin-right: 15px;"></i><span style="position: relative; top: -4px;">GÖNÜLLÜ ARAÇ GİR</span></a>
+            </div>
+        </div>
+    </header>
+    <section id="hakkinda">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="section-heading">SİSTEM NASIL İŞLİYOR?</h2>
+                    <p class="section-subheading text-muted fp17">Yurtdışında seçmenimizin sandığa ulaşımını sağlamak amacı ile AKPARTi olarak yenilikler üretmeye devam ediyoruz.</p>
+                    <p class="section-subheading text-muted fp17">
+                        Seçim yolu sitemiz ile her bir Bölge Seçim Koordinasyon Merkezimiz tarafından seçmeni sandığa ulaştırmak için belirlenmiş araçların bilgisi burada yayınlanmaktadır.
+                    </p>
+                    <p class="section-subheading text-muted fp17">
+                        Bu sayfada,
+                    </p>
+                    <p class="section-subheading text-muted fp17">
+                        <ul>
+                            <li class="text-muted fp17">Size en yakın seçim otobüsü/aracı bilgisine ulaşılabilir,</li>
+                            <li class="text-muted fp17">Gitmeyi planladığınız tarihleri ve yeri seçebilir,</li>
+                            <li class="text-muted fp17">Kayıt oluşturup rezervasyon yapabilirsiniz. Sadece kendiniz değil sizinle birlikte gidecek kişiler için de yer ayırmanız mümkündür,</li>
+                            <li class="text-muted fp17">Rezervasyonunuzun onayı size e-posta ile bildirilecektir.</li>
+                        </ul>
+                    </p>
+                    <p class="section-subheading text-muted fp17">
+                        Ülkemizin 2023 hedeflerine adım adım yürüyüşünde yurtdışında yaşayan siz vatandaşlarımızın destekleri en büyük gurur kaynaklarımızdan biridir.
+                    </p>
+                    <p class="section-subheading text-muted fp17">
+                        Haydi Sandığa
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <ul class="nav nav-tabs" role="tablist">
+            <li id="tabIlanArama" role="presentation" class="active"><a href="#ilanarama" role="tab" data-toggle="tab" onclick="ShowSearchCarTab();">SEÇİM OTOBÜSÜ ARA </a></li>
+            <li id="tabIlanVerme" role="presentation"><a href="#ilanver" role="tab" data-toggle="tab" onclick="ShowVoluntaryCarTab();">GÖNÜLLÜ ARAÇ GİR </a></li>
+        </ul>
+    </div>
+    <div id="ilanarama">
+        <form method="post" action="/">
+            <section id="arama" class="bg-light-gray">
+                @{
+                    secimyolu.Models.QueryParameter qParam = ViewBag.QueryParameters != null ? ViewBag.QueryParameters : new secimyolu.Models.QueryParameter();
+                }
+                <div class="container">
+                    <h2 class="section-heading text-center">Araba / Otobüs arıyorum</h2>
+                    <form method="post" id="searchForm">
+                        <div class="row">
+                            <input type="text" style="display: none;" name="AllDate" value="false" id="AllDate" />
+                            <div class="col-md-6">
+                                <div class="paper-input">
+
+                                    <input type="text" class="text-input floating-label" name="PCode" id="PCode" value="@(qParam != null ? (qParam.PCode) : "")">
+                                    <label for="input_17_1">Bulunduğunuz Yerin Posta Kodu</label>
+                                    <span id="validPostalCode"></span>
+                                </div>
+                                <script type="text/javascript">
+                                    var postalVal = new LiveValidation('PCode',
+                                    { onlyOnSubmit: true, insertAfterWhatNode: 'validPostalCode', onValid: function () { } });
+                                    postalVal.add(Validate.Presence, { failureMessage: '*Posta kodunuzu giriniz!' });
+                                </script>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="paper-input">
+
+                                    <input type="text" class="text-input floating-label" name="depDate" id="departureDate" value="@(qParam != null && qParam.depDate != null ? qParam.depDate.ToString("dd/MM/yyyy").Replace(".", "/") : "")" />
+                                    <label for="input_17_1">Oy Kullanacağınız Tarih</label>
+                                </div>
+                                <span id="validdepartureDate"></span>
+                                <script type="text/javascript">
+                                    $('#departureDate')
+                                        .datepicker({
+                                            autoclose: true
+                                        });
+                                    $.datepicker.setDefaults(
+                                        $.extend(
+                                            { 'dateFormat': 'dd/MM/yy', minDate: 0 }
+                                        )
+                                    );
+                                </script>
+                                <script type="text/javascript">
+                                    var dateVal = new LiveValidation('departureDate',
+                                    { onlyOnSubmit: true, insertAfterWhatNode: 'validdepartureDate', onValid: function () { } });
+                                    dateVal.add(Validate.Presence, { failureMessage: '*Tarih seçiniz!' });
+                                </script>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="input_17_1" class="select-label">Ülke</label>
+                                    <select name="CountryId" id="Country" onchange="onChangeCountry(-1); return false;" class="text-input floating-label">
+                                        @Html.Raw(secimyolu.Models.Utilities.getCountryOptionList(qParam != null ? qParam.CountryId : -1))
+                                    </select>
+                                    <span id="validCountry"></span>
+                                    <script type="text/javascript">
+                                        function onChangeCountry(selVal) {
+                                            var cId = $('#Country').val();
+                                            $.ajax({
+                                                url: '@Url.Action("getDestinationList", "Home")',
+                                                type: 'get',
+                                                data: { CountryId: cId, selVal: selVal },
+                                                success: function (data) {
+                                                    $('#Dest').html(data);
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                    <script type="text/javascript">
+                                        var countryVal = new
+                                            LiveValidation('Country',
+                                            { onlyOnSubmit: true, insertAfterWhatNode: 'validCountry', onValid: function () { } });
+                                        countryVal.add(Validate.Exclusion, { within: ['-1'], failureMessage: '*Ülke seçiniz!' });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="input_17_1" class="select-label">Oy Kullanacağınız Konsolosluk</label>
+                                    <select name="Dest" id="Dest" class="text-input floating-label">
+                                        <option value="-1">Ülke seçiniz</option>
+                                    </select>
+                                    <span id="validDest"></span>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <script type="text/javascript">
+                                    var destVal = new LiveValidation('Dest',
+                                    { onlyOnSubmit: true, insertAfterWhatNode: 'validDest', onValid: function () { } });
+                                    destVal.add(Validate.Exclusion, { within: ['-1'], failureMessage: '*Konsolosluk seçiniz!' });
+                                </script>
+
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-12 text-center">
+                                <div id="success"></div>
+                                <button type="submit" class="btn btn-xl">Ara</button>
+                            </div>
+                        </div>
+                        @if (qParam != null && qParam.CountryId != -1)
+            {
+                            <script type="text/javascript">
+                                $(document)
+                                    .ready(function () {
+                                        onChangeCountry(@(qParam.Dest));
+                                    });
+                            </script>
+                        }
+                    </form>
+                </div>
+            </section>
+            @if (ViewBag.QueryResult != null)
+            {
+                <section id="sonuc" class="bg-light-gray" style="padding: 0px !important;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <h2 class="section-heading">ARAMA SONUCU</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="trip-search-results">
+                                    @{
+                                        List<secimyolu.Models.vwCarList> carList = ViewBag.QueryResult;
+                                    }
+                                    @if (carList == null || carList.Count <= 0)
+                                    {
+                                        if (!qParam.AllDate)
+                                        {
+                                            <div style="text-align: center;" class="alert alert-warning">
+                                                Kriterlere uygun araç bulunamadı. İleri tarihli araçları görmek için <span style="text-decoration: underline; font-weight: bold;" onclick="getAllService(); return false;">tıklayınız</span>.
+                                            </div>
+                                            <script type="text/javascript">
+                                                function getAllService() {
+                                                    $("#AllDate").attr("value", true);
+                                                    $('#searchForm').submit();
+                                                }
+                                            </script>
+                                        }
+                                        else
+                                        {
+                                            <div style="text-align: center;" class="alert alert-warning">
+                                                Kriterlere uygun araç bulunamadı.
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in carList)
+                                        {
+                                            <li class="trip relative">
+                                                <a class="trip-search-oneresult" rel="nofollow" href="javascript:void(0);">
+                                                    <article class="row">
+                                                        <div class="user col-md-2" style="margin-top: 51px">
+                                                            <i class="fa fa-car" style="font-size 60px;"></i>
+                                                        </div>
+                                                        <div class="description col-md-4">
+                                                            <h3 class="time light-gray">@(item.DepartureDate != null ? ((DateTime)item.DepartureDate).ToString("dd/MM/yyyy") : "-") - @(item.DepartureHour ?? "-")</h3>
+                                                            <h3 class="fromto">
+                                                                <span class="from trip-roads-stop">KALKIŞ YERİ</span>
+                                                                <dl title="" class="car-type">
+                                                                    <strong>@(item.CityName ?? "-") @(item.PostalCode ?? "-") <i class="fa fa-map-marker" title="Adresi haritada görmek için tıklayınız." onclick="window.open('https://www.google.com/maps/place/@(item.PostalCode + "+" + @item.CityName)', '_blank');"></i></strong>
+                                                                    <br />
+                                                                    <dt>@(item.Address ?? "-")</dt>
+                                                                </dl>
+                                                            </h3>
+                                                            <h3 class="fromto">
+                                                                <span class="from trip-roads-stop">KONSOLOSLUK</span>
+                                                                <dl title="" class="car-type">
+                                                                    <dt>@(item.DestinationBox)</dt>
+                                                                </dl>
+                                                            </h3>
+                                                        </div>
+                                                        <div class="description col-md-4">
+                                                            <div class="mt25 ">
+                                                                <i class="fa fa-mobile"></i> @(item.ResponsiblePhone ?? "-")
+                                                            </div>
+                                                            <i class="fa fa-user"></i><strong> @(item.ResponsibleName ?? "-")</strong>
+                                                            <div class="clearfix"></div>
+                                                            <span>Detaylı bilgi ve rezervasyon için arayabilirsiniz.</span>
+                                                        </div>
+                                                        <div class="offer col-md-2 align-right">
+                                                            <div class="availability">
+                                                                @{
+                                                                    DateTime sDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                                                                }
+                                                                @if (item.PassengerCount >= item.Qutoa)
+                                                                {
+                                                                    <a href="#" class="btn btn-danger btn-lg disabled" role="button">Dolu</a>
+                                                                }
+                                                                else if (item.DepartureDate >= sDate)
+                                                                {
+                                                                    <strong>@(item.PassengerCount)/@(item.Qutoa)</strong>
+                                                                    if (myReservation != null && myReservation.Count > 0 && myReservation.Count(d => d.ServiceId == item.Id) > 0)
+                                                                    {
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div>
+                                                                            <button onclick="makeReservation(@item.Id); return false;" class="btn btn-success">Rezervasyon</button>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </article>
+                                                </a>
+                                            </li>
+                                                                        }
+                                                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                                                                    }
+            @if (secimyolu.Models.Current.isLogon && secimyolu.Models.Current.getUser.UserTypeId == secimyolu.Models.Constants.USER_TYPE_GUEST)
+            {
+                <section id="rezervasyonlar">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+                                <h2 class="section-heading">Rezervasyonlar</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="trip-search-results">
+                                    @if (myReservation == null || myReservation.Count <= 0)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in myReservation.OrderByDescending(d => d.DepartureDate))
+                                        {
+                                            <li class="trip relative">
+                                                <a class="trip-search-oneresult" rel="nofollow" href="javascript:void(0);">
+                                                    <article class="row">
+                                                        <div class="user col-md-2" style="margin-top: 51px">
+                                                            <i class="fa fa-car" style="font-size 60px;"></i>
+                                                        </div>
+                                                        <div class="description col-md-4">
+                                                            <h3 class="time light-gray">@(item.DepartureDate != null ? ((DateTime)item.DepartureDate).ToString("dd/MM/yyyy") : "-") - @(item.DepartureHour ?? "-")</h3>
+                                                            <h3 class="fromto">
+                                                                <span class="from trip-roads-stop">KALKIŞ YERİ</span>
+                                                                <dl title="Rahat araç" class="car-type">
+                                                                    <dt>@(item.Address ?? "-")</dt>
+                                                                </dl>
+                                                            </h3>
+                                                            <h3 class="fromto">
+                                                                <span class="from trip-roads-stop">KONSOLOSLUK</span>
+                                                                <dl title="" class="car-type">
+                                                                    <dt>@(item.DestinationBox)</dt>
+                                                                </dl>
+                                                            </h3>
+                                                            <strong>@(item.CityName ?? "-")-@(item.PostalCode ?? "-")</strong>
+                                                        </div>
+                                                        <div class="description col-md-4">
+                                                            <div class="mt25 ">
+                                                                <i class="fa fa-mobile"></i> @(item.ResponsiblePhone ?? "-")
+                                                            </div>
+                                                            <i class="fa fa-user"></i><strong> @(item.ResponsibleName ?? "-")</strong>
+                                                        </div>
+                                                        <div class="offer col-md-2 align-right">
+                                                            <div class="availability">
+                                                                <div class="description">
+                                                                    <h3 class="time light-gray">Yolcu Sayısı: @(item.PassengerCount)</h3>
+                                                                </div>
+                                                                @if (item.ServiceStatus == 0)
+                                                                {
+                                                                    <strong>Servis iptal edildi</strong>
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (item.DepartureDate >= DateTime.Now)
+                                                                    {
+                                                                        <div>
+                                                                            <button onclick="makeReservation(@item.ServiceId); return false;" class="btn btn-success">Düzenle</button>
+                                                                            <button class="btn btn-danger" onclick="deletePassenger('@item.ServiceId');return false;">İptal</button>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </article>
+                                                </a>
+                                            </li>
+                                        }
+                                        <div class="modal fade" id="deletePassenger" tabindex="-1" role="dialog" aria-labelledby="AddPassengerLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content" style="z-index: 9999 !important">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                                                        <h4 class="modal-title" id="publicationTitle">REZERVASYON İPTAL</h4>
+                                                    </div>
+                                                    <br />
+                                                    <form method="POST" action="@Url.Action("CancelReservation", "Home")" id="FormDeletePassenger">
+                                                        <input type="hidden" style="display: none" name="ServiceId" id="DeleteButton" />
+                                                    </form>
+                                                    <div class="alert alert-danger">
+                                                        Rezervasyonunuzu iptal etmek istediğinize emin misiniz?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                                        <button type="button" onclick="$('#FormDeletePassenger').submit(); return false;" class="btn btn-primary" name="operation" value="SaveManagementItem">Sil</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script type="text/javascript">
+                                            function deletePassenger(SpId) {
+                                                jQuery.noConflict();
+                                                (function ($) {
+                                                    $('#deletePassenger').modal('show');
+                                                    $("#DeleteButton").val(SpId);
+                                                })(jQuery);
+                                            }
+                                        </script>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+        </form>
+    </div>
+    <div id="ilanver" style="position: absolute; left: -100%">
+        <section id="araclarim">
+            <div class="container">
+                @{
+                    Html.RenderPartial("UserCarList");
+                }
+            </div>
+        </section>
+        <section id="aracGir" class="bg-light-gray">
+            <div class="container" id="aracGirContainer">
+                @{
+                    Html.RenderPartial("AddVoluntaryCar", carServiceInfo);
+                }
+            </div>
+        </section>
+    </div>
+    <footer>
+        <div class="container">
+            <a href="http://www.akyskm.com" target="_blank">AKPARTi Yurtdışı Seçim ve Koordinasyon Merkezi</a> <span class="copyright">©Copyright 2015</span>
+        </div>
+    </footer>
+    <!-- jQuery -->
+    <script src="~/Content/js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="~/Content/js/classie.js"></script>
+    <script src="~/Content/js/cbpAnimatedHeader.js"></script>
+    <!-- Contact Form JavaScript -->
+    <script src="~/Content/js/jqBootstrapValidation.js"></script>
+    @*<script src="~/Content/js/contact_me.js"></script>*@
+    <!-- Custom Theme JavaScript -->
+    <script src="~/Content/js/sayfa.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    var j = jQuery.noConflict();
+</script>
+<script type="text/javascript">
+    function makeReservation(serviceId) {
+        debugger;
+        var isLogon = '@(secimyolu.Models.Current.isLogon)';
+        var hasPhone = '@(secimyolu.Models.Current.hasPhone)';
+        if (isLogon == 'False') {
+            openLoginModal();
+        }
+        else if (hasPhone == 'False') {
+            window.location.href = '@Url.Action("Edit","Account")';
+        }
+        else {
+            jQuery.noConflict();
+            (function ($) {
+                $('#reservationModal').modal('show');
+                $.ajax({
+                    url: '@Url.Action("Reservation", "Home")',
+                    type: 'get',
+                    data: { serviceId: serviceId },
+                    success: function (data) {
+                        $('#reservationModal').html(data);
+                    }
+                });
+            }
+            )(jQuery);
+        }
+    }
+</script>
+<!-- Modal -->
+<div class="modal fade" id="reservationModal" role="dialog">
+
+</div>
+
+@*Login İşlemleri*@
+<div class="modal fade" id="loginModal" role="dialog">
+
+</div>
+<script type="text/javascript">
+    function openLoginModal() {
+        jQuery.noConflict();
+        (function ($) {
+            $('#loginModal').modal('show');
+            $.ajax({
+                url: '@Url.Action("Index", "Account")',
+                data: { isPopup: true },
+                type: 'get',
+                success: function (data) {
+                    $('#loginModal').html(data);
+                }
+            });
+        }
+        )(jQuery);
+    }
+</script>
+
+<script type="text/javascript">
+    function loginAction() {
+        var email = $('#Email').val();
+        var password = $('#Password').val();
+        if (email != '' && password != '') {
+            $.ajax({
+                url: '@Url.Action("LoginAction", "Account")',
+                contentType: 'application/json',
+                data: { Email: email, Password: password },
+                async: true,
+                dataType: 'json',
+                type: 'GET',
+                success: function (data) {
+                    /*Alanlar setleniyor*/
+                    if (data.IsLogin == 1) {
+                        if (data.ReturnUrl != '') {
+                            window.location.href = data.ReturnUrl;
+                        }
+                        else
+                            location.reload();
+                    } else {
+                        $('#loginError').html(data.Message);
+                        $("#loginError").css("display", "block");
+                        $('#loginError').delay(5000).fadeOut()
+                    }
+                }
+            });
+        }
+        else {
+            $('#loginError').html('*Kullanıcı adı ve şifre giriniz!');
+            $("#loginError").css("display", "block");
+            $('#loginError').delay(3000).fadeOut();
+        }
+    }
+</script>
+
+@if (secimyolu.Models.Current.isLogon)
+{
+    <script type="text/javascript">
+        $('#linkLogin').hide();
+        $('#linkLogout').show();
+        $('#linkProfile').show();
+        $('#linkReservation').show();
+    </script>
+}
+else
+{
+    <script type="text/javascript">
+        $('#linkLogin').show();
+        $('#linkLogout').hide();
+        $('#linkProfile').hide();
+        $('#linkReservation').hide();
+    </script>
+}
+
+@if (TempData["ErrorType"] != null)
+{
+
+    <div id="FailMessageArea" style="font-weight: 400; background-color:#ec5050; color:#fff; opacity: 0;padding-left: 8px; position:absolute;left: 50%;top: 50%; z-index:999999; transform: translate(-50%, 25%); cursor:pointer" onclick="closeWarningArea('FailMessageArea');" class="ErrorField alert alert-danger">@(TempData["Message"] ?? null)<i style="display: inline-block; margin: 0 0 -7px 12px; opacity:.5;" class="icon-content-black clear-md"></i></div>
+
+    <div id="SuccessMessageArea" style="position:absolute;font-weight: 400; background-color:#5cb85c; color:#fff; opacity: 0; padding-left: 8px;left: 50%;top: 50%; z-index:999999; transform: translate(-50%, 25%);" class="ErrorField alert alert-success">@(TempData["Message"] ?? null)<i style="display: inline-block; margin: 0 0 -7px 12px; opacity:.5; cursor:pointer" onclick="closeWarningArea('SuccessMessageArea');" class="icon-content-black clear-md"></i></div>
+
+    if (TempData["ErrorType"].ToString() == "Fail")
+    {
+
+        <script type="text/javascript">
+            if (document.cookie.search("ShowError=0") < 0) {
+                $('#FailMessageArea').css('display', 'block');
+                $('#FailMessageArea').animate({ "top": 250, "opacity": "1" }, "slow");
+                document.cookie = "ShowError=0;path=/;";//ilk gosterimden sonra, back yapinca tekrar gostermemek icin
+            }
+        </script>
+    }
+    if (TempData["ErrorType"].ToString() == "Success")
+    {
+        <script type="text/javascript">
+            if (document.cookie.search("ShowError=0") < 0) {
+                $('#SuccessMessageArea').css('display', 'block');
+                $('#SuccessMessageArea').animate({ "top": 250, "opacity": "1" }, "slow");
+                document.cookie = "ShowError=0;path=/;";//ilk gosterimden sonra, back yapinca tekrar gostermemek icin
+            }
+        </script>
+    }
+
+}
+<script type="text/javascript">
+    function closeWarningArea(item) {
+        $('#' + item).animate({ "top": 230, "opacity": "0" }, "slow");
+        $('#' + item).css('display', 'none');
+    }
+
+    setTimeout(function () {
+        $('.ErrorField').animate({ "top": 230, "opacity": "0" }, "slow");
+        $('.ErrorField').fadeOut('fast');
+        //$('.ErrorField').css('display', 'none');
+    },
+        4000);
+</script>
+
+<script type="text/javascript">
+    function ShowVoluntaryCarTab() {
+        var isLogon = '@(secimyolu.Models.Current.isLogon)';
+        if (isLogon == 'False') {
+            openLoginModal();
+        }
+        $('#ilanver').removeAttr('style');
+        $("#tabIlanVerme").addClass("active");
+        $("#tabIlanArama").removeClass("active");
+        $('#ilanarama').hide();
+        $('#ilanver').show();
+    }
+    function ShowSearchCarTab() {
+        $("#tabIlanArama").addClass("active");
+        $("#tabIlanVerme").removeClass("active");
+        $('#ilanarama').show();
+        $('#ilanver').hide();
+    }
+</script>
+<script>
+    if ('@isDefaultTab' == '0') {
+        ShowVoluntaryCarTab();
+    }
+</script>

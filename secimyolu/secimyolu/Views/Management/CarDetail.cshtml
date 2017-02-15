@@ -1,0 +1,249 @@
+﻿@using secimyolu.Models;
+@model secimyolu.Models.vwCarList
+@{
+    ViewBag.Title = "ARAÇ DETAY BİLGİLERİ";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+    List<ServicePassenger> serviceList = Current.Context.ServicePassenger.Where(f => f.ServiceId == Model.Id).ToList();
+    int UserType = (int)Current.getUser.UserTypeId;
+}
+
+
+<div class="page-group">
+    <div class="page-group-top">
+        <h3>@ViewBag.Title</h3>
+    </div>
+    <table class="table table-condensed">
+        <tr>
+            <td>Kalkış Ülke</td>
+            <td>Kalkış Şehir</td>
+            <td>Kalkış Tarih</td>
+            <td>Kalkış Saat</td>
+            <td>Kontenjan</td>
+            <td>Varış Yeri</td>
+        </tr>
+        <tr>
+            <td>@(Model != null && Model.CountryName != null ? Model.CountryName : "")</td>
+            <td>@(Model != null && Model.CityName != null ? Model.CityName : "")</td>
+            <td>@(Model != null && Model.DepartureDate != null ? String.Format("{0: dd MM yyyy}", Model.DepartureDate) : "")</td>
+            <td>@(Model != null && Model.DepartureHour != null ? Model.DepartureHour : "")</td>
+            <td style="font-weight:bold">@(Model != null && Model.Qutoa != null ? Model.Qutoa : 0) \ @(Model != null && Model.PassengerCount != null ? Model.PassengerCount : 0)</td>
+            <td>@(Model != null && Model.DestinationBox != null ? Model.DestinationBox : "")</td>
+        </tr>
+    </table>
+</div>
+
+
+
+<div class="page-group">
+    <div class="page-group-top">
+        <h3>YOLCU LİSTESİ</h3>
+
+        @if ((Model != null && Model.Qutoa != null ? Model.Qutoa : 0) != (Model != null && Model.PassengerCount != null ? Model.PassengerCount : 0))
+        {
+            <a style="top:-39px;position: relative;" onclick="addPassenger('@Model.Id');return false;" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Yolcu Ekle</a>
+        }
+        else
+        {
+            <span style="top:-50px;position: relative;display:block" class="pull-right alert alert-danger"><strong>Uyar!</strong> Araç kontenjanı dolmuştur!</span>
+
+        }
+    </div>
+
+
+
+
+
+    @if (serviceList != null && serviceList.Count() > 0)
+    {
+        <table class="table table-condensed">
+            <tr>
+                <th>Ad Soyad</th>
+                <th>TCK</th>
+                <th>Telefon Numarası</th>
+                <th>Yolcu Sayısı</th>
+                <th>Güncelle</th>
+            </tr>
+            @foreach (var item in serviceList)
+            {
+                <tr>
+                    <td>@(item.Name != null ? item.Name : "") @(item.Surname != null ? item.Surname : "")</td>
+                    <td>@(item.TCK != null ? item.TCK : "")</td>
+                    <td>@(item.Phone != null ? item.Phone : "")</td>
+                    <td>@(item.PassengerCount != null ? item.PassengerCount.ToString() : "")</td>
+                    <td>
+                        @{
+
+                if (item.AddUserId == Current.getUserId || UserType == Constants.USER_TYPE_YSKM)
+                {
+                    <a onclick="editPassenger('@item.Id');return false;" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i></a> <a href="#" onclick="deletePassenger('@item.Id');return false;" class="btn btn-sm btn-danger" title="sil"><i class="fa fa-trash"></i></a>
+                }
+                else
+                {<div class="alert alert-info">
+                    <strong>Düzenleme Kapalı</strong>
+                </div>
+                }
+
+
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        <span>Gösterilecek yolcu bulunamadı!</span>
+    }
+
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    function addPassenger(serviceId) {
+        jQuery.noConflict();
+        (function ($) {
+            $('#AddPassenger').modal('show');
+            $('#AddPassengerArea').html("");
+
+            var addUrl = '@Url.Action("AddPassenger", "Management")';
+            $.ajax({
+                url: addUrl,
+                data: { CarId: serviceId },
+                type: 'GET',
+                success: function (data) {
+                    $('#AddPassengerArea').html(data);
+                }
+            });
+        })(jQuery);
+    }
+
+
+    function editPassenger(SpId) {
+        jQuery.noConflict();
+        (function ($) {
+            $('#editPassenger').modal('show');
+            $('#EditPassengerArea').html("");
+
+            var addUrl = '@Url.Action("EditPassenger", "Management")';
+            $.ajax({
+                url: addUrl,
+                data: { SpId: SpId },
+                type: 'GET',
+                success: function (data) {
+                    $('#EditPassengerArea').html(data);
+                }
+            });
+        })(jQuery);
+    }
+
+
+
+    function deletePassenger(SpId) {
+        jQuery.noConflict();
+        (function ($) {
+            $('#deletePassenger').modal('show');
+            // $('#DeleteButton').onclick('/Management/DeletePassenger?SpId=' + SpId);
+            $("#DeleteButton").val(SpId);
+        })(jQuery);
+    }
+
+   
+   
+</script>
+
+<form id="dummy" method="post"></form>
+<div class="modal fade" id="AddPassenger" tabindex="-1" role="dialog" aria-labelledby="AddPassengerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style=" z-index:9999 !important">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                <h4 class="modal-title" id="publicationTitle">YOLCU EKLEME İŞLEMLERİ</h4>
+            </div>
+            <form method="POST" action="@Url.Action("AddPassenger", "Management")" id="FormAddPassenger">
+                <div class="modal-body" id="AddPassengerArea">
+
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="DestroyValidation();">Kapat</button>
+                <button type="button" onclick="$('#FormAddPassenger').submit(); return false;"  class="btn btn-primary" name="operation" value="SaveManagementItem">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function DestroyValidation() {
+        PassengerName.disable();
+        PassengerSurname.disable();
+        PassengerPhone.disable();
+        PassengerTCK.disable();
+    }
+</script>
+
+
+
+<div class="modal fade" id="editPassenger" tabindex="-1" role="dialog" aria-labelledby="AddPassengerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style=" z-index:9999 !important">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                <h4 class="modal-title" id="publicationTitle">YOLCU GÜNCELLEME İŞLEMLERİ</h4>
+            </div>
+            <form method="POST" action="@Url.Action("EditPassenger", "Management")" id="FormEditPassenger">
+                <div class="modal-body" id="EditPassengerArea">
+
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="DestroyEditValidation();">Kapat</button>
+                <button type="button" onclick="$('#FormEditPassenger').submit(); return false;" class="btn btn-primary" name="operation" value="SaveManagementItem">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deletePassenger" tabindex="-1" role="dialog" aria-labelledby="AddPassengerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style=" z-index:9999 !important">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                <h4 class="modal-title" id="publicationTitle">YOLCU SİLME İŞLEMİ</h4>
+            </div>
+            <br />
+            <form method="POST" action="@Url.Action("DeletePassenger", "Management")" id="FormDeletePassenger">
+                <input type="hidden" style="display: none" name="SpId" id="DeleteButton" />
+            </form>
+            <div class="alert alert-danger">
+                <strong>Uyarı!</strong> Yolcu silme işleminden emin misiniz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" onclick="$('#FormDeletePassenger').submit(); return false;" class="btn btn-primary" name="operation" value="SaveManagementItem">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function DestroyEditValidation() {
+        editPassengerName.disable();
+        editPassengerSurname.disable();
+        editPassengerPhone.disable();
+        editPassengerTCK.disable();
+    }
+
+
+    $('#AddPassenger').on('hidden.bs.modal', function () {
+       DestroyValidation();
+    });
+
+    $('#editPassenger').on('hidden.bs.modal', function () {
+        DestroyEditValidation();
+    });
+</script>

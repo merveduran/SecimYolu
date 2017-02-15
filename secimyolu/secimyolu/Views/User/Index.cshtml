@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Kullanıcı Listesi";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+}
+<script src="~/Scripts/jquery.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/SYDatatable.js"></script>
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@*<script src="~/Content/js/dataTables.responsive.min.js"></script>
+<link href="~/Content/css/responsive.dataTables.min.css" rel="stylesheet" />*@
+
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large blue" href="@Url.Action("CreateUser", "User")" data-toggle="tooltip" data-placement="left" title="Kullanıcı Ekle"><i class="mdi-content-add"></i></a>
+</div>
+
+<div class="page-group">
+
+    <div class="page-group-top">
+        <h3>Kullanıcı Listesi</h3>
+<a style="top:-39px;position: relative;" href="@Url.Action("CreateUser","User")" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Kullanıcı Ekle</a>
+    </div>
+
+    <table id="example" class="table table-bordered table-responsive display">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Kullanıcı Adı</th>
+                <th>GSM</th>
+                <th>Tür</th>
+                <th>Durum</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Kullanıcı Adı</td>
+                <td>GSM</td>
+                <td>Tür</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+
+    </table>
+    <script type="text/javascript">
+        var filterList = ['Kullanıcı Adı', 'GSM', "Tür"];
+        $(document).ready(function () {
+            $('#example').dataTable({
+                "bServerSide": true,
+                "bFilter": true,
+                "bSortCellsTop": true,
+                "responsive": true,
+                "sAjaxSource": '@Url.Action("GetUserList", "User")',
+                "bProcessing": true,
+                "aoColumns": [{ "sName": "Id", "orderable": false },
+                    { "sName": "Name", "orderable": true },
+                    { "sName": "GSM", "orderable": true },
+                      { "sName": "UserTypeName", "orderable": true },
+                    { "sName": "Status", "orderable": false },
+                    { "sName": "", "orderable": false }
+                ],
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return '<a href="@Url.Action("EditUser","User")?Id=' + row[0] + '" style="font-size:20px;margin-right:10px;" title="Düzenle"><i class="fa fa-edit"></i></a><a style="font-size:20px;" href="@Url.Action("DeleteUser","User")?Id=' + row[0] + '">' + (row[4] == 'False' ? "<i title='Aktif Yap' class='fa fa-eye'></i>" : "<i title='Pasif Yap' class='fa fa-eye-slash'></i>") + '</a>';
+                        },
+                        "targets": 5
+                    },
+                         {
+                             "render": function (data, type, row) {
+                                 return '<a href="@Url.Action("EditUser", "User")?Id=' + row[0] + '">' + (row[1]) + '</a>';
+                             }, "targets": 1
+                         }, {
+                             "render": function (data, type, row) {
+                                 if (row[4]=='False') {
+                                     return 'Pasif';
+                                 } else {
+                                     return 'Aktif';
+                                 }
+                               
+                             }, "targets": 4
+                         },
+
+                    { "visible": false, "targets": [0] }
+                ],
+                "dom": '<"top"if>rt<"bottom"lp><"clear">',
+                "language": {
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "  _TOTAL_ Kayıttan _START_ - _END_ Arası Kayıtlar",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "sInfoFiltered": "( _MAX_ Kayıt İçerisinden Bulunan)",
+                    "sInfoPostFix": "",
+                    "sSearch": "",
+                    "sSearchPlaceholder": "Ülke ara",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#example thead td').each(function () {
+                if ($(this).text() != '' && $.inArray($(this).text(), filterList) >= 0) {
+                    var title = $('#example thead td').eq($(this).index()).text();
+                    $(this).html('<input class="filter-table-input" id="inp' + $(this).index() + '"  type="text" placeholder="' + title + '" />');
+                }
+            });
+
+            // DataTable
+            var table = $('#example').DataTable();
+
+            // Apply the search
+            table.columns().eq(0).each(function (colIdx) {
+                $('#inp' + colIdx).keyup(function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            });
+            $('#example_filter').empty();
+        });
+
+
+    </script>
+</div>

@@ -1,0 +1,29 @@
+﻿@model List<secimyolu.Models.vwServicePassenger>
+@if (Model.Count > 0)
+{
+    <table id="example" class="table table-bordered table-responsive display  dt-responsive nowrap">
+        <thead>
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Yolcu Sayısı</th>
+            <th>Telefon</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(item.ResponsibleName)</td>
+                <td>@(item.CarPassenger)</td>
+                <td>@(item.ResponsiblePhone)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div style="text-align: center;" class="alert alert-info">
+        Bu araç için yolcu kaydı bulunmamaktadır.
+    </div>
+}

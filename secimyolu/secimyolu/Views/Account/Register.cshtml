@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "Kullanıcı Ekle";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Seçim Yolu</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.ui.datepicker-tr.js"></script>
+    <script src="~/Scripts/livevalidation_standalone.js"></script>
+
+    <script src="~/Content/js/utils.js"></script>
+    <link href="~/Content/css/input.css" rel="stylesheet" />
+    <script src="~/Content/js/input.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () { $("form").attr("autocomplete", "off"); });
+        var validationArray = new Array();
+    </script>
+    <style>
+        .LV_validation_message {
+            color: red;
+        }
+    </style>
+</head>
+
+<body id="page-top" class="index" style="background-color: #3975B1 !important;">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="/"><img src="~/Content/img/logo.png" /></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="/">Ana Sayfa</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <!-- Header -->
+    <header style="text-align:left !important;">
+        <div class="container">
+            <div class="intro-text" style="padding-top:100px !important;">
+                <div class="page-group">
+                    <div class="page-group-top"><h3>Üye Ol</h3></div>
+                    <form method="POST" id="Register">
+                        <div class="col-md-6">
+                            <div class="paper-input">
+                                <input type="text" class="text-input floating-label" autocomplete="off" tabindex="1" id="name" name="Name" maxlength="50" aria-invalid="false">
+                                <label for="name">Ad*<span id="validName" class="gfield_required"></span></label>
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="paper-input">
+
+                                <input type="text" class="text-input floating-label" autocomplete="off" tabindex="2" id="surname" name="Surname" maxlength="50" aria-invalid="false">
+                                <label for="surname">Soyad*<span id="validSurname" class="gfield_required"></span></label>
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="paper-input">
+
+                                <input type="text" maxlength="11" autocomplete="off" class="text-input floating-label" onkeypress=" return isNumberKey(event) " id="tcno" name="TCNo" aria-invalid="false">
+                                <label for="surname">TC Kimlik No</label>
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="paper-input">
+                                <input style="display:none" type="text" name="fakeemailremembered" />
+                                <input type="text" class="text-input floating-label" autocomplete="off" tabindex="3" id="Email" name="Email" maxlength="50" aria-invalid="false">
+                                <label for="email">Eposta*<span id="validMail" class="gfield_required"></span></label>
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="paper-input">
+                                <input style="display:none" type="password" name="fakepasswordremembered" />
+                                <input type="password" class="text-input floating-label" autocomplete="off" tabindex="4" id="password" maxlength="50" name="Password" aria-invalid="false">
+                                <label for="password">Şifre*<span id="validPassword" class="gfield_required"></span></label>
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="paper-input">
+
+                                <input type="text" class="text-input floating-label" autocomplete="off" maxlength="15" tabindex="5" id="GSM" name="GSM" aria-invalid="false">
+                                <label for="GSM">GSM</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div id="dogrulamaDiv">
+                                <div class="pull-left">
+                                    <a href="#" onclick=" refreshdogrulama(); ">
+                                        Yenile
+                                    </a>
+                                </div>
+                                <img id="resim" style="float: left;" src="@Url.Action("Show", "Account")" alt=""/>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="paper-input">
+                                    <input class="floating-label text-input" autocomplete="off" maxlength="6" name="CaptchaCode" id=CaptchaCode />
+                                    <label for="CaptchaCode"><span id="validCaptcha" class="gfield_required"></span></label>
+                                </div>
+                            </div>
+                        <div class="clearfix"></div>
+                        <p>&nbsp;</p>
+                        <a href="javascript:void(0);" onclick=" $('#Register').submit(); " class="btn btn-xl">Kaydet</a>
+                        <div class="clearfix"></div>
+                        <label style="margin-top: 15px">Not: * Alanlar doldurulması zorunlu alanlardır.</label>
+
+                        
+                    </form>
+                    <script type="text/javascript">
+                        var sayac = 0;
+                        function refreshdogrulama() {
+                            $('#resim').attr('src', '@Url.Action("Show", "Account")?key=' + sayac);
+                            sayac++;
+                        }
+                    </script>
+                    <script type="text/javascript">
+
+                        function isNumberKey(evt) {
+                            var charCode = (evt.which) ? evt.which : event.keyCode;
+                            if (charCode >= 48 && charCode <= 57)
+                                return true;
+                            return false;
+                        }
+
+                        function checkEmailExist() {
+                            var email = $('#Email').val();
+                            var result = 'False';
+                            $.ajax({
+                                url: '@Url.Action("checkEmailExist", "Account")',
+                                data: { Email: email },
+                                type: 'get',
+                                async: false,
+                                success: function (data) {
+                                    result = data;
+                                }
+                            });
+                            if (result == 'True')
+                                return false;
+                            else
+                                return true;
+                        }
+
+                        var nameVal = new LiveValidation('name', { onlyOnSubmit: 'true', insertAfterWhatNode: 'validName', onValid: function () { } });
+                        nameVal.add(Validate.Presence, { failureMessage: 'Ad giriniz!' });
+
+                        var surname = new LiveValidation('surname', { onlyOnSubmit: 'true', insertAfterWhatNode: 'validSurname', onValid: function () { } });
+                        surname.add(Validate.Presence, { failureMessage: 'Soyad giriniz!' });
+
+                        var mail = new LiveValidation('Email', { onlyOnSubmit: 'true', insertAfterWhatNode: 'validMail', onValid: function () { } });
+                        mail.add(Validate.Email, { failureMessage: 'Geçerli eposta giriniz!' });
+                        mail.add(Validate.Presence, { failureMessage: 'Eposta giriniz!' });
+                        mail.add(Validate.Custom, { failureMessage: 'Girdiğiniz mail sistemde kayıtlıdır!', against: checkEmailExist });
+
+                        var pass = new LiveValidation('password', { onlyOnSubmit: 'true', insertAfterWhatNode: 'validPassword', onValid: function () { } });
+                        pass.add(Validate.Presence, { failureMessage: 'Şifre giriniz!' });
+
+                        var captchaControl = new LiveValidation('CaptchaCode', { onlyOnSubmit: 'true', insertAfterWhatNode: 'validCaptcha', onValid: function () { } });
+                        captchaControl.add(Validate.Presence, { failureMessage: 'Doğrulama kodunu giriniz!' });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- jQuery -->
+    <script src="~/Content/js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="~/Content/js/classie.js"></script>
+    <script src="~/Content/js/cbpAnimatedHeader.js"></script>
+    <!-- Contact Form JavaScript -->
+    <script src="~/Content/js/jqBootstrapValidation.js"></script>
+    @*<script src="~/Content/js/contact_me.js"></script>*@
+    <!-- Custom Theme JavaScript -->
+    <script src="~/Content/js/sayfa.js"></script>
+</body>
+</html>

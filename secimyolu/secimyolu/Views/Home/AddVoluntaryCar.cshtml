@@ -1,0 +1,441 @@
+﻿@using secimyolu.Models
+@model CarService
+@{
+    ViewBag.Title = "ARAÇ GİR";
+    Layout = null;//"~/Views/Shared/ManagerLayout.cshtml";
+    User curUser = Current.getUser ?? new User();
+}
+
+
+<h2 class="section-heading text-center">Araç Gİr</h2>
+@if (!secimyolu.Models.Current.isLogon)
+{
+    <div style="text-align: center;" class="alert alert-warning">
+        Araç girişi yapmak ve araçlarınızı görüntülemek için üye girişi yapmalısınız. Giriş yapmak için <span style="text-decoration: underline;  font-weight: bold;" onclick="openLoginModal(); return false;">tıklayınız</span>.
+    </div>
+}
+<form method="post" id="CarDefine" autocomplete="off" action="@Url.Action("AddVoluntaryCar")">
+    <input type="hidden" id="PostalCode" name="newCar.PostalCode" />
+    <input type="hidden" id="CityName" name="newCar.CityName" />
+    <input type="hidden" id="CountryCode" name="countryCode" />
+    <input type="hidden" id="MapLatitude" name="newCar.MapLatitude" value="@Model.MapLatitude"/>
+    <input type="hidden" id="MapLongitude" name="newCar.MapLongitude" value="@Model.MapLongitude"/>
+    <input type="hidden"  name="newCar.Id" value="@Model.Id" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="page-group">
+                <div class="col-md-12">
+                    <div class="paper-input">
+                        <textarea class="text-input floating-label" tabindex="3" rows="3" id="Address" name="newCar.Address" maxlength="250" placeholder="Konum">@Model.Address</textarea>
+                        <label for="Address">Kalkış Adres</label>
+                       
+                    </div>
+                    <script type="text/javascript">
+                        var Address = new LiveValidation('Address', { onlyOnSubmit: 'true', onValid: function () { } });
+                        Address.add(Validate.Presence, { failureMessage: 'Kalkış adres bilgisini giriniz!' });
+                    </script>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+
+                        <input type="text" class="text-input floating-label" id="arrivalDate" tabindex="4" name="newCar.DepartureDate"  value="@(Model.DepartureDate != null ? Model.DepartureDate.Value.ToShortDateString() : "")">
+                        <label for="departureDate">Kalkış Tarih</label>
+                    </div>
+                    <script type="text/javascript">
+                        $('#arrivalDate')
+                            .datepicker({
+                                autoclose: true
+                            });
+                        $.datepicker.setDefaults(
+                            $.extend(
+                                { 'dateFormat': 'dd/mm/yy' }
+                            )
+                        );
+
+                        var departureDate = new LiveValidation('arrivalDate',
+                        { onlyOnSubmit: 'true', onValid: function () { } });
+                        departureDate.add(Validate.Presence, { failureMessage: 'Kalkış tarih bilgisini giriniz!' });
+
+                    </script>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <input type="text" class="text-input floating-label hasPtTimeSelect" id="DepartureHour" tabindex="5" name="newCar.DepartureHour" value="@(Model.DepartureHour)">
+                        <label for="DepartureHour">Kalkış Saat</label>
+                    </div>
+                    <script type="text/javascript">
+                        $('#DepartureHour')
+                            .clockpicker({
+                                autoclose: 1
+                            });
+
+                        var DepartureHour = new LiveValidation('DepartureHour',
+                        { onlyOnSubmit: 'true', onValid: function () { } });
+                        DepartureHour.add(Validate.Presence, { failureMessage: 'Kalkış saat bilgisini giriniz!' });
+                    </script>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="Destination" class="select-label">Varış Noktası</label>
+                        <select name="newCar.Destination" id="Destination" class="text-input floating-label">
+                            <option value="-1">Seçiniz</option>
+                            @Html.Raw(Utilities.getDestinationOptionList(Model.Destination ?? -1))
+                        </select>
+                    </div>
+                    <script type="text/javascript">
+                        var Destination = new LiveValidation('Destination',
+                        { onlyOnSubmit: 'true', onValid: function () { } });
+                        Destination.add(Validate.Exclusion,
+                        { within: ['-1'], failureMessage: 'Varış noktası seçiniz!' });
+                    </script>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="page-group">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sel1" class="select-label">Araç Türü</label>
+                        <select name="newCar.CarTypeId" class="text-input floating-label" id="carType">
+                            <option value="-1">Seçiniz</option>
+                            @Html.Raw(Utilities.GetCarTypeList(Model.CarTypeId ?? -1))
+                        </select>
+                    </div>
+                    <script type="text/javascript">
+                        var carType = new LiveValidation('carType', { onlyOnSubmit: 'true', onValid: function () { } });
+                        carType.add(Validate.Exclusion, { within: ['-1'], failureMessage: 'Araç türünü seçiniz!' });
+                    </script>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <input type="text" class="text-input floating-label" tabindex="6" onkeypress="return isNumberKey(event)" maxlength="3" name="newCar.Qutoa" id="Quota" value="@Model.Qutoa">
+                        <label for="Quota">Araç Kontenjan</label>
+                    </div>
+                    <script type="text/javascript">
+                        var Quota = new LiveValidation('Quota', { onlyOnSubmit: 'true', onValid: function () { } });
+                        Quota.add(Validate.Presence, { failureMessage: 'Araç kontenjan bilgisini giriniz!' });
+                    </script>
+                </div>
+                <div class="col-md-12">
+                    <div class="paper-input">
+                        <textarea class="text-input floating-label" rows="3" id="Description" name="newCar.Description" tabindex="9" maxlength="250">@Model.Description</textarea>
+                        <label for="Description">Araç Hakkında Bilgi Notu</label>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="page-group">
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <input type="text" class="text-input floating-label" maxlength="150" tabindex="7" name="newCar.ResponsibleName" id="ResponsibleName" value="@(curUser.Name) @(curUser.Surname)">
+                        <label for="ResponsibleName">Sorumlu Ad Soyad</label>
+                    </div>
+                    <script type="text/javascript">
+                        var ResponsibleName = new
+                            LiveValidation('ResponsibleName', { onlyOnSubmit: 'true', onValid: function () { } });
+                        ResponsibleName.add(Validate.Presence, { failureMessage: 'Sorumlu bilgisini giriniz!' });
+                    </script>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <input type="text" class="text-input floating-label" maxlength="150" tabindex="8" name="newCar.ResponsiblePhone" id="ResponsiblePhone" value="@(curUser.GSM)">
+                        <label for="ResponsiblePhone">Sorumlu Telefon</label>
+                    </div>
+                    <script type="text/javascript">
+                        var ResponsiblePhone = new
+                            LiveValidation('ResponsiblePhone', { onlyOnSubmit: 'true', onValid: function () { } });
+                        ResponsiblePhone.add(Validate.Presence,
+                        { failureMessage: 'Soumlu telefon numara bilgisini giriniz!' });
+                    </script>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+            @if (secimyolu.Models.Current.isLogon)
+            {
+                <div class="col-md-12">
+                    <br />
+                    <a href="javascript:void(0);" onclick="$('#CarDefine').submit();" class="btn btn-xl">Kaydet</a>
+                </div>
+            }
+            
+        </div>
+        <div class="col-md-6">
+            <div id="dvMap" style="height: 360px; margin-top: 25px">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</form>
+<script type="text/javascript">
+    window.onload = function() {
+        var mapLatitude = document.getElementById("MapLatitude").value;
+        var mapLongitude = document.getElementById("MapLongitude").value;
+        GetLanLogFromAddress("", mapLatitude, mapLongitude);
+    }
+
+</script>
+@*autocomplete map search*@
+<script type="text/javascript">
+
+    google.maps.event.addDomListener(window,
+        'load',
+        function () {
+            var places = new google.maps.places.Autocomplete(document.getElementById('Address'));
+            google.maps.event.addListener(places,
+                'place_changed',
+                function () {
+                    var place = places.getPlace();
+                    var address = place.formatted_address;
+                    var latitude = place.geometry.location.k;
+                    var longitude = place.geometry.location.D;
+                    var mesg = address + "_" + latitude + "_" + longitude;
+                    //Initialize(mesg);
+                    GetLanLogFromAddress(address);
+                    //mesg += "\nLatitude: " + latitude;
+                    //mesg += "\nLongitude: " + longitude;
+                    //alert(mesg);
+                });
+        });
+
+
+</script>
+<script type="text/javascript">
+    function GetLanLogFromAddress(address, mapLatitude, mapLongitude) {
+        debugger;
+        var fulladdress = "";
+        if (typeof address !== 'undefined' && address !== "") {
+            fulladdress = address;
+        } else {
+            if (document.getElementById('Address').value != "") {
+                fulladdress += document.getElementById('Address').value;
+            }
+            if (document.getElementById('PostalCode').value != "") {
+                fulladdress += " ";
+                fulladdress += document.getElementById('PostalCode').value;
+            }
+        }
+        //var fulladdress= address;
+        if (typeof mapLatitude !== 'undefined' &&
+            mapLatitude !== "" &&
+            typeof mapLongitude !== 'undefined' &&
+            mapLongitude !== "") {
+            mapLatitude = mapLatitude.replace(',', '.');
+            mapLongitude = mapLongitude.replace(',', '.');
+            var editUrl = '@Url.Action("GetLanLogGoogleMap", "Home")';
+            $.ajax({
+                url: editUrl,
+                data: 'fullAddress=' + fulladdress + '&mapLatitude=' + mapLatitude + '&mapLongitude=' + mapLongitude,
+                async: false,
+                type: 'GET',
+                success: function(data) {
+                    Initialize(data);
+                }
+            });
+        } else {
+            var editUrl = '@Url.Action("GetLanLogGoogleMap", "Home")';
+            $.ajax({
+                url: editUrl,
+                data: 'fullAddress=' + fulladdress,
+                async: false,
+                type: 'GET',
+                success: function(data) {
+                    Initialize(data);
+                }
+            });
+        }
+
+    }
+
+    function Initialize(data) {
+        var markers = [];
+        var uniqueId = 1;
+        google.maps.visualRefresh = true;
+        var AddressInfo = data.split("_");
+        var MapDescription = AddressInfo[0];
+        var MapLatitude = AddressInfo[1];
+        document.getElementById("MapLatitude").value = MapLatitude;
+        var MapLongitude = AddressInfo[2];
+        document.getElementById("MapLongitude").value = MapLongitude;
+        if (typeof MapLatitude !== "undefined" && typeof MapLongitude !== "undefined") {
+            MapLatitude = MapLatitude.replace(',', '.');
+            MapLongitude = MapLongitude.replace(',', '.');
+        }
+        var liverpool = new google.maps.LatLng(parseFloat(MapLatitude), parseFloat(MapLongitude));
+
+        var mapOptions = {
+            zoom: 10,
+            center: liverpool,
+            mapTypeId: google.maps.MapTypeId.G_NORMAL_MAP
+        };
+
+        // This makes the div with id "map_canvas" a google map
+        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+        var latlng = new google.maps.LatLng(MapLatitude, MapLongitude);
+        var geocoder = new google.maps.Geocoder();
+        //Determine the location where the user has clicked.
+        var location = latlng;
+        //Create a marker and placed it on the map.
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        marker.id = uniqueId;
+        uniqueId++;
+
+        geocoder.geocode({ 'latLng': location },
+            function(results, status) {
+                var cityName = "";
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        for (var i = 0; i < results[0].address_components.length; i++) {
+                            var types = results[0].address_components[i].types;
+                            for (var typeIdx = 0; typeIdx < types.length; typeIdx++) {
+                                if (types[typeIdx] == 'postal_code') {
+                                    $('#PostalCode').val(results[0].address_components[i].short_name); //postal code
+                                }
+                                if (types[typeIdx] == "country") {
+                                    $('#CountryCode').val(results[0].address_components[i].short_name);
+                                    GetDestination();
+                                }
+                                if ((types[typeIdx] == "locality" || types[typeIdx] == "administrative_area_level_1") &&
+                                    cityName == '') {
+                                    cityName = results[0].address_components[i].short_name;
+                                }
+                            }
+                        }
+                    }
+                    $('#CityName').val(cityName);
+                }
+            });
+
+        google.maps.event.addListener(marker,
+            "click",
+            function(e) {
+
+                var infoWindow = new google.maps.InfoWindow({
+                    content: 'Adres:' +
+                        document.getElementById('Address').value +
+                        '<br />Latitude: ' +
+                        location.lat() +
+                        '<br />Longitude: ' +
+                        location.lng()
+                });
+                //content += "<br /><input type = 'button' value = 'Delete' onclick = 'DeleteMarker(" + marker.id + ");' value = 'Delete' />";
+                infoWindow.open(map, marker);
+
+            });
+
+        markers.push(marker);
+
+        google.maps.event.addListener(map,
+            'click',
+            function(e) {
+                latlng = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+                geocoder = new google.maps.Geocoder();
+                //Determine the location where the user has clicked.
+                location = e.latLng;
+                //Create a marker and placed it on the map.
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+
+                marker.id = uniqueId;
+                uniqueId++;
+                DeleteMarker(((marker.id) - 1))
+                geocoder.geocode({ 'latLng': latlng },
+                    function(results, status) {
+                        var city = ""
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (results[1]) {
+                                //alert("Location: " + results[1].formatted_address + "\r\nLatitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
+                                document.getElementById('Address').value = results[1].formatted_address;
+                                for (var i = 0; i < results[0].address_components.length; i++) {
+                                    var types = results[0].address_components[i].types;
+                                    for (var typeIdx = 0; typeIdx < types.length; typeIdx++) {
+                                        if (types[typeIdx] == 'postal_code') {
+                                            //console.log(results[0].address_components[i].long_name);
+                                            $('#PostalCode').val(results[0].address_components[i].short_name);//postal code
+                                        }
+                                        if (types[typeIdx] == "country") {
+                                            $('#CountryCode').val(results[0].address_components[i].short_name);
+                                            GetDestination();
+                                        }
+                                        if ((types[typeIdx] == "locality" ||
+                                                types[typeIdx] == "administrative_area_level_1") &&
+                                            city == '') {
+                                            city = results[0].address_components[i].short_name;
+                                        }
+                                    }
+                                }
+                                $('#CityName').val(city);
+                            }
+                        }
+                    });
+
+                google.maps.event.addListener(marker,
+                    "click",
+                    function(e) {
+
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: 'Adres:' +
+                                document.getElementById('Address').value +
+                                '<br />Latitude: ' +
+                                location.lat() +
+                                '<br />Longitude: ' +
+                                location.lng()
+                        });
+
+                        //content += "<br /><input type = 'button' value = 'Delete' onclick = 'DeleteMarker(" + marker.id + ");' value = 'Delete' />";
+                        infoWindow.open(map, marker);
+
+                    });
+                document.getElementById("MapLatitude").value = location.lat();
+                document.getElementById("MapLongitude").value = location.lng();
+                markers.push(marker);
+
+                function DeleteMarker(id) {
+                    //Find and remove the marker from the Array
+                    for (var i = 0; i < markers.length; i++) {
+                        if (markers[i].id == id) {
+                            //Remove the marker from Map
+                            markers[i].setMap(null);
+
+                            //Remove the marker from array.
+                            markers.splice(i, 1);
+                            return;
+                        }
+                    }
+                };
+            });
+    }
+</script>
+<script type="text/javascript">
+
+    function GetDestination() {
+        var countryCode = $('#CountryCode').val();
+        var selVal = '@Model.Destination';
+        var ActionUrl = '@Url.Action("GetDestinations", "Home", new {area = ""})';
+        $.ajax({
+            url: ActionUrl,
+            data: { countryCode: countryCode, selVal: selVal },
+            type: 'GET',
+            success: function(data) {
+                $('#Destination').empty();
+                $('#Destination').append(data);
+            }
+        });
+
+    }
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode >= 48 && charCode <= 57)
+            return true;
+        return false;
+    }
+</script>
+<div class="clearfix"></div>

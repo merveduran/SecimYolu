@@ -1,0 +1,74 @@
+﻿@model secimyolu.Models.vwCarList
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Rezervasyon</h4>
+        </div>
+        <div class="clearfix"></div>
+        <form id="formReservation" method="post" action="@Url.Action("Reservation","Home")">
+            <div class="modal-body">
+                <div class="col-md-6">
+                    <input type="hidden" name="ServiceId" value="@(Model!=null?Model.Id:0)" />
+                    <div class="paper-input">
+                        <label class="select-label">Kalkış Şehir</label>
+                        <input type="text" class="text-input floating-label" value="@Model.CityName @Model.PostalCode" readonly />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <label class="select-label">Varış Yeri</label>
+                        <input type="text" class="text-input floating-label" value="@Model.DestinationBox" readonly />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <label class="select-label">Tarih</label>
+                        <input type="text" class="text-input floating-label" value="@(((DateTime)Model.DepartureDate).ToString("dd/MM/yyyy").Replace(".","/"))" readonly />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <label class="select-label">Saat</label>
+                        <input type="text" class="text-input floating-label" value="@(Model.DepartureHour??"-")" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="paper-input">
+                        <label class="select-label">Kalkış Yeri Adresi</label>
+                        <textarea class="text-input floating-label" readonly>@(Model.Address??"-")</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <label class="select-label">Sorumlu Adı</label>
+                        <input type="text" class="text-input floating-label" value="@(Model.ResponsibleName??"-")" readonly />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="paper-input">
+                        <label class="select-label">Sorumlu Telefon</label>
+                        <input type="text" class="text-input floating-label" value="@(Model.ResponsiblePhone??"-")" readonly />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="input_17_1" class="select-label">Yolcu Sayısı<span class="gfield_required">*</span></label>
+                        <select name="PassengerCount" id="PassengerCount" class="text-input floating-label">
+                            @Html.Raw(secimyolu.Models.Utilities.getPassengerCountOption(ViewBag.CurQuota,ViewBag.PassengerCount))
+                        </select>
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-xl" onclick="$('#formReservation').submit(); return false;" value="Kaydet" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

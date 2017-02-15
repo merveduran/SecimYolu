@@ -1,0 +1,10 @@
+bin
+obj
+.suo
+*.csproj
+*.suo
+*.user
+/secimyolu/secimyolu/bin
+/secimyolu/secimyolu/secimyolu.csproj.user
+/secimyolu/secimyolu.v12.suo
+/secimyolu/secimyolu/obj

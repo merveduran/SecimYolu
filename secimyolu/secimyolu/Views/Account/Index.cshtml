@@ -1,0 +1,163 @@
+﻿@{
+    Layout = null;
+}
+
+<link href="~/Content/css/zocial.css" rel="stylesheet" />
+
+<meta name="google-signin-scope" content="profile">
+<meta name="google-signin-client_id" content="@System.Configuration.ConfigurationManager.AppSettings["GoogleAppId"]">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">ÜYE GİRİŞİ</h4>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-body" style="padding:40px 20px 60px;">
+            <form id="LoginForm" action="@Url.Action("Index", "Account")" method="post" enctype="multipart/form-data">
+                <div class="alert alert-danger" style="display:none;" id="loginError" role="alert"></div>
+                <div class="col-md-12">
+
+                    <div class="paper-input">
+                        <input type="text" class="text-input floating-label" name="Email" id="Email">
+                        <label for="Email">Kullanıcı Adı(Eposta) <span id="validEmail" class="gfield_required"></span></label>
+                    </div>
+                    @*<script type="text/javascript">
+                            var MailVal = new LiveValidation('Email', { insertAfterWhatNode: 'validEmail', onValid: function () { } });
+                            MailVal.add(Validate.Presence, { failureMessage: '*Kullanıcı adını giriniz.' });
+                        </script>*@
+
+                    <div class="paper-input">
+
+                        <input type="password" class="text-input floating-label" name="Password" id="Password">
+                        <label for="Password">Şifre <span id="validPassword" class="gfield_required"></span></label>
+                    </div>
+                    @*<script type="text/javascript">
+                            var PassVal = new LiveValidation('Password', { insertAfterWhatNode: 'validPassword', onValid: function () { } });
+                            PassVal.add(Validate.Presence, { failureMessage: '*Şifre giriniz.' });
+                        </script>*@
+                </div>
+                <div class="clearfix"></div>
+                <div class="">
+                    <br /><br />
+                    <div class="col-md-8">
+                        <a href="javascript:void(0);" onclick=" loginAction(); return false; " class="btn btn-primary">Giriş</a>
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-default">Üye Ol</a>
+                        <a href="@Url.Action("ResetPasswordRequest", "Account")" class="btn btn-default">Şifremi Unuttum</a>
+                        <script language="javascript" type="text/javascript">
+                            function submitDetailsForm() {
+                                $.ajax({
+                                    url: "/account/Index",
+                                    type: "POST",
+                                    data: { Email: 1 },
+                                    error: function () {
+                                        //alert("error logging in to your facebook account.");
+                                    },
+                                    success: function () {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        </script>
+
+                        <div id="fb-root"></div>
+
+                        <script>
+                            window.fbAsyncInit = function () {
+                                FB.init({
+                                    appId: '@System.Configuration.ConfigurationManager.AppSettings["FacebookAppId"]',
+                                    cookie: true,
+                                    xfbml: true,
+                                    version: 'v2.8'
+                                });
+                                FB.AppEvents.logPageView();
+                            };
+
+                            (function (d, s, id) {
+                                var js, fjs = d.getElementsByTagName(s)[0];
+                                if (d.getElementById(id)) { return; }
+                                js = d.createElement(s); js.id = id;
+                                js.src = "//connect.facebook.net/en_US/sdk.js";
+                                fjs.parentNode.insertBefore(js, fjs);
+                            }(document, 'script', 'facebook-jssdk'));
+                        </script>
+                        <script>
+                            function login() {
+                                FB.login(function (response) {
+                                    var credentials = { uid: response.authResponse.userID, accessToken: response.authResponse.accessToken };
+                                    $.ajax({
+                                        url: "/account/UserDetail",
+                                        type: "POST",
+                                        data: credentials,
+                                        error: function () {
+                                            window.location.reload();
+                                        },
+                                        success: function () {
+                                            isLogon = true;
+                                            window.location.reload();
+                                        }
+                                    });
+
+                                }, { scope: 'read_stream,publish_stream,publish_actions,read_friendlists,email' });
+                            }
+
+                            function logout() {
+                                FB.logout(function (response) {
+                                    // user is now logged out
+                                });
+                            }
+                        </script>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-block btn-social btn-facebook" onclick="javascript:login();">
+                            <i class="fa fa-facebook"></i> Facebook'la Bağlan
+                        </a>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="g-signin2  pull-right" data-onsuccess="onSignIn" onclick="signedOut = true;"></div>
+                    </div>
+                  
+
+                </div>
+            </form>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document)
+        .keypress(function(event) {
+            if (event.keyCode == 13) {
+                loginAction();
+            }
+        });
+</script>
+<form id="submitGoogle" action="@Url.Action("GoogleLogin","Account")" method="post">
+    <input type="hidden" id="tokenID" name="tokenID" />
+</form>
+
+<script>
+    var signedOut = false;
+    function onSignIn(googleUser) {
+        var id_token = googleUser.getAuthResponse().id_token;
+        if (!signedOut) {
+            signedOut = true;
+            signOut();
+
+        } else {
+            $('#tokenID').val(id_token);
+            document.getElementById("submitGoogle").submit();
+        }
+    };
+
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut()
+            .then(function() {
+                console.log('User signed out.');
+            });
+    }
+</script>

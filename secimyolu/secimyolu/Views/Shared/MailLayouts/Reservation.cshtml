@@ -1,0 +1,35 @@
+﻿@using secimyolu.Models
+@model ReservationInfo
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="Turkish" name="language" />
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-9">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body style="margin:0 !important;padding:0 !important;font-size:14px; font-family:Arial, Helvetica, sans-serif;  color:#555; background:  #e2e4e9;  height: 100%;">
+    <div style="max-width:800px; width:100%;  height:100%;   margin:auto;   background-color: #ECECEC !important;  border-color: #e9eaed #dfe0e4 #d0d1d5; border-image: none; border-style: solid; border-width: 1px;  border-radius: 4px; box-shadow: 1px 4px 4px -2px rgba(7, 7, 7, 0.2);">
+        <div style=" width: 100%; float:left; height:100px; background-color:#266cb2;">
+            <div style=" width: 19%; float:left;padding-left:20px;padding-top:20px; ">
+                <a href="http://secimyolu.com"><img src="http://secimyolu.com/Content/img/logo.png"></a>
+            </div>
+        </div>
+        <div style="float: left; width: 100%; background-color: #FDFDFD !important;">
+            <div style="margin:40px !important;">
+                <h4 style="font-family: Arial, Helvetica, sans-serif; font-weight: bold;  font-size:20px;  color:#2D2D2D;">Merhaba, <b style="font-weight:bold;">@Model.Name</b></h4>
+                <p style="font-family: Arial, Helvetica, sans-serif; font-weight:300;  font-size:20px;  color:#2D2D2D;"><b style="font-weight:400;">Rezervasyon bilgileriniz</b> </p>
+                <p style="font-family: Arial, Helvetica, sans-serif; font-weight:300;  font-size:20px;  color:#2D2D2D;"><h4>Tarih:</h4>@Model.DateString @Model.TimeString</p>
+                <p style="font-family: Arial, Helvetica, sans-serif; font-weight:300;  font-size:20px;  color:#2D2D2D;"><h4>Konsolosluk:</h4>@Model.Destination</p>
+                <p style="font-family: Arial, Helvetica, sans-serif; font-weight:300;  font-size:20px;  color:#2D2D2D;"><h4>Adres:</h4>@Model.Address</p>
+            </div>
+        </div>
+    </div>
+    <div style=" width: 100%; width:100%;  float:left; height:60px; background-color:#266cb2;">
+
+    </div>
+    </div>
+</body>
+</html>

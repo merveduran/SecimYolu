@@ -1,0 +1,268 @@
+﻿@{
+    ViewBag.Title = "ARAÇ LİSTESİ";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+}
+
+<script src="~/Scripts/SYDatatable.js"></script>
+<link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/css/simple-line-icons.css" rel="stylesheet" />
+@*<script src="~/Content/js/dataTables.responsive.min.js"></script>
+
+    <link href="~/Content/css/responsive.dataTables.min.css" rel="stylesheet" />*@
+<style>
+    .top {
+        margin-top: 25px;
+    }
+</style>
+
+
+<div class="page-group">
+    <div class="page-group-top">
+        <h3>@ViewBag.Title</h3>
+        <a style="top:-39px;position: relative;" onclick="reset_dt_view();" href="#" class="btn btn-danger pull-right"><i class="fa fa-trash" title="Filtreyi Temizle"></i>&nbsp;</a>
+        <a style="top:-39px;position: relative;" href="@Url.Action("AddCar","Management")" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Araç Ekle</a>
+    </div>
+
+
+    <table id="example" class="table table-bordered table-responsive display  dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Araç Türü</th>
+                <th>Posta Kodu</th>
+                <th>Kalkış Şehir</th>
+                <th>Kalkış Ülke</th>
+                <th>Kalkış Tarih</th>
+                <th>Varış</th>
+                <th>Durum</th>
+                <th>Kontenjan</th>
+                <th>Ekleyen</th>
+                <th style="width:100px"></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Araç Türü</td>
+                <td>Posta Kodu</td>
+                <td>Kalkış Şehir</td>
+                <td>Kalkış Ülke</td>
+                <td></td>
+                <td>Varış</td>
+                <td>Durum</td>
+                <td></td>
+                <td>Ekleyen</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script type="text/javascript">
+        var filterList = ['Araç Türü', 'Posta Kodu', 'Kalkış Şehir', 'Kalkış Ülke', 'Varış', 'Durum', 'Ekleyen'];
+        $(document).ready(function () {
+            $('#example').dataTable({
+                "bServerSide": true,
+                "bFilter": true,
+                "bSortCellsTop": true,
+                "bStateSave": true,
+                "responsive": true,
+                "sAjaxSource": '@Url.Action("getCarList", "Management")',
+                "fnStateSave": function (oSettings, oData) { save_dt_view(oSettings, oData); },
+                "fnStateLoad": function (oSettings) { return load_dt_view(oSettings); },
+                "fnInitComplete": function (oSettings, json) {
+                    var cols = oSettings.aoPreSearchCols;
+                    debugger;   
+                    for (var i = 0; i < cols.length; i++) {
+                        var value = cols[i].sSearch;
+                        if (value.length > 0) {
+                            if (i == 6) {
+                                $('#RangeFilter').val(value);
+                                if (value == 1) {
+                                    $('#RangeFilter').removeClass('rangeAll').removeClass('rangePassive').addClass('rangeActive');
+                                } else if (value == 2) {
+                                    $('#RangeFilter').removeClass('rangeActive').removeClass('rangePassive').addClass('rangeAll');
+                                } else if (value == 3) {
+                                    $('#RangeFilter').removeClass('rangeAll').removeClass('rangeActive').addClass('rangePassive');
+                                }
+                            }
+                            else if (i == 8) {
+                                $('#TypeFilter').val(value);
+                                if (value == 1) {
+                                    $('#TypeFilter').removeClass('rangeAll').removeClass('rangePassive').addClass('rangeActive');
+                                } else if (value == 2) {
+                                    $('#TypeFilter').removeClass('rangeActive').removeClass('rangePassive').addClass('rangeAll');
+                                } else if (value == 3) {
+                                    $('#TypeFilter').removeClass('rangeAll').removeClass('rangeActive').addClass('rangePassive');
+                                }
+                                }
+                            else
+                                $("thead td input")[i].value = value;
+                        }
+                    }
+                },
+                "bProcessing": true,
+                "aoColumns": [{ "sName": "Id", "orderable": true },
+                    { "sName": "CarType", "orderable": true },
+                    { "sName": "PostalCode", "orderable": true },
+                    { "sName": "CityName", "orderable": true },
+                    { "sName": "CountryName", "orderable": true },
+                    { "sName": "ResponsibleName", "orderable": true },
+                    { "sName": "DestinationBox", "orderable": true },
+                    { "sName": "ServiceStatus", "orderable": true },
+                    { "sName": "CarStatus", "orderable": true },
+                    { "sName": "", "orderable": false },
+                     { "sName": "", "orderable": false }
+                ],
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            var JobsString = '<a style="font-size:20px;margin-right:0;" href="@Url.Action("CarDetail","Management")?CarId=' + row[0] + '" class="btn btn-info btn-xs" title="Yolcu İşlemleri"><i class="fa fa-user"></i></a>&nbsp;<a style="font-size:20px;margin-right:0;" class="btn btn-info btn-xs" href="@Url.Action("EditCar","Management")?Id=' + row[0] + '" title="Düzenle"><i class="fa fa-pencil"></i></a>&nbsp;';
+
+                            if (row[7] == '1') {
+                                JobsString += '<a href="   @Url.Action("DeleteCar","Management")?Id=' + row[0] + '" style="font-size:20px;margin-right:0;" class="btn btn-danger btn-xs" title="Sil"><i class="fa fa-trash"></i></a>';
+                            } else {
+                                JobsString += '<a href="   @Url.Action("AddCarAgain","Management")?Id=' + row[0] + '" style="font-size:20px;" title="Yeni Ekle"><i class="fa fa-plus"></i></a>';
+                            }
+
+                            return JobsString;
+                        },
+                        "targets": 10
+                    },
+                 {
+                     "render": function (data, type, row) {
+                         if (row[7] == '1')
+                             return '<img src="../../../Content/images/ic_done_24px.svg"  />';
+                         else
+                             return '<img src="../../../Content/images/ic_remove_24px.svg" style="opacity:.5"  />';
+                     },
+                     "targets": 7
+                 },
+                     {
+                         "render": function (data, type, row) {
+                             return '<a href="@Url.Action("EditCar", "Management")?Id=' + row[0] + '">' + (row[1]) + '</a>';
+                         }, "targets": 1
+                     },
+                { "visible": false, "targets": [0] }
+                ],
+                "dom": '<"top"if>rt<"bottom"lp><"clear">',
+                "language": {
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "  _TOTAL_ Kayıttan _START_ - _END_ Arası Kayıtlar",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "sInfoFiltered": "( _MAX_ Kayıt İçerisinden Bulunan)",
+                    "sInfoPostFix": "",
+                    "sSearch": "",
+                    "sSearchPlaceholder": "Ülke ara",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#example thead td').each(function () {
+                if ($(this).text() != '' && $.inArray($(this).text(), filterList) >= 0) {
+
+                    var title = $('#example thead td').eq($(this).index()).text();
+                    $(this).html('<input class="filter-table-input" id="inp' + $(this).index() + '"  type="text" placeholder="' + title + '" />');
+
+                    if ($(this).index() == 6) {
+                        $(this).html('<p class="range-field" style=" width:60px"><input type="range" id="RangeFilter" name="points" onchange="filterme(this.value);" min="1" class="fl rangeAll" max="3" value="2"></p>');
+                    }
+
+                    if ($(this).index() == 8) {
+                        $(this).html('<p class="range-field" style=" width:60px"><input type="range" id="TypeFilter" name="points" onchange="filterType(this.value);" min="1" class="fl rangeAll" max="3" value="2"></p>');
+                    }
+                }
+            });
+
+            // DataTable
+            var table = $('#example').DataTable();
+
+            // Apply the search
+            table.columns().eq(0).each(function (colIdx) {
+                $('#inp' + colIdx).keyup(function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            });
+            $('#example_filter').empty();
+        });
+
+
+        var otable;
+
+        $(document).ready(function () {
+            otable = $('#example').dataTable();
+
+        });
+
+        function filterme(val) {
+
+            if (val == 1) {
+                $('#RangeFilter').removeClass('rangeAll').removeClass('rangePassive').addClass('rangeActive');
+            } else if (val == 2) {
+                $('#RangeFilter').removeClass('rangeActive').removeClass('rangePassive').addClass('rangeAll');
+            } else if (val == 3) {
+                $('#RangeFilter').removeClass('rangeAll').removeClass('rangeActive').addClass('rangePassive');
+            }
+
+            otable.fnFilter(val, 6, true, false, false, false);
+        }
+
+        function filterType(val) {
+
+            if (val == 1) {
+                $('#TypeFilter').removeClass('rangeAll').removeClass('rangePassive').addClass('rangeActive');
+            } else if (val == 2) {
+                $('#TypeFilter').removeClass('rangeActive').removeClass('rangePassive').addClass('rangeAll');
+            } else if (val == 3) {
+                $('#TypeFilter').removeClass('rangeAll').removeClass('rangeActive').addClass('rangePassive');
+            }
+
+            otable.fnFilter(val, 8, true, false, false, false);
+        }
+
+
+        function save_dt_view(oSettings, oData) {
+            alert(oData);
+
+            localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+        }
+        function load_dt_view(oSettings) {
+            return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
+        }
+
+        function reset_dt_view() {
+            localStorage.removeItem('DataTables_' + window.location.pathname);
+
+            var table = $('#example').dataTable();
+            var filters = $(".filter-table-input");
+
+            table.fnSort([0]);
+            for (var i = 0; i < filters.length; i++) {
+                if ($(filters[i]).val() != "") {
+                    if (i == 4)
+                        table.fnFilter('', 5);
+                    else
+                        table.fnFilter('', i);
+
+                    $(filters[i]).val("");
+                }
+            }
+            filterme(2);
+            filterType(2);
+            $('#RangeFilter').val(2);
+            $('#TypeFilter').val(2);
+            otable.DataTable().ajax.reload();
+        }
+    </script>
+</div>

@@ -1,0 +1,1157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CarService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CarTypeId" Type="int" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="Destination" Type="int" />
+          <Property Name="DepartureDate" Type="datetime" />
+          <Property Name="DepartureHour" Type="nvarchar" MaxLength="20" />
+          <Property Name="Qutoa" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="ResponsibleName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ResponsiblePhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="AddUserId" Type="int" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="DeletedUserId" Type="int" />
+          <Property Name="DeleteDate" Type="datetime" />
+          <Property Name="IsVoluntaryService" Type="bit" />
+          <Property Name="MapLatitude" Type="nvarchar" MaxLength="150" />
+          <Property Name="MapLongitude" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="CarType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="EnName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Iso" Type="nvarchar" MaxLength="10" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="TrName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CountryTemp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Iso" Type="nvarchar" MaxLength="10" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="TrName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Destination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="Box" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="DestinationPollingDates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DestinationId" Type="int" />
+          <Property Name="ElectionStartDate" Type="datetime" />
+          <Property Name="ElectionEndDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MailTo" Type="int" Nullable="false" />
+          <Property Name="MailContent" Type="nvarchar(max)" />
+          <Property Name="MailSubject" Type="nvarchar" MaxLength="150" />
+          <Property Name="MailFrom" Type="int" Nullable="false" />
+          <Property Name="SendTime" Type="datetime" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="MailError">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MailId" Type="int" Nullable="false" />
+          <Property Name="ErrorMessage" Type="nvarchar" MaxLength="500" />
+          <Property Name="Time" Type="date" />
+        </EntityType>
+        <EntityType Name="MailStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MailStatus" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PollingBox">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BoxNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="DestinationId" Type="int" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PollingClerk">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BoxId" Type="int" />
+          <Property Name="AssociateMember" Type="int" />
+          <Property Name="AssociateMemberSecondary" Type="int" />
+        </EntityType>
+        <EntityType Name="PollingList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TC" Type="nvarchar" MaxLength="11" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="100" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ResetPassword">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="CreationTime" Type="datetime" />
+          <Property Name="ExpirationTime" Type="datetime" />
+          <Property Name="IsValid" Type="bit" />
+          <Property Name="Guid" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Right">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="ServicePassenger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TCK" Type="nvarchar" MaxLength="11" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="PassengerCount" Type="int" Nullable="false" />
+          <Property Name="AddUserId" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SecondName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="FacebookId" Type="nvarchar" MaxLength="100" />
+          <Property Name="GSM" Type="nvarchar" MaxLength="15" />
+          <Property Name="UserTypeId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="TCNo" Type="nvarchar" MaxLength="11" />
+        </EntityType>
+        <EntityType Name="UserCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="CountryId" Type="int" />
+        </EntityType>
+        <EntityType Name="UserRight">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="RightId" Type="int" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.vwCarList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwCarList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Qutoa" />
+            <PropertyRef Name="PassengerCount" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="CarType" Type="nvarchar" MaxLength="150" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="DepartureDate" Type="datetime" />
+          <Property Name="Qutoa" Type="int" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="150" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ResponsibleName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ResponsiblePhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Destination" Type="int" />
+          <Property Name="ServiceStatus" Type="int" />
+          <Property Name="DepartureHour" Type="nvarchar" MaxLength="20" />
+          <Property Name="DestinationBox" Type="nvarchar" MaxLength="50" />
+          <Property Name="PassengerCount" Type="int" Nullable="false" />
+          <Property Name="CountryId" Type="int" />
+          <Property Name="AddUserId" Type="int" />
+          <Property Name="IsVoluntaryService" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.vwCarSearchQuery' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwCarSearchQuery">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="150" />
+          <Property Name="SearchText" Type="nvarchar" MaxLength="201" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.vwServicePassenger' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwServicePassenger">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ServiceId" />
+            <PropertyRef Name="AddUserId" />
+            <PropertyRef Name="AddTime" />
+            <PropertyRef Name="PassengerCount" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ServiceId" Type="int" Nullable="false" />
+          <Property Name="AddUserId" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+          <Property Name="PassengerCount" Type="int" Nullable="false" />
+          <Property Name="CarType" Type="nvarchar" MaxLength="150" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="DepartureDate" Type="datetime" />
+          <Property Name="DepartureHour" Type="nvarchar" MaxLength="20" />
+          <Property Name="Qutoa" Type="int" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="150" />
+          <Property Name="CarPassenger" Type="int" />
+          <Property Name="ServiceStatus" Type="int" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="150" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResponsibleName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ResponsiblePhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="DestinationBox" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwUserList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+            <PropertyRef Name="UserTypeId" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="GSM" Type="nvarchar" MaxLength="15" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserTypeId" Type="int" Nullable="false" />
+          <Property Name="UserTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Mail_MailStatus">
+          <End Role="MailStatus" Type="Self.MailStatus" Multiplicity="0..1" />
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailError_Mail">
+          <End Role="Mail" Type="Self.Mail" Multiplicity="1" />
+          <End Role="MailError" Type="Self.MailError" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mail">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MailError">
+              <PropertyRef Name="MailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResetPassword_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ResetPassword" Type="Self.ResetPassword" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResetPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetRightsOfTheUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="p1" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Name" Type="nvarchar" MaxLength="1000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="GetRightsOfTheUserr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="p1" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Name" Type="nvarchar" MaxLength="1000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="ModelsStoreContainer">
+          <EntitySet Name="CarService" EntityType="Self.CarService" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CarType" EntityType="Self.CarType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Destination" EntityType="Self.Destination" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DestinationPollingDates" EntityType="Self.DestinationPollingDates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mail" EntityType="Self.Mail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MailError" EntityType="Self.MailError" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MailStatus" EntityType="Self.MailStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PollingBox" EntityType="Self.PollingBox" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PollingClerk" EntityType="Self.PollingClerk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PollingList" EntityType="Self.PollingList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Right" EntityType="Self.Right" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServicePassenger" EntityType="Self.ServicePassenger" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserCountry" EntityType="Self.UserCountry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRight" EntityType="Self.UserRight" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountryTemp" EntityType="Self.CountryTemp" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CountryTemp].[Id] AS [Id], 
+    [CountryTemp].[Iso] AS [Iso], 
+    [CountryTemp].[Name] AS [Name], 
+    [CountryTemp].[TrName] AS [TrName]
+    FROM [dbo].[CountryTemp] AS [CountryTemp]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwCarList" EntityType="Self.vwCarList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwCarList].[Id] AS [Id], 
+    [vwCarList].[CarType] AS [CarType], 
+    [vwCarList].[Address] AS [Address], 
+    [vwCarList].[DepartureDate] AS [DepartureDate], 
+    [vwCarList].[Qutoa] AS [Qutoa], 
+    [vwCarList].[CountryName] AS [CountryName], 
+    [vwCarList].[PostalCode] AS [PostalCode], 
+    [vwCarList].[CityName] AS [CityName], 
+    [vwCarList].[ResponsibleName] AS [ResponsibleName], 
+    [vwCarList].[ResponsiblePhone] AS [ResponsiblePhone], 
+    [vwCarList].[Destination] AS [Destination], 
+    [vwCarList].[ServiceStatus] AS [ServiceStatus], 
+    [vwCarList].[DepartureHour] AS [DepartureHour], 
+    [vwCarList].[DestinationBox] AS [DestinationBox], 
+    [vwCarList].[PassengerCount] AS [PassengerCount], 
+    [vwCarList].[CountryId] AS [CountryId], 
+    [vwCarList].[AddUserId] AS [AddUserId], 
+    [vwCarList].[IsVoluntaryService] AS [IsVoluntaryService]
+    FROM [dbo].[vwCarList] AS [vwCarList]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwCarSearchQuery" EntityType="Self.vwCarSearchQuery" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwCarSearchQuery].[Id] AS [Id], 
+    [vwCarSearchQuery].[PostalCode] AS [PostalCode], 
+    [vwCarSearchQuery].[CityName] AS [CityName], 
+    [vwCarSearchQuery].[SearchText] AS [SearchText]
+    FROM [dbo].[vwCarSearchQuery] AS [vwCarSearchQuery]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwServicePassenger" EntityType="Self.vwServicePassenger" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwServicePassenger].[Id] AS [Id], 
+    [vwServicePassenger].[ServiceId] AS [ServiceId], 
+    [vwServicePassenger].[AddUserId] AS [AddUserId], 
+    [vwServicePassenger].[AddTime] AS [AddTime], 
+    [vwServicePassenger].[PassengerCount] AS [PassengerCount], 
+    [vwServicePassenger].[CarType] AS [CarType], 
+    [vwServicePassenger].[Address] AS [Address], 
+    [vwServicePassenger].[DepartureDate] AS [DepartureDate], 
+    [vwServicePassenger].[DepartureHour] AS [DepartureHour], 
+    [vwServicePassenger].[Qutoa] AS [Qutoa], 
+    [vwServicePassenger].[CountryName] AS [CountryName], 
+    [vwServicePassenger].[CarPassenger] AS [CarPassenger], 
+    [vwServicePassenger].[ServiceStatus] AS [ServiceStatus], 
+    [vwServicePassenger].[CityName] AS [CityName], 
+    [vwServicePassenger].[PostalCode] AS [PostalCode], 
+    [vwServicePassenger].[ResponsibleName] AS [ResponsibleName], 
+    [vwServicePassenger].[ResponsiblePhone] AS [ResponsiblePhone], 
+    [vwServicePassenger].[DestinationBox] AS [DestinationBox]
+    FROM [dbo].[vwServicePassenger] AS [vwServicePassenger]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwUserList" EntityType="Self.vwUserList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwUserList].[Id] AS [Id], 
+    [vwUserList].[GSM] AS [GSM], 
+    [vwUserList].[Name] AS [Name], 
+    [vwUserList].[Surname] AS [Surname], 
+    [vwUserList].[Email] AS [Email], 
+    [vwUserList].[UserTypeId] AS [UserTypeId], 
+    [vwUserList].[UserTypeName] AS [UserTypeName], 
+    [vwUserList].[Status] AS [Status]
+    FROM [dbo].[vwUserList] AS [vwUserList]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Mail_MailStatus" Association="Self.FK_Mail_MailStatus">
+            <End Role="MailStatus" EntitySet="MailStatus" />
+            <End Role="Mail" EntitySet="Mail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailError_Mail" Association="Self.FK_MailError_Mail">
+            <End Role="Mail" EntitySet="Mail" />
+            <End Role="MailError" EntitySet="MailError" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResetPassword_User" Association="Self.FK_ResetPassword_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ResetPassword" EntitySet="ResetPassword" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="GetRightsOfTheUser_Result">
+          <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <ComplexType Name="GetRightsOfTheUserr_Result">
+          <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <EntityType Name="CarType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="EnName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Iso" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TrName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Destination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="Box" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MailTo" Type="Int32" Nullable="false" />
+          <Property Name="MailContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MailSubject" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MailFrom" Type="Int32" Nullable="false" />
+          <Property Name="SendTime" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <NavigationProperty Name="MailStatus" Relationship="Self.FK_Mail_MailStatus" FromRole="Mail" ToRole="MailStatus" />
+          <NavigationProperty Name="MailError" Relationship="Self.FK_MailError_Mail" FromRole="Mail" ToRole="MailError" />
+        </EntityType>
+        <EntityType Name="MailError">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MailId" Type="Int32" Nullable="false" />
+          <Property Name="ErrorMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Time" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Mail" Relationship="Self.FK_MailError_Mail" FromRole="MailError" ToRole="Mail" />
+        </EntityType>
+        <EntityType Name="MailStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MailStatus1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Mail" Relationship="Self.FK_Mail_MailStatus" FromRole="MailStatus" ToRole="Mail" />
+        </EntityType>
+        <EntityType Name="ResetPassword">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="CreationTime" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationTime" Type="DateTime" Precision="3" />
+          <Property Name="IsValid" Type="Boolean" />
+          <Property Name="Guid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="Self.FK_ResetPassword_User" FromRole="ResetPassword" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Right">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ServicePassenger">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TCK" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassengerCount" Type="Int32" Nullable="false" />
+          <Property Name="AddUserId" Type="Int32" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SecondName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="GSM" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="TCNo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ResetPassword" Relationship="Self.FK_ResetPassword_User" FromRole="User" ToRole="ResetPassword" />
+        </EntityType>
+        <EntityType Name="UserCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="CountryId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserRight">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="RightId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CountryTemp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Iso" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TrName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwCarSearchQuery">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SearchText" Type="String" MaxLength="201" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwServicePassenger">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ServiceId" />
+            <PropertyRef Name="AddUserId" />
+            <PropertyRef Name="AddTime" />
+            <PropertyRef Name="PassengerCount" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <Property Name="AddUserId" Type="Int32" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PassengerCount" Type="Int32" Nullable="false" />
+          <Property Name="CarType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
+          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Qutoa" Type="Int32" />
+          <Property Name="CountryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CarPassenger" Type="Int32" />
+          <Property Name="ServiceStatus" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationBox" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwUserList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+            <PropertyRef Name="UserTypeId" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="GSM" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
+          <Property Name="UserTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Mail_MailStatus">
+          <End Role="MailStatus" Type="Self.MailStatus" Multiplicity="0..1" />
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MailError_Mail">
+          <End Role="Mail" Type="Self.Mail" Multiplicity="1" />
+          <End Role="MailError" Type="Self.MailError" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mail">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="MailError">
+              <PropertyRef Name="MailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResetPassword_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ResetPassword" Type="Self.ResetPassword" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResetPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SECIMYOLUEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CarType" EntityType="Self.CarType" />
+          <EntitySet Name="Country" EntityType="Self.Country" />
+          <EntitySet Name="Destination" EntityType="Self.Destination" />
+          <EntitySet Name="Mail" EntityType="Self.Mail" />
+          <EntitySet Name="MailError" EntityType="Self.MailError" />
+          <EntitySet Name="MailStatus" EntityType="Self.MailStatus" />
+          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" />
+          <EntitySet Name="Right" EntityType="Self.Right" />
+          <EntitySet Name="ServicePassenger" EntityType="Self.ServicePassenger" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserCountry" EntityType="Self.UserCountry" />
+          <EntitySet Name="UserRight" EntityType="Self.UserRight" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" />
+          <EntitySet Name="CountryTemp" EntityType="Self.CountryTemp" />
+          <EntitySet Name="vwCarSearchQuery" EntityType="Self.vwCarSearchQuery" />
+          <EntitySet Name="vwServicePassenger" EntityType="Self.vwServicePassenger" />
+          <EntitySet Name="vwUserList" EntityType="Self.vwUserList" />
+          <AssociationSet Name="FK_Mail_MailStatus" Association="Self.FK_Mail_MailStatus">
+            <End Role="MailStatus" EntitySet="MailStatus" />
+            <End Role="Mail" EntitySet="Mail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailError_Mail" Association="Self.FK_MailError_Mail">
+            <End Role="Mail" EntitySet="Mail" />
+            <End Role="MailError" EntitySet="MailError" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResetPassword_User" Association="Self.FK_ResetPassword_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ResetPassword" EntitySet="ResetPassword" />
+          </AssociationSet>
+          <FunctionImport Name="GetRightsOfTheUser" IsComposable="true" ReturnType="Collection(Models.GetRightsOfTheUser_Result)">
+          <Parameter Name="p1" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetRightsOfTheUserr" IsComposable="true" ReturnType="Collection(Models.GetRightsOfTheUserr_Result)">
+          <Parameter Name="p1" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="CarService" EntityType="Models.CarService" />
+          <EntitySet Name="vwCarList" EntityType="Models.vwCarList" />
+          <EntitySet Name="DestinationPollingDates" EntityType="Models.DestinationPollingDates" />
+          <EntitySet Name="PollingBox" EntityType="Models.PollingBox" />
+          <EntitySet Name="PollingClerk" EntityType="Models.PollingClerk" />
+          <EntitySet Name="PollingList" EntityType="Models.PollingList" />
+        </EntityContainer>
+        <EntityType Name="CarService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarTypeId" Type="Int32" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="Destination" Type="Int32" />
+          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
+          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Qutoa" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AddUserId" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="DeletedUserId" Type="Int32" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <Property Name="IsVoluntaryService" Type="Boolean" />
+          <Property Name="MapLatitude" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MapLongitude" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwCarList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Qutoa" />
+            <PropertyRef Name="PassengerCount" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="CarType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
+          <Property Name="Qutoa" Type="Int32" Nullable="false" />
+          <Property Name="CountryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Destination" Type="Int32" />
+          <Property Name="ServiceStatus" Type="Int32" />
+          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationBox" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassengerCount" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="AddUserId" Type="Int32" />
+          <Property Name="IsVoluntaryService" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="DestinationPollingDates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DestinationId" Type="Int32" />
+          <Property Name="ElectionStartDate" Type="DateTime" Precision="3" />
+          <Property Name="ElectionEndDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PollingBox">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BoxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PollingClerk">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BoxId" Type="Int32" />
+          <Property Name="AssociateMember" Type="Int32" />
+          <Property Name="AssociateMemberSecondary" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PollingList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TC" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="SECIMYOLUEntities">
+          <EntitySetMapping Name="CarType">
+            <EntityTypeMapping TypeName="Models.CarType">
+              <MappingFragment StoreEntitySet="CarType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EnName" ColumnName="EnName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="Models.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Iso" ColumnName="Iso" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TrName" ColumnName="TrName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Destination">
+            <EntityTypeMapping TypeName="Models.Destination">
+              <MappingFragment StoreEntitySet="Destination">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Box" ColumnName="Box" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mail">
+            <EntityTypeMapping TypeName="Models.Mail">
+              <MappingFragment StoreEntitySet="Mail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
+                <ScalarProperty Name="MailContent" ColumnName="MailContent" />
+                <ScalarProperty Name="MailSubject" ColumnName="MailSubject" />
+                <ScalarProperty Name="MailFrom" ColumnName="MailFrom" />
+                <ScalarProperty Name="SendTime" ColumnName="SendTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MailError">
+            <EntityTypeMapping TypeName="Models.MailError">
+              <MappingFragment StoreEntitySet="MailError">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MailId" ColumnName="MailId" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MailStatus">
+            <EntityTypeMapping TypeName="Models.MailStatus">
+              <MappingFragment StoreEntitySet="MailStatus">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MailStatus1" ColumnName="MailStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResetPassword">
+            <EntityTypeMapping TypeName="Models.ResetPassword">
+              <MappingFragment StoreEntitySet="ResetPassword">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CreationTime" ColumnName="CreationTime" />
+                <ScalarProperty Name="ExpirationTime" ColumnName="ExpirationTime" />
+                <ScalarProperty Name="IsValid" ColumnName="IsValid" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Right">
+            <EntityTypeMapping TypeName="Models.Right">
+              <MappingFragment StoreEntitySet="Right">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServicePassenger">
+            <EntityTypeMapping TypeName="Models.ServicePassenger">
+              <MappingFragment StoreEntitySet="ServicePassenger">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="TCK" ColumnName="TCK" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PassengerCount" ColumnName="PassengerCount" />
+                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Models.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
+                <ScalarProperty Name="GSM" ColumnName="GSM" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TCNo" ColumnName="TCNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCountry">
+            <EntityTypeMapping TypeName="Models.UserCountry">
+              <MappingFragment StoreEntitySet="UserCountry">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRight">
+            <EntityTypeMapping TypeName="Models.UserRight">
+              <MappingFragment StoreEntitySet="UserRight">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="RightId" ColumnName="RightId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserType">
+            <EntityTypeMapping TypeName="Models.UserType">
+              <MappingFragment StoreEntitySet="UserType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CountryTemp">
+            <EntityTypeMapping TypeName="Models.CountryTemp">
+              <MappingFragment StoreEntitySet="CountryTemp">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Iso" ColumnName="Iso" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TrName" ColumnName="TrName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwCarSearchQuery">
+            <EntityTypeMapping TypeName="Models.vwCarSearchQuery">
+              <MappingFragment StoreEntitySet="vwCarSearchQuery">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="SearchText" ColumnName="SearchText" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwServicePassenger">
+            <EntityTypeMapping TypeName="Models.vwServicePassenger">
+              <MappingFragment StoreEntitySet="vwServicePassenger">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="PassengerCount" ColumnName="PassengerCount" />
+                <ScalarProperty Name="CarType" ColumnName="CarType" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
+                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
+                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CarPassenger" ColumnName="CarPassenger" />
+                <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
+                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
+                <ScalarProperty Name="DestinationBox" ColumnName="DestinationBox" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwUserList">
+            <EntityTypeMapping TypeName="Models.vwUserList">
+              <MappingFragment StoreEntitySet="vwUserList">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="GSM" ColumnName="GSM" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="UserTypeName" ColumnName="UserTypeName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="Models.Store.GetRightsOfTheUser" FunctionImportName="GetRightsOfTheUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.GetRightsOfTheUser_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="Models.Store.GetRightsOfTheUserr" FunctionImportName="GetRightsOfTheUserr">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.GetRightsOfTheUserr_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CarService">
+            <EntityTypeMapping TypeName="Models.CarService">
+              <MappingFragment StoreEntitySet="CarService">
+                <ScalarProperty Name="MapLongitude" ColumnName="MapLongitude" />
+                <ScalarProperty Name="MapLatitude" ColumnName="MapLatitude" />
+                <ScalarProperty Name="IsVoluntaryService" ColumnName="IsVoluntaryService" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+                <ScalarProperty Name="DeletedUserId" ColumnName="DeletedUserId" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
+                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
+                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
+                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="CarTypeId" ColumnName="CarTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwCarList">
+            <EntityTypeMapping TypeName="Models.vwCarList">
+              <MappingFragment StoreEntitySet="vwCarList">
+                <ScalarProperty Name="IsVoluntaryService" ColumnName="IsVoluntaryService" />
+                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="PassengerCount" ColumnName="PassengerCount" />
+                <ScalarProperty Name="DestinationBox" ColumnName="DestinationBox" />
+                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
+                <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
+                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
+                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CarType" ColumnName="CarType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DestinationPollingDates">
+            <EntityTypeMapping TypeName="Models.DestinationPollingDates">
+              <MappingFragment StoreEntitySet="DestinationPollingDates">
+                <ScalarProperty Name="ElectionEndDate" ColumnName="ElectionEndDate" />
+                <ScalarProperty Name="ElectionStartDate" ColumnName="ElectionStartDate" />
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PollingBox">
+            <EntityTypeMapping TypeName="Models.PollingBox">
+              <MappingFragment StoreEntitySet="PollingBox">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
+                <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PollingClerk">
+            <EntityTypeMapping TypeName="Models.PollingClerk">
+              <MappingFragment StoreEntitySet="PollingClerk">
+                <ScalarProperty Name="AssociateMemberSecondary" ColumnName="AssociateMemberSecondary" />
+                <ScalarProperty Name="AssociateMember" ColumnName="AssociateMember" />
+                <ScalarProperty Name="BoxId" ColumnName="BoxId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PollingList">
+            <EntityTypeMapping TypeName="Models.PollingList">
+              <MappingFragment StoreEntitySet="PollingList">
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TC" ColumnName="TC" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

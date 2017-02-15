@@ -1,0 +1,169 @@
+﻿@using secimyolu.Models
+
+@{
+    ViewBag.Title = "Kullanıcı Ekle";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+}
+<script src="~/Content/js/bootstrap-multiselect.js"></script>
+<link href="~/Content/js/bootstrap-multiselect.css" rel="stylesheet" />
+<style>
+    .LV_invalid {
+        color: red;
+    }
+</style>
+<form method="POST" id="CreateUser">
+    <div class="page-group">
+        <div class="page-group-top">
+            <h3>Üye Oluştur</h3>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-input">
+                <input type="text" class="text-input floating-label" tabindex="1" maxlength="50" id="name" name="Name" aria-invalid="false">
+                <label for="name">Ad*<span id="validName" class="gfield_required"></span></label>
+            </div>
+            <script type="text/javascript">
+                var nameVal = new LiveValidation('name', { onlyOnSubmit: 'true', insertAfterWhatNode: 'validName', onValid: function() {} });
+                nameVal.add(Validate.Presence, { failureMessage: 'Ad giriniz!' });
+            </script>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-input">
+
+                <input type="text" class="text-input floating-label" tabindex="2" id="surname" maxlength="50" name="Surname" aria-invalid="false">
+                <label for="surname">Soyad*<span id="validSurname" class="gfield_required"></span></label>
+            </div>
+            <script type="text/javascript">
+                var surname = new LiveValidation('surname', { onlyOnSubmit: 'true', insertAfterWhatNode: "validSurname", onValid: function() {} });
+                surname.add(Validate.Presence, { failureMessage: 'Soyad giriniz!' });
+            </script>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-6">
+            <div class="paper-input">
+                <input style="display:none" type="text" name="fakeemailremembered" />
+                <input type="text" class="text-input floating-label" tabindex="3" id="email" maxlength="50" name="Email" aria-invalid="false">
+                <label for="email">Eposta*<span id="validEmail" class="gfield_required"></span></label>
+            </div>
+            <script type="text/javascript">
+                var mail = new LiveValidation('email', { onlyOnSubmit: 'true', insertAfterWhatNode: "validEmail", onValid: function() {} });
+                mail.add(Validate.Email, { failureMessage: 'Geçerli eposta giriniz!' });
+                mail.add(Validate.Presence, { failureMessage: 'Eposta giriniz!' });
+            </script>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-input">
+                <input style="display:none" type="password" name="fakepasswordremembered" />
+                <input type="password" class="text-input floating-label" tabindex="4" id="password" maxlength="50" name="Password" aria-invalid="false">
+                <label for="password">Şifre*<span id="validPassword" class="gfield_required"></span></label>
+            </div>
+            <script type="text/javascript">
+                var pass = new LiveValidation('password', { onlyOnSubmit: 'true', insertAfterWhatNode: "validPassword", onValid: function() {} });
+                pass.add(Validate.Presence, { failureMessage: 'Şifre giriniz!' });
+            </script>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="" class="select-label">Kullanıcı Türü*<span id="validType" class="gfield_required"></span></label>
+                <select name="UserTypeId" id="type" onchange=" changeType(); return false; " tabindex="5" class="text-input floating-label">
+                    <option value="-1" selected>Seçiniz</option>
+                    <option value="2">BSKM</option>
+                    <option value="3">YSKM</option>
+                </select>
+                <script type="text/javascript">
+                    var userType = new LiveValidation('type', { onlyOnSubmit: 'true', insertAfterWhatNode: "validType", onValid: function() {} });
+                    userType.add(Validate.Exclusion, { within: ['-1'], failureMessage: 'Kullanıcı türünü seçiniz!' });
+                </script>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-6">
+            <div class="paper-input">
+
+                <input type="text" class="text-input floating-label" id="GSM" tabindex="6" maxlength="15" name="GSM" aria-invalid="false">
+                <label for="GSM">GSM</label>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12" id="countryDiv">
+            <div id="divstudentlist" style="height: 110px; overflow: auto; border: 1px solid #eaeaea; padding: 15px; width: 50%;">
+                <table width="100%">
+                    @foreach (var names in Current.Context.Country)
+                    {
+                        var checkBoxId = "chk" + names.Id;
+                        var tdId = "td" + names.Id;
+
+                        <tr>
+                            <td style="width: 5%">
+                                <input type="checkbox" name="Country" id="@checkBoxId" class="chkclass" value="@names.Id"/>
+                            </td>
+                            <td width="100px" id="@tdId">
+                                @names.Name
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-12">
+            <br/>
+            <a href="javascript:void(0);" onclick=" $('#CreateUser').submit(); " class="btn btn-xl">Kaydet</a>
+            <div class="clearfix"></div>
+            <label style="margin-top: 15px">Not: * Alanlar doldurulması zorunlu alanlardır.</label>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+
+            $('.chkclass').click(function () {
+
+                var getchkid = $(this).attr('id');
+                var isChecked = $('#' + getchkid).is(':checked');
+
+                if ($('#' + getchkid).is(':checked') == true) {
+                    $('#td' + $(this).val()).css("color", "white");
+                    $('#td' + $(this).val()).css("background-color", "blue");
+                }
+                else {
+                    $('#td' + $(this).val()).css("color", "black");
+                    $('#td' + $(this).val()).css("background-color", "white");
+                }
+            });
+
+        });
+
+    </script>
+
+           
+            <script type="text/javascript">
+                function changeType() {
+                    var typeValue = $("#type").val();
+                    if (typeValue == 3 || typeValue == 1) {
+                        $('#countryDiv').hide();
+                    } else {
+                        $('#countryDiv').show();
+                    }
+                }
+
+            </script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#Country').multiselect({ nonSelectedText: 'Seçiniz!' });
+                    $('#countryDiv').hide();
+                });
+            </script>
+
+        </form>
+            <style>
+                .dropdown-menu {
+                    max-height: 300px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                }
+            </style>

@@ -1,0 +1,151 @@
+﻿@using secimyolu.Models
+@model User
+@{
+    ViewBag.Title = "Kullanıcı Güncelle";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+    List<int> countryList = Current.Context.UserCountry.Where(d => d.UserId == Model.Id).Select(d => (int)d.CountryId).ToList();
+}
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.min.js"></script>
+<link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+
+<script src="~/Content/js/bootstrap-multiselect.js"></script>
+<link href="~/Content/js/bootstrap-multiselect.css" rel="stylesheet" />*@
+<script src="~/Content/js/bootstrap-multiselect.js"></script>
+<link href="~/Content/js/bootstrap-multiselect.css" rel="stylesheet" />
+
+
+<style>
+    .LV_invalid {
+        color: red;
+    }
+</style>
+<form method="POST" id="CreateUser">
+    <input type="hidden" name="Id" value="@(Model!=null ? Model.Id:-1)"/>
+<div class="page-group">
+<div class="page-group-top">
+<h3>Kullanıcı Düzenle</h3>
+</div>
+
+    <div class="col-md-6">
+        <div class="paper-input">
+ 
+            <input type="text" class="text-input floating-label" tabindex="1" id="name" maxlength="50" name="Name" value="@(Model != null && Model.Name != null ? Model.Name : "")" aria-invalid="false">
+           <label for="name">Ad<span id="validName" class="gfield_required"></span></label>
+        </div>
+        <script type="text/javascript">
+            var nameVal = new LiveValidation('name', { onlyOnSubmit: 'true',insertAfterWhatNode: 'validName', onValid: function() {} });
+            nameVal.add(Validate.Presence, { failureMessage: 'Ad giriniz!' });
+        </script>
+
+        <div class="paper-input">
+
+            <input type="text" class="text-input floating-label" id="email" name="Email" maxlength="50" value="@(Model != null && Model.Email != null ? Model.Email : "")" disabled aria-invalid="false">
+            <label for="email">Eposta<span id="validEmail" class="gfield_required"></span></label>
+        </div>
+        <script type="text/javascript">
+            var mail = new LiveValidation('email', { onlyOnSubmit: 'true',insertAfterWhatNode:"validEmail", onValid: function() {} });
+            mail.add(Validate.Email, { failureMessage: 'Geçerli eposta giriniz!' });
+            mail.add(Validate.Presence, { failureMessage: 'Eposta giriniz!' });
+        </script>
+        <div class="form-group">
+            <label for="" class="select-label">Kullanıcı Türü<span id="validType" class="gfield_required"></span></label>
+            <select name="UserTypeId" id="type" onchange="changeType(); return false; " tabindex="3" class="text-input floating-label">
+                @Html.Raw(Utilities.getUserTypeList(Model != null && Model.UserTypeId != null ? (int) Model.UserTypeId : -1))
+            </select>
+            <script type="text/javascript">
+                var userType = new LiveValidation('type', { onlyOnSubmit: 'true',insertAfterWhatNode :"validType", onValid: function() {} });
+                userType.add(Validate.Exclusion, { within: ['-1'], failureMessage: 'Kullanıcı türünü seçiniz!' });
+            </script>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="paper-input">
+            
+            <input type="text" class="text-input floating-label" id="surname" tabindex="2" name="Surname" maxlength="50" value="@(Model != null && Model.Surname != null ? Model.Surname : "")" aria-invalid="false">
+<label for="surname">Soyad<span id="validSurname" class="gfield_required"></span></label>
+        </div>
+        <script type="text/javascript">
+            var surname = new LiveValidation('surname', { onlyOnSubmit: 'true', insertAfterWhatNode: "validSurname", onValid: function() {} });
+            surname.add(Validate.Presence, { failureMessage: 'Soyad giriniz!' });
+        </script>
+        <div class="paper-input">
+      
+            <input type="password" class="text-input floating-label" id="password" maxlength="50" value="****************" disabled name="Password" aria-invalid="false">
+      <label for="password">Şifre</label>
+        </div>
+        <div class="paper-input">
+      
+            <input type="text" class="text-input floating-label" id="GSM" name="GSM" tabindex="4" maxlength="15" value="@(Model != null && Model.GSM != null ? Model.GSM : "")" aria-invalid="false">
+      <label for="GSM">GSM</label>
+        </div>
+    </div>
+    <div class="col-md-12" id="countryDiv">
+        <div id="divstudentlist" style="height: 110px; overflow: auto; border: 1px solid #eaeaea; width: 50%; padding:15px;">
+            @foreach (var names in Current.Context.Country)
+            {
+                var checkBoxId = "chk" + names.Id;
+                var tdId = "td" + names.Id;
+                <table width="100%">
+                    <tr>
+                        <td style="width: 22px;">
+                            @if (countryList.Contains(names.Id))
+                            {
+                                <input type="checkbox" checked name="Country" id="@checkBoxId" class="chkclass" value="@names.Id"/>
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="Country" id="@checkBoxId" class="chkclass" value="@names.Id"/>
+                            }
+
+                        </td>
+                        <td id="@tdId" style="text-align:left;">
+                            @names.Name
+                        </td>
+                    </tr>
+
+                </table>
+            }
+        </div>
+    </div>
+<div class="clearfix"></div>
+
+    <div class="clearfix"></div>
+<br />
+    <div class="col-md-12">
+        <a href="javascript:void(0);" onclick=" $('#CreateUser').submit(); " class="btn btn-xl">Kaydet</a>
+    </div>
+  <div class="clearfix"></div>
+
+</div>
+    <script type="text/javascript">
+        function changeType() {
+            var typeValue = $("#type").val();
+            if (typeValue == 3 || typeValue==1) {
+                $('#countryDiv').hide();
+            } else {
+                $('#countryDiv').show();
+            }
+        }
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#Country').multiselect({ nonSelectedText: 'Seçiniz!' });
+            if (@Model.UserTypeId == 2) {
+                $('#countryDiv').show();
+            } else
+                $('#countryDiv').hide();
+        });
+    </script>
+
+</form>
+<style>
+    .dropdown-menu {
+        max-height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+</style>

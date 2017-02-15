@@ -1,0 +1,65 @@
+﻿@using secimyolu.Models
+@{
+    ViewBag.Title = "SANDIK YÖNETİMİ";
+    Layout = "~/Views/Shared/ManagerLayout.cshtml";
+}
+<style>
+    .top {
+        margin-top: 25px;
+    }
+</style>
+
+
+<div class="page-group">
+    <div class="page-group-top">
+        <h3>@ViewBag.Title</h3>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="CountryId" class="select-label">Ülke</label>
+            <select name="newCar.CountryId" id="CountryId" onchange="GetDestination(); return false;" class="text-input floating-label">
+                @Html.Raw(Utilities.getCountryOptionList(-1))
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="Destination" class="select-label">Konsolosluk</label>
+            <select name="newCar.Destination" id="Destination" onchange="GetBoxList(); return false;" class="text-input floating-label">
+                @Html.Raw(Utilities.getDestinationOptionList(-1))
+            </select>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div id="destinationBoxes"></div>
+    <script type="text/javascript">
+        function GetDestination() {
+            var CountryId = $('#CountryId').val();
+            var ActionUrl = '@Url.Action("GetDestinations", "Management", new {area = ""})';
+            $.ajax({
+                url: ActionUrl,
+                data: { CountryId: CountryId, SelVal: -1 },
+                type: 'GET',
+                success: function(data) {
+                    $('#Destination').empty();
+                    $('#Destination').append(data);
+
+                }
+            });
+
+        }
+
+        function GetBoxList() {
+            var destinationId = $('#Destination').val();
+            var ActionUrl = '@Url.Action("BoxDetail", "Management", new {area = ""})';
+            $.ajax({
+                url: ActionUrl,
+                data: { destinationId: destinationId },
+                type: 'GET',
+                success: function (data) {
+                    $('#destinationBoxes').html(data);
+                }
+            });
+        }
+    </script>
+</div>

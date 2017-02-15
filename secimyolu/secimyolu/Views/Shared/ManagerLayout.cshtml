@@ -1,0 +1,138 @@
+﻿
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,100,300,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>    
+    <script src="~/Scripts/jquery.js"></script>
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <link href="~/Content/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/livevalidation_standalone.js"></script>
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+<script src="~/Content/js/utils.js"></script>
+    <link href="~/Content/css/input.css" rel="stylesheet" />
+    <script src="~/Content/js/input.js"></script>
+    <style>
+        .LV_invalid {
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body id="page-top" class="index" style="background-color: #3975B1 !important;">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default" style="padding-bottom: 0;">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">        
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>   
+                <a class="navbar-brand page-scroll" href="/"><img src="~/Content/img/logo.png" /></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+
+
+                    @if (secimyolu.Models.Current.isLogon)
+                    {
+                        int UserType = (int)secimyolu.Models.Current.getUser.UserTypeId;
+                        if (UserType == secimyolu.Models.Constants.USER_TYPE_BSKM || UserType == secimyolu.Models.Constants.USER_TYPE_YSKM)
+                        {
+                           <li> <a href="@Url.Action("CarList","Management")" class="page-scroll">ARAÇ YÖNETİMİ</a></li>
+                        }
+
+                        if (UserType == secimyolu.Models.Constants.USER_TYPE_YSKM)
+                        {
+                            <li> <a href="@Url.Action("Index", "User")" class="page-scroll">KULLANICI LİSTESİ</a></li>
+                            <li> <a href="@Url.Action("BoxList","Management")" class="page-scroll">SANDIK YÖNETİMİ</a></li>
+                        }
+                    }
+                   
+                    <li>
+                        <a class="page-scroll" href="@Url.Action("Edit","Account")">PROFİL</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="@Url.Action("Logout","Account")">ÇIKIŞ</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+
+
+    @if (TempData["ErrorType"] != null)
+    {
+
+        <div id="FailMessageArea" style="font-weight: 400; background-color:#ec5050; color:#fff; opacity: 0;padding-left: 8px; position:absolute;left: 50%;top: 50%; z-index:999999; transform: translate(-50%, 25%); cursor:pointer" onclick="closeWarningArea('FailMessageArea');" class="ErrorField alert alert-danger">@(TempData["Message"] ?? null)<i style="display: inline-block; margin: 0 0 -7px 12px; opacity:.5;" class="icon-content-black clear-md"></i></div>
+
+        <div id="SuccessMessageArea" style="position:absolute;font-weight: 400; background-color:#5cb85c; color:#fff; opacity: 0; padding-left: 8px;left: 50%;top: 50%; z-index:999999; transform: translate(-50%, 25%);" class="ErrorField alert alert-success">@(TempData["Message"] ?? null)<i style="display: inline-block; margin: 0 0 -7px 12px; opacity:.5; cursor:pointer" onclick="closeWarningArea('SuccessMessageArea');" class="icon-content-black clear-md"></i></div>
+
+        if (TempData["ErrorType"].ToString() == "Fail")
+        {
+
+            <script type="text/javascript">
+                if (document.cookie.search("ShowError=0") < 0) {
+                    $('#FailMessageArea').css('display', 'block');
+                    $('#FailMessageArea').animate({ "top": 250, "opacity": "1" }, "slow");
+                    document.cookie = "ShowError=0;path=/;";//ilk gosterimden sonra, back yapinca tekrar gostermemek icin
+                }
+            </script>
+        }
+        if (TempData["ErrorType"].ToString() == "Success")
+        {
+            <script type="text/javascript">
+                if (document.cookie.search("ShowError=0") < 0) {
+                    $('#SuccessMessageArea').css('display', 'block');
+                    $('#SuccessMessageArea').animate({ "top": 250, "opacity": "1" }, "slow");
+                    document.cookie = "ShowError=0;path=/;";//ilk gosterimden sonra, back yapinca tekrar gostermemek icin
+                }
+            </script>
+        }
+
+    }
+    <script type="text/javascript">
+        function closeWarningArea(item) {
+            $('#' + item).animate({ "top": 230, "opacity": "0" }, "slow");
+            $('#' + item).css('display', 'none');
+        }
+
+        setTimeout(function () {
+            $('.ErrorField').animate({ "top": 230, "opacity": "0" }, "slow");
+            $('.ErrorField').fadeOut('fast');
+            //$('.ErrorField').css('display', 'none');
+        }, 4000);
+    </script>
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+</body>
+</html>
