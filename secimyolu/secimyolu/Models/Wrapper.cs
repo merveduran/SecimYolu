@@ -14,6 +14,18 @@ namespace secimyolu.Models
       public DateTime depDate { get; set; }
   }
 
+    public class UserBoxModel
+    {
+        public string TCNo { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Gsm { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public int BoxId { get; set; }
+        public int MemberType { get; set; }
+    }
+
   public class ResetPasswordMail
   {
       public string UserName { get; set; }

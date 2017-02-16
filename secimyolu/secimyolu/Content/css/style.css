@@ -1264,16 +1264,16 @@ label {
 
     .panel-default > .panel-heading .badge {
         color: #f5f5f5;
-        background-color: #0C6978;
+        background-color: #3975b1;
         font-size: 14px;
     }
 
 .inputIcon {
-    position: relative;
-    top: -23px;
-    z-index: 9999999999;
+    /*position: relative;
     float: right;
-    cursor: pointer;
-    color: #999; /*#29f*/;
     margin-right: 10px;
+    width: 40%;*/
+    width: 49% !important;
+    float: right !important;
+    margin-top: -32px !important;
 }

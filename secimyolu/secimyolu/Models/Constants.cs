@@ -17,6 +17,7 @@ namespace secimyolu.Models
         public const int USER_TYPE_GUEST = 1;
         public const int USER_TYPE_BSKM = 2;
         public const int USER_TYPE_YSKM = 3;
+        public const int USER_TYPE_POLLING_CLERK = 4;
 
         public const int MAIL_TYPE_RESET_PASSWORD = 1;
 

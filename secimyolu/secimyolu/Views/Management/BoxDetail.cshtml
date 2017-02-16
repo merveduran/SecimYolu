@@ -6,15 +6,16 @@
     var dateList = Model.Any() ? Model.GroupBy(g => g.PollingDate) : null;
     var indx = 1;
 }
-@if (Model.Any()) { 
+@if (Model.Any()) {
     foreach(var item in dateList)
     {
+        var boxInfo = Model.Where(c => c.PollingDate == item.Key);
         <div class="panel-group" id="accordion@(indx)" role="tablist">
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab">
                     <h4 class="panel-title collapsed" role="tab" role="button" data-toggle="collapse" data-parent="#accordion@(indx)" href="#collapse@(indx)" aria-expanded="true" aria-controls="collapse@(indx)">
                         <i class="fa fa-calendar"></i> @item.Key.Value.ToShortDateString()
-                        @*<span id="countryCount" class="badge pull-right">0</span>*@
+                        <span id="countryCount" class="badge pull-right">1/@(boxInfo.Count())</span>
                     </h4>
                 </div>
                 <div id="collapse@(indx)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1" style="height: 0px;">
@@ -32,8 +33,8 @@
                                   {
                                       <tr>
                                           <td>@box.BoxNumber</td>
-                                          <td><input type="text" id="inpMember@(box.Id)" value="@box.Member" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id, 0); }" maxlength="11"/><i class="fa fa-user inputIcon"></i></td>
-                                          <td><input type="text" id="inpMemberSec@(box.Id)" value="@box.MemberSecondary" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id,1);}" maxlength="11"/><i class="fa fa-user inputIcon"></i></td>
+                                      <td><input type="text" id="inpMember@(box.Id)" value="@box.Member" style="width: 50%" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id, 0); }" maxlength="11"/><input id="inpMemberInfo@(box.Id)" class="text-input floating-label inputIcon" type="text" readonly="readonly" placeholder="Görevli Ad Soyad"/></td>
+                                          <td><input type="text" id="inpMemberSec@(box.Id)" value="@box.MemberSecondary" style="width: 50%" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id,1);}" maxlength="11" /><input id="inpMemberSecName@(box.Id)" class="text-input floating-label inputIcon" type="text" readonly="readonly" placeholder="Görevli Ad Soyad" /></td>
                                       </tr>
                                   }
                               </tbody>

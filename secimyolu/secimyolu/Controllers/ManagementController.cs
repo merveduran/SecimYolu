@@ -365,23 +365,43 @@ namespace secimyolu.Controllers
         public ActionResult AddAssociateMember(string tck)
         {
             PollingList pollingList = Current.Context.PollingList.FirstOrDefault(f => f.TCKimlikNo == tck);
+            if (pollingList == null)
+            {
+                pollingList = new PollingList();
+                pollingList.TCKimlikNo = tck;
+            }
             return PartialView(pollingList);
         }
-      
-        public bool SaveAssociateMember(int boxId, int memberId, int memberType = 0)
+
+        public bool SaveAssociateMember(UserBoxModel boxModel)
         {
             try
             {
-                var box = Current.Context.PollingClerk.FirstOrDefault(f => f.BoxId == boxId);
+                //seçmen tablosundan alınan kayıt user tablosunda var mı kontrol ediliyor. Yoksa önce user kaydı oluşturuluyor. Sandık görevlileri user tablosuyla ilişkili olacak
+                User user = Current.Context.User.FirstOrDefault(f => f.TCNo == boxModel.TCNo);
+                if (user == null)
+                {
+                    user = new User();
+                    user.TCNo = boxModel.TCNo;
+                    user.UserTypeId = Constants.USER_TYPE_POLLING_CLERK;
+                    user.Name = boxModel.Name;
+                    user.Surname = boxModel.Surname;
+                    Current.Context.User.Add(user);
+                }
+                user.Email = boxModel.Email;
+                user.GSM = boxModel.Gsm;
+                Current.Context.SaveChanges();
+
+                var box = Current.Context.PollingClerk.FirstOrDefault(f => f.BoxId == boxModel.BoxId);
                 if (box == null)
                 {
                     box = new PollingClerk();
-                    box.BoxId = boxId;
+                    box.BoxId = boxModel.BoxId;
                 }
-                if (memberType == 0) // asıl üye = 0, yedek = 1
-                    box.AssociateMember = memberId;
+                if (boxModel.MemberType == 0) // asıl üye = 0, yedek = 1
+                    box.AssociateMember = user.Id;
                 else
-                    box.AssociateMemberSecondary = memberId;
+                    box.AssociateMemberSecondary = user.Id;
 
                 if (box.Id == 0)
                     Current.Context.PollingClerk.Add(box);

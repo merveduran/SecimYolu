@@ -4,61 +4,95 @@
     Layout = null;
 }
 
-    <input type="hidden" name="memberId" value="@Model.Id"/>
+<script src="~/Scripts/jquery-ui.min.js"></script>
+<link href="~/Content/css/jquery-ui.min.css" rel="stylesheet" />
+<style>
+    .LV_invalid {
+        color: red;
+    }
+</style>
+<input type="hidden" name="memberId" value="@Model.Id"/>
     <div style="text-align:center;" class="alert alert-info">
         Seçmen bilgileri doğru ise <b>Kaydet</b> butonu ile ilgili sandığa görevli atayabilirsiniz.
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="paper-info">
+            <div class="paper-input">
                 <label>Ad</label>
-                <input type="text" class="text-input floating-label" id="name" tabindex="4" value="@Model.Adi" readonly="readonly">
+                <input type="text" class="text-input floating-label" id="name" name="Name" value="@Model.Adi" @(Model.Adi != null ? "readonly": "")>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="paper-info">
+            <div class="paper-input">
                 <label>Soyad</label>
-                <input type="text" class="text-input floating-label" id="surname" value="@Model.Soyadi" readonly="readonly">
+                <input type="text" class="text-input floating-label" id="surname" name="Surname" value="@Model.Soyadi" @(Model.Soyadi != null ? "readonly": "")>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="paper-info">
+            <div class="paper-input">
                 <label>TC Kimlik No</label>
-                <input type="text" class="text-input floating-label" id="tckNo" value="@(Model.TCKimlikNo)" readonly="readonly">
+                <input type="text" class="text-input floating-label" id="tckNo" name="TCNo" value="@(Model.TCKimlikNo)" @(Model.TCKimlikNo != null ? "readonly": "")>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="paper-info">
-                <label>Pasaport No</label>
-                <input type="text" class="text-input floating-label" id="passport" value="" readonly="readonly">
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="paper-info">
+            <div class="paper-input">
                 <label>Cep Telefonu</label>
-                <input type="text" class="text-input floating-label" id="mobilePhone" value="@Model.Telefon" readonly="readonly">
+                <input type="text" class="text-input floating-label" id="mobilePhone" name="GSM" value="@Model.Telefon" >
             </div>
         </div>
         <div class="col-md-6">
-            <div class="paper-info">
+            <div class="paper-input">
                 <label>E-posta</label>
-                <input type="text" class="text-input floating-label" id="email" value="" readonly="readonly">
+                <input type="text" class="text-input floating-label" id="email" name="Email" value="">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-input">
+                <label>Şifre</label>
+                <input type="text" class="text-input floating-label" id="password" name="Password" value="">
             </div>
         </div>
         <div class="clearfix"></div>
     </div>
-    <script>
-        function SaveAssociateMember(boxid, memberType) {
-            var ActionUrl = '@Url.Action("SaveAssociateMember", "Management", new {area = ""})';
-            $.ajax({
-                url: ActionUrl,
-                data: { boxId: boxid, memberId : '@Model.Id', memberType : memberType },
-                type: 'GET',
-                success: function (data) {
-                   if (data == 'True') {
-                       $('#MemberInfo').modal("toggle");
-                   }
+<script type="text/javascript">
+    function SaveAssociateMember(boxid, memberType) {
+        var curUser = new Object();
+        curUser.TCNo = $('#tckNo').val();
+        curUser.Name = $('#name').val();
+        curUser.Surname = $('#surname').val();
+        curUser.Email = $('#email').val();
+        curUser.Gsm = $('#mobilePhone').val();
+        curUser.BoxId = boxid;
+        curUser.MemberType = memberType;
+
+        var ActionUrl = '@Url.Action("SaveAssociateMember", "Management", new {area = ""})';
+        $.ajax({
+            url: ActionUrl,
+            type: 'GET',
+            data: curUser,
+            async: false,
+            success: function(data) {
+                if (data == 'True') {
+                    $('#MemberInfo').modal("toggle");
                 }
-            });
-        }
-    </script>
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var name1 = new LiveValidation('name', { onlyOnSubmit: 'true', onValid: function () { } });
+    name1.add(Validate.Presence, { failureMessage: 'Ad giriniz!' });
+
+    var surname = new LiveValidation('surname', { onlyOnSubmit: 'true', onValid: function () { } });
+    surname.add(Validate.Presence, { failureMessage: 'Soyad giriniz!' });
+
+    var tckNo = new LiveValidation('tckNo', { onlyOnSubmit: 'true', onValid: function () { } });
+    tckNo.add(Validate.Presence, { failureMessage: 'Kimlik numarası giriniz!' });
+
+    var email = new LiveValidation('email', { onlyOnSubmit: 'true', onValid: function () { } });
+    email.add(Validate.Presence, { failureMessage: 'Mail adresi giriniz!' });
+
+    var password = new LiveValidation('password', { onlyOnSubmit: 'true', onValid: function () { } });
+    password.add(Validate.Presence, { failureMessage: 'Şifre giriniz!' });
+
+</script>
