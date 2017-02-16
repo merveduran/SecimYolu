@@ -22,7 +22,8 @@
     <!-- Custom Fonts -->
     <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,100,300,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBJaUThIBbkhKjEpCG3r4e_j5g0IAwy9NI&sensor=false&libraries=places&language=en"></script>
+    @*<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBJaUThIBbkhKjEpCG3r4e_j5g0IAwy9NI&sensor=false&libraries=places&language=en"></script>*@
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDYQrOCz-itw35UkMlX1jVG495nsncbIEk&sensor=false&libraries=places&language=en"></script>
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/jquery-ui.min.js"></script>
@@ -398,7 +399,7 @@
                                                 <a class="trip-search-oneresult" rel="nofollow" href="javascript:void(0);">
                                                     <article class="row">
                                                         <div class="user col-md-2" style="margin-top: 51px">
-                                                            <i class="fa fa-car" style="font-size 60px;"></i>
+                                                            <i class="fa fa-car" style="font-size:60px;"></i>
                                                         </div>
                                                         <div class="description col-md-4">
                                                             <h3 class="time light-gray">@(item.DepartureDate != null ? ((DateTime)item.DepartureDate).ToString("dd/MM/yyyy") : "-") - @(item.DepartureHour ?? "-")</h3>

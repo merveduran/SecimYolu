@@ -967,9 +967,9 @@ border-color:#000;
             margin: 5px 0 -16px;
         }
 
-    .trip-search-results article {
+    /*.trip-search-results article {
         background: transparent url(../../Content/images/search/trip-user-separator.png) repeat-y 205px 0;
-    }
+    }*/
 
 .no-trip-search-title .trip-search-title-count {
     font-size: 19px;

@@ -98,7 +98,7 @@
                     <div class="form-group">
                         <label for="sel1" class="select-label">Araç Türü</label>
                         <select name="newCar.CarTypeId" class="text-input floating-label" id="carType">
-                            <option value="-1">Seçiniz</option>
+                            @*<option value="-1">Seçiniz</option>*@
                             @Html.Raw(Utilities.GetCarTypeList(Model.CarTypeId ?? -1))
                         </select>
                     </div>

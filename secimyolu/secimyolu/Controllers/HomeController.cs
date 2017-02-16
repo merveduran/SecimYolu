@@ -89,7 +89,7 @@ namespace secimyolu.Controllers
                 CarService service = Current.Context.CarService.FirstOrDefault(d => d.Id == ServiceId);
                 if (service != null)
                 {
-                    ServicePassenger cService = Current.Context.ServicePassenger.FirstOrDefault(d => d.AddUserId == Current.getUserId && d.ServiceId == d.ServiceId);
+                    ServicePassenger cService = Current.Context.ServicePassenger.FirstOrDefault(d => d.AddUserId == Current.getUserId && d.ServiceId == ServiceId);
                     secimyolu.Models.User curUser = Current.getUser;
                     if (cService == null)
                     {

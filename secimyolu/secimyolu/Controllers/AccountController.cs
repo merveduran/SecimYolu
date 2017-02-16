@@ -333,7 +333,7 @@ namespace secimyolu.Controllers
             else
             {
                 var newUser = new User();
-                var oldUserInfo = Current.Context.User.FirstOrDefault(a => a.Email == facebookUser.email);
+                var oldUserInfo = Current.Context.User.FirstOrDefault(a => !string.IsNullOrEmpty(facebookUser.email) && a.Email == facebookUser.email);
                 if (oldUserInfo!=null)
                 {
                     //eğer adam kendi mail adresiyle daha önceden kaydolmuşsa bu hesapla facebooku eşleştirelim
