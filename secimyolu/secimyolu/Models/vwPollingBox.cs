@@ -12,11 +12,13 @@ namespace secimyolu.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PollingBox
+    public partial class vwPollingBox
     {
         public int Id { get; set; }
         public string BoxNumber { get; set; }
         public Nullable<int> DestinationId { get; set; }
         public Nullable<System.DateTime> PollingDate { get; set; }
+        public string Member { get; set; }
+        public string MemberSecondary { get; set; }
     }
 }

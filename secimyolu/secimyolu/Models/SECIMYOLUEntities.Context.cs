@@ -47,9 +47,10 @@ namespace secimyolu.Models
         public virtual DbSet<CarService> CarService { get; set; }
         public virtual DbSet<vwCarList> vwCarList { get; set; }
         public virtual DbSet<DestinationPollingDates> DestinationPollingDates { get; set; }
+        public virtual DbSet<PollingList> PollingList { get; set; }
         public virtual DbSet<PollingBox> PollingBox { get; set; }
         public virtual DbSet<PollingClerk> PollingClerk { get; set; }
-        public virtual DbSet<PollingList> PollingList { get; set; }
+        public virtual DbSet<vwPollingBox> vwPollingBox { get; set; }
     
         [DbFunction("SECIMYOLUEntities", "GetRightsOfTheUser")]
         public virtual IQueryable<GetRightsOfTheUser_Result> GetRightsOfTheUser(Nullable<int> p1)

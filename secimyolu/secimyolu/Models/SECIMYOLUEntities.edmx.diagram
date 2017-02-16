@@ -28,9 +28,10 @@
         <EntityTypeShape EntityType="Models.CarService" Width="1.5" PointX="3.375" PointY="13.75" />
         <EntityTypeShape EntityType="Models.vwCarList" Width="1.5" PointX="5.375" PointY="13.75" />
         <EntityTypeShape EntityType="Models.DestinationPollingDates" Width="1.5" PointX="12.375" PointY="6.75" />
-        <EntityTypeShape EntityType="Models.PollingBox" Width="1.5" PointX="7.375" PointY="13.75" />
-        <EntityTypeShape EntityType="Models.PollingClerk" Width="1.5" PointX="13.375" PointY="9.75" />
         <EntityTypeShape EntityType="Models.PollingList" Width="1.5" PointX="9.375" PointY="13.75" />
+        <EntityTypeShape EntityType="Models.PollingBox" Width="1.5" PointX="13.375" PointY="9.75" />
+        <EntityTypeShape EntityType="Models.PollingClerk" Width="1.5" PointX="11.375" PointY="13.75" />
+        <EntityTypeShape EntityType="Models.vwPollingBox" Width="1.5" PointX="13.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

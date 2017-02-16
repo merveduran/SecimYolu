@@ -15,8 +15,35 @@ namespace secimyolu.Models
     public partial class PollingList
     {
         public int Id { get; set; }
-        public string TC { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public string TCKimlikNo { get; set; }
+        public string Adi { get; set; }
+        public string Soyadi { get; set; }
+        public string AnaAdi { get; set; }
+        public string BabaAdi { get; set; }
+        public string Cinsiyet { get; set; }
+        public string DogumYeri { get; set; }
+        public string DogumYer { get; set; }
+        public string DogumTarihi { get; set; }
+        public string NufusIl { get; set; }
+        public string NufusIlce { get; set; }
+        public string Ilce { get; set; }
+        public string Mahalle { get; set; }
+        public string Sandik_Alani { get; set; }
+        public string Sandik { get; set; }
+        public string Sandik_Sira { get; set; }
+        public string Adres_Genel { get; set; }
+        public string Sokak { get; set; }
+        public string KapiNo { get; set; }
+        public string DaireNo { get; set; }
+        public string PostaKodu { get; set; }
+        public string Sehir { get; set; }
+        public string Eyalet { get; set; }
+        public string Ulke { get; set; }
+        public string ISOKod { get; set; }
+        public string TemsilcilikUlke { get; set; }
+        public string Aciklama { get; set; }
+        public string Telefon { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     }
 }

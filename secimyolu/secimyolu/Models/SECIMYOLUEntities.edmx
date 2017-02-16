@@ -113,7 +113,7 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BoxNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="DestinationId" Type="int" />
-          <Property Name="Date" Type="datetime" />
+          <Property Name="PollingDate" Type="datetime" />
         </EntityType>
         <EntityType Name="PollingClerk">
           <Key>
@@ -129,9 +129,36 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TC" Type="nvarchar" MaxLength="11" Nullable="false" />
-          <Property Name="Name" Type="nchar" MaxLength="100" />
-          <Property Name="Surname" Type="nvarchar" MaxLength="100" />
+          <Property Name="TCKimlikNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="Adi" Type="nvarchar" MaxLength="255" />
+          <Property Name="Soyadi" Type="nvarchar" MaxLength="255" />
+          <Property Name="AnaAdi" Type="nvarchar" MaxLength="255" />
+          <Property Name="BabaAdi" Type="nvarchar" MaxLength="255" />
+          <Property Name="Cinsiyet" Type="nvarchar" MaxLength="255" />
+          <Property Name="DogumYeri" Type="nvarchar" MaxLength="255" />
+          <Property Name="DogumYer" Type="nvarchar" MaxLength="255" />
+          <Property Name="DogumTarihi" Type="nvarchar" MaxLength="255" />
+          <Property Name="NufusIl" Type="nvarchar" MaxLength="255" />
+          <Property Name="NufusIlce" Type="nvarchar" MaxLength="255" />
+          <Property Name="Ilce" Type="nvarchar" MaxLength="255" />
+          <Property Name="Mahalle" Type="nvarchar" MaxLength="255" />
+          <Property Name="Sandik_Alani" Type="nvarchar" MaxLength="255" />
+          <Property Name="Sandik" Type="nvarchar" MaxLength="255" />
+          <Property Name="Sandik_Sira" Type="nvarchar" MaxLength="255" />
+          <Property Name="Adres_Genel" Type="nvarchar" MaxLength="255" />
+          <Property Name="Sokak" Type="nvarchar" MaxLength="255" />
+          <Property Name="KapiNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="DaireNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="PostaKodu" Type="nvarchar" MaxLength="255" />
+          <Property Name="Sehir" Type="nvarchar" MaxLength="255" />
+          <Property Name="Eyalet" Type="nvarchar" MaxLength="255" />
+          <Property Name="Ulke" Type="nvarchar" MaxLength="255" />
+          <Property Name="ISOKod" Type="nvarchar" MaxLength="255" />
+          <Property Name="TemsilcilikUlke" Type="nvarchar" MaxLength="255" />
+          <Property Name="Aciklama" Type="nvarchar" MaxLength="255" />
+          <Property Name="Telefon" Type="nvarchar" MaxLength="255" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="255" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="ResetPassword">
           <Key>
@@ -242,6 +269,19 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwCarSearchQuery' does not have a pr
           <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
           <Property Name="CityName" Type="nvarchar" MaxLength="150" />
           <Property Name="SearchText" Type="nvarchar" MaxLength="201" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.vwPollingBox' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwPollingBox">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="BoxNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="DestinationId" Type="int" />
+          <Property Name="PollingDate" Type="datetime" />
+          <Property Name="Member" Type="nvarchar" MaxLength="255" />
+          <Property Name="MemberSecondary" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SECIMYOLU.dbo.vwServicePassenger' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -403,6 +443,16 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
     [vwCarSearchQuery].[CityName] AS [CityName], 
     [vwCarSearchQuery].[SearchText] AS [SearchText]
     FROM [dbo].[vwCarSearchQuery] AS [vwCarSearchQuery]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwPollingBox" EntityType="Self.vwPollingBox" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwPollingBox].[Id] AS [Id], 
+    [vwPollingBox].[BoxNumber] AS [BoxNumber], 
+    [vwPollingBox].[DestinationId] AS [DestinationId], 
+    [vwPollingBox].[PollingDate] AS [PollingDate], 
+    [vwPollingBox].[Member] AS [Member], 
+    [vwPollingBox].[MemberSecondary] AS [MemberSecondary]
+    FROM [dbo].[vwPollingBox] AS [vwPollingBox]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwServicePassenger" EntityType="Self.vwServicePassenger" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -731,9 +781,10 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <EntitySet Name="CarService" EntityType="Models.CarService" />
           <EntitySet Name="vwCarList" EntityType="Models.vwCarList" />
           <EntitySet Name="DestinationPollingDates" EntityType="Models.DestinationPollingDates" />
+          <EntitySet Name="PollingList" EntityType="Models.PollingList" />
           <EntitySet Name="PollingBox" EntityType="Models.PollingBox" />
           <EntitySet Name="PollingClerk" EntityType="Models.PollingClerk" />
-          <EntitySet Name="PollingList" EntityType="Models.PollingList" />
+          <EntitySet Name="vwPollingBox" EntityType="Models.vwPollingBox" />
         </EntityContainer>
         <EntityType Name="CarService">
           <Key>
@@ -795,6 +846,42 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="ElectionStartDate" Type="DateTime" Precision="3" />
           <Property Name="ElectionEndDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="PollingList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TCKimlikNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Adi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Soyadi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AnaAdi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BabaAdi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Cinsiyet" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DogumYeri" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DogumYer" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DogumTarihi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="NufusIl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="NufusIlce" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Ilce" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Mahalle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Sandik_Alani" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Sandik" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Sandik_Sira" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Adres_Genel" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Sokak" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="KapiNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DaireNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PostaKodu" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Sehir" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Eyalet" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Ulke" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ISOKod" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TemsilcilikUlke" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Aciklama" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Telefon" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="PollingBox">
           <Key>
             <PropertyRef Name="Id" />
@@ -802,7 +889,7 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BoxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="DestinationId" Type="Int32" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="PollingDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="PollingClerk">
           <Key>
@@ -813,14 +900,16 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="AssociateMember" Type="Int32" />
           <Property Name="AssociateMemberSecondary" Type="Int32" />
         </EntityType>
-        <EntityType Name="PollingList">
+        <EntityType Name="vwPollingBox">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TC" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
-          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="BoxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationId" Type="Int32" />
+          <Property Name="PollingDate" Type="DateTime" Precision="3" />
+          <Property Name="Member" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MemberSecondary" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1101,10 +1190,47 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PollingList">
+            <EntityTypeMapping TypeName="Models.PollingList">
+              <MappingFragment StoreEntitySet="PollingList">
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="TemsilcilikUlke" ColumnName="TemsilcilikUlke" />
+                <ScalarProperty Name="ISOKod" ColumnName="ISOKod" />
+                <ScalarProperty Name="Ulke" ColumnName="Ulke" />
+                <ScalarProperty Name="Eyalet" ColumnName="Eyalet" />
+                <ScalarProperty Name="Sehir" ColumnName="Sehir" />
+                <ScalarProperty Name="PostaKodu" ColumnName="PostaKodu" />
+                <ScalarProperty Name="DaireNo" ColumnName="DaireNo" />
+                <ScalarProperty Name="KapiNo" ColumnName="KapiNo" />
+                <ScalarProperty Name="Sokak" ColumnName="Sokak" />
+                <ScalarProperty Name="Adres_Genel" ColumnName="Adres_Genel" />
+                <ScalarProperty Name="Sandik_Sira" ColumnName="Sandik_Sira" />
+                <ScalarProperty Name="Sandik" ColumnName="Sandik" />
+                <ScalarProperty Name="Sandik_Alani" ColumnName="Sandik_Alani" />
+                <ScalarProperty Name="Mahalle" ColumnName="Mahalle" />
+                <ScalarProperty Name="Ilce" ColumnName="Ilce" />
+                <ScalarProperty Name="NufusIlce" ColumnName="NufusIlce" />
+                <ScalarProperty Name="NufusIl" ColumnName="NufusIl" />
+                <ScalarProperty Name="DogumTarihi" ColumnName="DogumTarihi" />
+                <ScalarProperty Name="DogumYer" ColumnName="DogumYer" />
+                <ScalarProperty Name="DogumYeri" ColumnName="DogumYeri" />
+                <ScalarProperty Name="Cinsiyet" ColumnName="Cinsiyet" />
+                <ScalarProperty Name="BabaAdi" ColumnName="BabaAdi" />
+                <ScalarProperty Name="AnaAdi" ColumnName="AnaAdi" />
+                <ScalarProperty Name="Soyadi" ColumnName="Soyadi" />
+                <ScalarProperty Name="Adi" ColumnName="Adi" />
+                <ScalarProperty Name="TCKimlikNo" ColumnName="TCKimlikNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PollingBox">
             <EntityTypeMapping TypeName="Models.PollingBox">
               <MappingFragment StoreEntitySet="PollingBox">
-                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="PollingDate" ColumnName="PollingDate" />
                 <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
                 <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -1121,12 +1247,14 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PollingList">
-            <EntityTypeMapping TypeName="Models.PollingList">
-              <MappingFragment StoreEntitySet="PollingList">
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="TC" ColumnName="TC" />
+          <EntitySetMapping Name="vwPollingBox">
+            <EntityTypeMapping TypeName="Models.vwPollingBox">
+              <MappingFragment StoreEntitySet="vwPollingBox">
+                <ScalarProperty Name="MemberSecondary" ColumnName="MemberSecondary" />
+                <ScalarProperty Name="Member" ColumnName="Member" />
+                <ScalarProperty Name="PollingDate" ColumnName="PollingDate" />
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
+                <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

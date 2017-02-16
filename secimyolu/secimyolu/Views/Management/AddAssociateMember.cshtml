@@ -4,38 +4,61 @@
     Layout = null;
 }
 
-<form method="post" id="CarDefine">
-    <div class="row">
-        <div class="page-group">
-            <div class="col-md-12">
-                <div class="paper-input">
-                    <textarea class="text-input floating-label" tabindex="3" rows="3" id="Address" name="newCar.Address" maxlength="250" placeholder="Konum"></textarea>
-                    <label for="Address">Kalkış Adres</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="paper-input">
-
-                    <input type="text" class="text-input floating-label" id="arrivalDate" tabindex="4" name="newCar.DepartureDate" value="">
-                    <label for="departureDate">Kalkış Tarih</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="paper-input">
-                    <input type="text" class="text-input floating-label hasPtTimeSelect" id="DepartureHour" tabindex="5" name="newCar.DepartureHour" value="">
-                    <label for="DepartureHour">Kalkış Saat</label>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="Destination" class="select-label">Varış Noktası</label>
-                    <select name="newCar.Destination" id="Destination" class="text-input floating-label">
-                        <option value="-1">Seçiniz</option>
-                       
-                    </select>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
+    <input type="hidden" name="memberId" value="@Model.Id"/>
+    <div style="text-align:center;" class="alert alert-info">
+        Seçmen bilgileri doğru ise <b>Kaydet</b> butonu ile ilgili sandığa görevli atayabilirsiniz.
     </div>
-</form>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="paper-info">
+                <label>Ad</label>
+                <input type="text" class="text-input floating-label" id="name" tabindex="4" value="@Model.Adi" readonly="readonly">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-info">
+                <label>Soyad</label>
+                <input type="text" class="text-input floating-label" id="surname" value="@Model.Soyadi" readonly="readonly">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-info">
+                <label>TC Kimlik No</label>
+                <input type="text" class="text-input floating-label" id="tckNo" value="@(Model.TCKimlikNo)" readonly="readonly">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-info">
+                <label>Pasaport No</label>
+                <input type="text" class="text-input floating-label" id="passport" value="" readonly="readonly">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-info">
+                <label>Cep Telefonu</label>
+                <input type="text" class="text-input floating-label" id="mobilePhone" value="@Model.Telefon" readonly="readonly">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="paper-info">
+                <label>E-posta</label>
+                <input type="text" class="text-input floating-label" id="email" value="" readonly="readonly">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <script>
+        function SaveAssociateMember(boxid, memberType) {
+            var ActionUrl = '@Url.Action("SaveAssociateMember", "Management", new {area = ""})';
+            $.ajax({
+                url: ActionUrl,
+                data: { boxId: boxid, memberId : '@Model.Id', memberType : memberType },
+                type: 'GET',
+                success: function (data) {
+                   if (data == 'True') {
+                       $('#MemberInfo').modal("toggle");
+                   }
+                }
+            });
+        }
+    </script>

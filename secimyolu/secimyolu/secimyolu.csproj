@@ -132,6 +132,7 @@
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\images\akparti-afis.jpg" />
+    <Content Include="Content\images\akparti-afis1.jpg" />
     <Content Include="Content\images\fbLogin.png" />
     <Content Include="Content\images\ic_done_24px.svg" />
     <Content Include="Content\images\ic_remove_24px.svg" />
@@ -341,6 +342,9 @@
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vwCarSearchQuery.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vwPollingBox.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vwServicePassenger.cs">

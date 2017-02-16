@@ -11,10 +11,10 @@ namespace secimyolu.Controllers
     public class ManagementController : BaseController
     {
         // GET: Management
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
         public ActionResult Login()
         {
@@ -101,7 +101,7 @@ namespace secimyolu.Controllers
             var sortDirection = Request["sSortDir_0"];
             regList = OrderClass.OrderBy<vwCarList>(regList, orderingFunction, sortDirection);
             //-------------------------------------------------------------------
-            var data = regList.Skip(param.iDisplayStart).Take(param.iDisplayLength).ToList().Select(r => new[] { r.Id.ToString(), r.CarType, r.PostalCode, r.CityName, r.CountryName, (r.DepartureDate != null ? String.Format("{0:dd/MM/yyyy}", r.DepartureDate) : "")+(r.DepartureHour!=null ? "-"+ r.DepartureHour:""),TinyGridItem(r.DestinationBox), r.ServiceStatus.ToString(), (r.PassengerCount + "/" + (r.Qutoa != null ? r.Qutoa.ToString() : "")), r.IsVoluntaryService == true ? "Gönüllü" : "Yönetici"});
+            var data = regList.Skip(param.iDisplayStart).Take(param.iDisplayLength).ToList().Select(r => new[] { r.Id.ToString(), r.CarType, r.PostalCode, r.CityName, r.CountryName, (r.DepartureDate != null ? String.Format("{0:dd/MM/yyyy}", r.DepartureDate) : "") + (r.DepartureHour != null ? "-" + r.DepartureHour : ""), TinyGridItem(r.DestinationBox), r.ServiceStatus.ToString(), (r.PassengerCount + "/" + (r.Qutoa != null ? r.Qutoa.ToString() : "")), r.IsVoluntaryService == true ? "Gönüllü" : "Yönetici" });
             return Json(new
             {
                 sEcho = param.sEcho,
@@ -325,7 +325,7 @@ namespace secimyolu.Controllers
             return RedirectToAction("CarDetail", new { CarId = oldServicePassenger.ServiceId });
         }
         #endregion
-        
+
         #region Yolcu Sil
         [AuthenticationFilter(UserType = "BSKM")]
         public ActionResult DeletePassenger(int SpId)
@@ -358,14 +358,40 @@ namespace secimyolu.Controllers
 
         public ActionResult BoxDetail(int destinationId)
         {
-            List<PollingBox> boxList = Current.Context.PollingBox.Where(w => w.DestinationId == destinationId).ToList();
+            List<vwPollingBox> boxList = Current.Context.vwPollingBox.Where(w => w.DestinationId == destinationId).ToList();
             return PartialView(boxList);
         }
 
-        public ActionResult AddAssociateMember(int boxId, string tck)
+        public ActionResult AddAssociateMember(string tck)
         {
-            PollingList pollingList = Current.Context.PollingList.FirstOrDefault(f => f.TC == tck);
+            PollingList pollingList = Current.Context.PollingList.FirstOrDefault(f => f.TCKimlikNo == tck);
             return PartialView(pollingList);
+        }
+      
+        public bool SaveAssociateMember(int boxId, int memberId, int memberType = 0)
+        {
+            try
+            {
+                var box = Current.Context.PollingClerk.FirstOrDefault(f => f.BoxId == boxId);
+                if (box == null)
+                {
+                    box = new PollingClerk();
+                    box.BoxId = boxId;
+                }
+                if (memberType == 0) // asıl üye = 0, yedek = 1
+                    box.AssociateMember = memberId;
+                else
+                    box.AssociateMemberSecondary = memberId;
+
+                if (box.Id == 0)
+                    Current.Context.PollingClerk.Add(box);
+                Current.Context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         #endregion
 
@@ -373,15 +399,15 @@ namespace secimyolu.Controllers
         public string GetDestinations(int CountryId, int Selval)
         {
 
-            List<Destination> destinationList = Current.Context.Destination.Where(f=>f.CountryId==CountryId).ToList();
+            List<Destination> destinationList = Current.Context.Destination.Where(f => f.CountryId == CountryId).ToList();
             string optionStr = "<option value=\"-1\">Seçiniz</option>";
             string selStr = "selected=\"selected\"";
-            foreach (var item in destinationList.OrderBy(f=>f.Box))
+            foreach (var item in destinationList.OrderBy(f => f.Box))
             {
                 optionStr += "<option value=\"" + item.Id + "\" " + (Selval == item.Id ? selStr : "") + ">" + item.Box + "</option>";
             }
             return optionStr;
-         
+
         }
 
 

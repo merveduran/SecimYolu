@@ -1,18 +1,19 @@
-﻿@model List<secimyolu.Models.PollingBox>
+﻿@model List<secimyolu.Models.vwPollingBox>
 @{
     ViewBag.Title = "SANDIK BİLGİLERİ";
     Layout = null;
 
-    var dateList = Model.GroupBy(g => g.Date);
+    var dateList = Model.Any() ? Model.GroupBy(g => g.PollingDate) : null;
     var indx = 1;
 }
-    @foreach(var item in dateList)
+@if (Model.Any()) { 
+    foreach(var item in dateList)
     {
         <div class="panel-group" id="accordion@(indx)" role="tablist">
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab">
                     <h4 class="panel-title collapsed" role="tab" role="button" data-toggle="collapse" data-parent="#accordion@(indx)" href="#collapse@(indx)" aria-expanded="true" aria-controls="collapse@(indx)">
-                        <i class="mdi-content-add"></i> @item.Key.Value.ToShortDateString()
+                        <i class="fa fa-calendar"></i> @item.Key.Value.ToShortDateString()
                         @*<span id="countryCount" class="badge pull-right">0</span>*@
                     </h4>
                 </div>
@@ -27,12 +28,12 @@
                                   </tr>
                               </thead>
                               <tbody>
-                                  @foreach (var box in Model.Where(w=> w.Date == item.Key))
+                                  @foreach (var box in Model.Where(w=> w.PollingDate == item.Key))
                                   {
                                       <tr>
                                           <td>@box.BoxNumber</td>
-                                          <td><input type="text" id="inpMember@(box.Id)" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id);}" maxlength="11"/></td>
-                                          <td><input type="text" id="inpMemberSec@(box.Id)" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event)" maxlength="11"/></td>
+                                          <td><input type="text" id="inpMember@(box.Id)" value="@box.Member" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id, 0); }" maxlength="11"/><i class="fa fa-user inputIcon"></i></td>
+                                          <td><input type="text" id="inpMemberSec@(box.Id)" value="@box.MemberSecondary" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id,1);}" maxlength="11"/><i class="fa fa-user inputIcon"></i></td>
                                       </tr>
                                   }
                               </tbody>
@@ -45,21 +46,25 @@
         indx ++;
     }
 
-    <div class="modal fade" id="MemberInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
-                    <h4 class="modal-title" id="">YOLCU BİLGİLERİ</h4>
-                </div>
-                <div class="modal-body" id="MemberInfoArea">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                </div>
+   <div class="modal fade" id="MemberInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Kapat</span></button>
+                <h4 class="modal-title" id="">SEÇMEN BİLGİLERİ</h4>
+            </div>
+            <div class="modal-body" id="MemberInfoArea">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <input type="submit" class="btn" value="Kaydet" style="background-color: #ffa838; border-color: #f6bf01; color: #fff;" onclick="SaveAssociateMember( $('#boxid').val(),$('#memberType').val()); return false;" />
             </div>
         </div>
     </div>
+</div>
+<input type="hidden" id="memberType" />
+<input type="hidden" id="tck" />
+<input type="hidden" id="boxid" />
 <script type="text/javascript">
     function isNumberKey(evt) {
         var charCode = (evt.which) ? evt.which : event.keyCode;
@@ -68,20 +73,47 @@
         return false;
     }
 
-    function AddAssociateMember(tck, boxid) {
-
+    function AddAssociateMember(tck, boxid, type) {
+        $('#memberType').val(type);
+        $('#boxid').val(boxid);
+        $('#tck').val(tck);
+        $('#MemberInfo').modal('show');
     }
 </script>
 
 <script type="text/javascript">
+    $('#MemberInfo')
+        .on('show.bs.modal',
+            function(event) {
+                var tck = $('#tck').val();
+                var boxid = $('#boxid').val();
+                var pollingDate = $('#pollingDate').val();
+                var editUrl = '@Url.Action("AddAssociateMember", "Management", new {Area = ""})';
+                $.ajax({
+                    url: editUrl,
+                    async: false,
+                    data: 'tck=' + tck + '&boxId=' + boxid + '&pollingDate=' + pollingDate,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#MemberInfoArea').html(data);
+                    }
+                });
+            });
+    $('#MemberInfo')
+        .on('hidden.bs.modal',
+            function(event) {
+                $('#MemberInfoArea').html("");
+            });
+</script>
+
+<script type="text/javascript">
         $('#MemberInfo').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var carid = button.data('carid');
-            var editUrl = '@Url.Action("GetPassengerInfo", "Home", new { Area = "" })';
+            var tck = $('#tck').val();
+            var editUrl = '@Url.Action("AddAssociateMember", "Management", new { Area = "" })';
             $.ajax({
                 url: editUrl,
                 async: false,
-                data: 'Id=' + carid,
+                data: 'tck=' + tck,
                 type: 'GET',
                 success: function (data) {
                     $('#MemberInfoArea').html(data);
@@ -92,3 +124,4 @@
             $('#MemberInfoArea').html("");
         });
 </script>
+}
