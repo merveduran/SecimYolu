@@ -1277,3 +1277,56 @@ label {
     float: right !important;
     margin-top: -32px !important;
 }
+
+#FailMessageArea,
+#SuccessMessageArea,
+#ErrorTextDiv,
+#SuccessTextDiv {
+    font-weight: 400;
+    min-width: 410px;
+    background-color: #E7505A;
+    color: #fff;
+    right: 40%;
+    position: absolute;
+    cursor: pointer;
+    display: none;
+    z-index: 999999;
+    text-align: center;
+    top: 300px;
+    opacity: 0;
+}
+
+#SuccessMessageArea,
+#SuccessTextDiv {
+    background-color: #26a1ab !important;
+}
+
+    #SuccessMessageArea .infoSuccess i,
+    #SuccessTextDiv .infoSuccess i {
+        float: left;
+        padding: 20px 10px 20px 10px;
+        background: #0C6971;
+        color: #fff;
+        font-size: 26px;
+        margin-top: 0px;
+        margin-bottom: 1px;
+    }
+
+#FailMessageArea .infoFail i,
+#ErrorTextDiv .infoFail i {
+    float: left;
+    padding: 20px 10px 20px 10px;
+    background: #DA212D;
+    color: #fff;
+    font-size: 26px;
+    margin-top: 0px;
+    margin-bottom: 1px;
+}
+
+#FailMessageArea .text,
+#SuccessMessageArea .text,
+#ErrorTextDiv .text,
+#SuccessTextDiv .text {
+    padding: 15px 5px 15px 5px;
+    margin: auto !important;
+}

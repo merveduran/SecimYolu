@@ -12,11 +12,13 @@ namespace secimyolu.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserCountry
+    public partial class District
     {
         public int Id { get; set; }
-        public Nullable<int> UserId { get; set; }
-        public Nullable<int> CountryId { get; set; }
-        public Nullable<int> DestinationId { get; set; }
+        public Nullable<int> CityRef { get; set; }
+        public Nullable<int> DistrictCode { get; set; }
+        public string Name { get; set; }
+    
+        public virtual City City { get; set; }
     }
 }

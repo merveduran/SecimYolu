@@ -40,6 +40,14 @@
           <Property Name="EnName" Type="nvarchar" MaxLength="150" />
           <Property Name="Status" Type="bit" />
         </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CityCode" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="Id" />
@@ -68,6 +76,7 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="CountryId" Type="int" />
           <Property Name="Box" Type="nvarchar" MaxLength="50" />
           <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DestinationPollingDates">
           <Key>
@@ -77,6 +86,15 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="DestinationId" Type="int" />
           <Property Name="ElectionStartDate" Type="datetime" />
           <Property Name="ElectionEndDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="District">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CityRef" Type="int" />
+          <Property Name="DistrictCode" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Mail">
           <Key>
@@ -124,42 +142,6 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="AssociateMember" Type="int" />
           <Property Name="AssociateMemberSecondary" Type="int" />
         </EntityType>
-        <EntityType Name="PollingList">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TCKimlikNo" Type="nvarchar" MaxLength="255" />
-          <Property Name="Adi" Type="nvarchar" MaxLength="255" />
-          <Property Name="Soyadi" Type="nvarchar" MaxLength="255" />
-          <Property Name="AnaAdi" Type="nvarchar" MaxLength="255" />
-          <Property Name="BabaAdi" Type="nvarchar" MaxLength="255" />
-          <Property Name="Cinsiyet" Type="nvarchar" MaxLength="255" />
-          <Property Name="DogumYeri" Type="nvarchar" MaxLength="255" />
-          <Property Name="DogumYer" Type="nvarchar" MaxLength="255" />
-          <Property Name="DogumTarihi" Type="nvarchar" MaxLength="255" />
-          <Property Name="NufusIl" Type="nvarchar" MaxLength="255" />
-          <Property Name="NufusIlce" Type="nvarchar" MaxLength="255" />
-          <Property Name="Ilce" Type="nvarchar" MaxLength="255" />
-          <Property Name="Mahalle" Type="nvarchar" MaxLength="255" />
-          <Property Name="Sandik_Alani" Type="nvarchar" MaxLength="255" />
-          <Property Name="Sandik" Type="nvarchar" MaxLength="255" />
-          <Property Name="Sandik_Sira" Type="nvarchar" MaxLength="255" />
-          <Property Name="Adres_Genel" Type="nvarchar" MaxLength="255" />
-          <Property Name="Sokak" Type="nvarchar" MaxLength="255" />
-          <Property Name="KapiNo" Type="nvarchar" MaxLength="255" />
-          <Property Name="DaireNo" Type="nvarchar" MaxLength="255" />
-          <Property Name="PostaKodu" Type="nvarchar" MaxLength="255" />
-          <Property Name="Sehir" Type="nvarchar" MaxLength="255" />
-          <Property Name="Eyalet" Type="nvarchar" MaxLength="255" />
-          <Property Name="Ulke" Type="nvarchar" MaxLength="255" />
-          <Property Name="ISOKod" Type="nvarchar" MaxLength="255" />
-          <Property Name="TemsilcilikUlke" Type="nvarchar" MaxLength="255" />
-          <Property Name="Aciklama" Type="nvarchar" MaxLength="255" />
-          <Property Name="Telefon" Type="nvarchar" MaxLength="255" />
-          <Property Name="Longitude" Type="nvarchar" MaxLength="255" />
-          <Property Name="Latitude" Type="nvarchar" MaxLength="255" />
-        </EntityType>
         <EntityType Name="ResetPassword">
           <Key>
             <PropertyRef Name="Id" />
@@ -192,6 +174,15 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="AddUserId" Type="int" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="SKM">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="SKMType" Type="nvarchar" MaxLength="255" />
+          <Property Name="DestinationId" Type="int" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
@@ -207,6 +198,7 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="UserTypeId" Type="int" Nullable="false" />
           <Property Name="Status" Type="bit" Nullable="false" />
           <Property Name="TCNo" Type="nvarchar" MaxLength="11" />
+          <Property Name="VoterId" Type="int" />
         </EntityType>
         <EntityType Name="UserCountry">
           <Key>
@@ -215,6 +207,7 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" />
           <Property Name="CountryId" Type="int" />
+          <Property Name="DestinationId" Type="int" />
         </EntityType>
         <EntityType Name="UserRight">
           <Key>
@@ -231,6 +224,58 @@ warning 6002: The table/view 'SECIMYOLU.dbo.CountryTemp' does not have a primary
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="VoterContact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VoterId" Type="int" />
+          <Property Name="FormatedAddress" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Street" Type="nvarchar" MaxLength="100" />
+          <Property Name="Street_Number" Type="nvarchar" MaxLength="20" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="ApartmentNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Route" Type="nvarchar" MaxLength="100" />
+          <Property Name="Locality" Type="nvarchar" MaxLength="100" />
+          <Property Name="Administrative_Level1" Type="nvarchar" MaxLength="100" />
+          <Property Name="Administrative_Level2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Administrative_Level3" Type="nvarchar" MaxLength="100" />
+          <Property Name="Administrative_Level4" Type="nvarchar" MaxLength="100" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="100" />
+          <Property Name="ISO" Type="nvarchar" MaxLength="20" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsProcess" Type="bit" />
+          <Property Name="ResultText" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="VoterInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ForeignNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="SurName" Type="nvarchar" MaxLength="100" />
+          <Property Name="MotherName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FatherName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Gender" Type="int" />
+          <Property Name="BirthCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="BirthDate" Type="date" />
+          <Property Name="RegisteredCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="RegisteredDistrict" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="VoterRegisteredCity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VoterId" Type="int" />
+          <Property Name="CityRef" Type="int" />
+          <Property Name="DistrictRef" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SECIMYOLU.dbo.vwCarList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -280,8 +325,10 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwPollingBox' does not have a primar
           <Property Name="BoxNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="DestinationId" Type="int" />
           <Property Name="PollingDate" Type="datetime" />
-          <Property Name="Member" Type="nvarchar" MaxLength="255" />
-          <Property Name="MemberSecondary" Type="nvarchar" MaxLength="255" />
+          <Property Name="Member" Type="nvarchar" MaxLength="11" />
+          <Property Name="MemberNameSurname" Type="nvarchar" MaxLength="101" />
+          <Property Name="MemberSecondary" Type="nvarchar" MaxLength="11" />
+          <Property Name="MemberSecondaryNameSurname" Type="nvarchar" MaxLength="101" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SECIMYOLU.dbo.vwServicePassenger' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -331,6 +378,31 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="UserTypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="bit" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SECIMYOLU.dbo.vwVoter' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwVoter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ForeignNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="SurName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_District_City">
+          <End Role="City" Type="Self.City" Multiplicity="0..1" />
+          <End Role="District" Type="Self.District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="District">
+              <PropertyRef Name="CityRef" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Mail_MailStatus">
           <End Role="MailStatus" Type="Self.MailStatus" Multiplicity="0..1" />
           <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
@@ -367,6 +439,30 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_VoterContact_VoterInfo">
+          <End Role="VoterInfo" Type="Self.VoterInfo" Multiplicity="0..1" />
+          <End Role="VoterContact" Type="Self.VoterContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VoterInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VoterContact">
+              <PropertyRef Name="VoterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VoterRegisteredCity_VoterInfo">
+          <End Role="VoterInfo" Type="Self.VoterInfo" Multiplicity="0..1" />
+          <End Role="VoterRegisteredCity" Type="Self.VoterRegisteredCity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VoterInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VoterRegisteredCity">
+              <PropertyRef Name="VoterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="GetRightsOfTheUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p1" Type="int" Mode="In" />
           <ReturnType>
@@ -390,22 +486,27 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
         <EntityContainer Name="ModelsStoreContainer">
           <EntitySet Name="CarService" EntityType="Self.CarService" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarType" EntityType="Self.CarType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Destination" EntityType="Self.Destination" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DestinationPollingDates" EntityType="Self.DestinationPollingDates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Mail" EntityType="Self.Mail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MailError" EntityType="Self.MailError" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MailStatus" EntityType="Self.MailStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PollingBox" EntityType="Self.PollingBox" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PollingClerk" EntityType="Self.PollingClerk" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PollingList" EntityType="Self.PollingList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Right" EntityType="Self.Right" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServicePassenger" EntityType="Self.ServicePassenger" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SKM" EntityType="Self.SKM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserCountry" EntityType="Self.UserCountry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRight" EntityType="Self.UserRight" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VoterContact" EntityType="Self.VoterContact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VoterInfo" EntityType="Self.VoterInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VoterRegisteredCity" EntityType="Self.VoterRegisteredCity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CountryTemp" EntityType="Self.CountryTemp" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [CountryTemp].[Id] AS [Id], 
@@ -451,7 +552,9 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
     [vwPollingBox].[DestinationId] AS [DestinationId], 
     [vwPollingBox].[PollingDate] AS [PollingDate], 
     [vwPollingBox].[Member] AS [Member], 
-    [vwPollingBox].[MemberSecondary] AS [MemberSecondary]
+    [vwPollingBox].[MemberNameSurname] AS [MemberNameSurname], 
+    [vwPollingBox].[MemberSecondary] AS [MemberSecondary], 
+    [vwPollingBox].[MemberSecondaryNameSurname] AS [MemberSecondaryNameSurname]
     FROM [dbo].[vwPollingBox] AS [vwPollingBox]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwServicePassenger" EntityType="Self.vwServicePassenger" store:Type="Views" store:Schema="dbo">
@@ -488,6 +591,20 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
     [vwUserList].[Status] AS [Status]
     FROM [dbo].[vwUserList] AS [vwUserList]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vwVoter" EntityType="Self.vwVoter" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwVoter].[Id] AS [Id], 
+    [vwVoter].[ForeignNumber] AS [ForeignNumber], 
+    [vwVoter].[Name] AS [Name], 
+    [vwVoter].[SurName] AS [SurName], 
+    [vwVoter].[Phone] AS [Phone], 
+    [vwVoter].[Email] AS [Email]
+    FROM [dbo].[vwVoter] AS [vwVoter]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_District_City" Association="Self.FK_District_City">
+            <End Role="City" EntitySet="City" />
+            <End Role="District" EntitySet="District" />
+          </AssociationSet>
           <AssociationSet Name="FK_Mail_MailStatus" Association="Self.FK_Mail_MailStatus">
             <End Role="MailStatus" EntitySet="MailStatus" />
             <End Role="Mail" EntitySet="Mail" />
@@ -500,6 +617,14 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
             <End Role="User" EntitySet="User" />
             <End Role="ResetPassword" EntitySet="ResetPassword" />
           </AssociationSet>
+          <AssociationSet Name="FK_VoterContact_VoterInfo" Association="Self.FK_VoterContact_VoterInfo">
+            <End Role="VoterInfo" EntitySet="VoterInfo" />
+            <End Role="VoterContact" EntitySet="VoterContact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VoterRegisteredCity_VoterInfo" Association="Self.FK_VoterRegisteredCity_VoterInfo">
+            <End Role="VoterInfo" EntitySet="VoterInfo" />
+            <End Role="VoterRegisteredCity" EntitySet="VoterRegisteredCity" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -511,6 +636,32 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
         <ComplexType Name="GetRightsOfTheUserr_Result">
           <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
         </ComplexType>
+        <EntityType Name="CarService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarTypeId" Type="Int32" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="Destination" Type="Int32" />
+          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
+          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Qutoa" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AddUserId" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="DeletedUserId" Type="Int32" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <Property Name="IsVoluntaryService" Type="Boolean" />
+          <Property Name="MapLatitude" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MapLongitude" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="CarType">
           <Key>
             <PropertyRef Name="Id" />
@@ -519,6 +670,15 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="EnName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CityCode" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="District" Relationship="Self.FK_District_City" FromRole="City" ToRole="District" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -537,6 +697,26 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="CountryId" Type="Int32" />
           <Property Name="Box" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DestinationPollingDates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DestinationId" Type="Int32" />
+          <Property Name="ElectionStartDate" Type="DateTime" Precision="3" />
+          <Property Name="ElectionEndDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="District">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CityRef" Type="Int32" />
+          <Property Name="DistrictCode" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="City" Relationship="Self.FK_District_City" FromRole="District" ToRole="City" />
         </EntityType>
         <EntityType Name="Mail">
           <Key>
@@ -570,6 +750,24 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="MailStatus1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Mail" Relationship="Self.FK_Mail_MailStatus" FromRole="MailStatus" ToRole="Mail" />
         </EntityType>
+        <EntityType Name="PollingBox">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BoxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationId" Type="Int32" />
+          <Property Name="PollingDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PollingClerk">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BoxId" Type="Int32" />
+          <Property Name="AssociateMember" Type="Int32" />
+          <Property Name="AssociateMemberSecondary" Type="Int32" />
+        </EntityType>
         <EntityType Name="ResetPassword">
           <Key>
             <PropertyRef Name="Id" />
@@ -580,7 +778,7 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="ExpirationTime" Type="DateTime" Precision="3" />
           <Property Name="IsValid" Type="Boolean" />
           <Property Name="Guid" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_ResetPassword_User" FromRole="ResetPassword" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="Models.FK_ResetPassword_User" FromRole="ResetPassword" ToRole="User" />
         </EntityType>
         <EntityType Name="Right">
           <Key>
@@ -603,30 +801,14 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="AddUserId" Type="Int32" Nullable="false" />
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="User">
+        <EntityType Name="SKM">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SecondName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="GSM" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Boolean" Nullable="false" />
-          <Property Name="TCNo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ResetPassword" Relationship="Self.FK_ResetPassword_User" FromRole="User" ToRole="ResetPassword" />
-        </EntityType>
-        <EntityType Name="UserCountry">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" />
-          <Property Name="CountryId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SKMType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationId" Type="Int32" />
         </EntityType>
         <EntityType Name="UserRight">
           <Key>
@@ -644,6 +826,62 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VoterContact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VoterId" Type="Int32" />
+          <Property Name="FormatedAddress" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Street_Number" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ApartmentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Route" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Locality" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Administrative_Level1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Administrative_Level2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Administrative_Level3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Administrative_Level4" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ISO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VoterInfo" Relationship="Models.FK_VoterContact_VoterInfo" FromRole="VoterContact" ToRole="VoterInfo" />
+          <Property Name="IsProcess" Type="Boolean" />
+          <Property Name="ResultText" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VoterInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ForeignNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SurName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FatherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int32" />
+          <Property Name="BirthCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="DateTime" Precision="0" />
+          <Property Name="RegisteredCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RegisteredDistrict" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VoterContact" Relationship="Models.FK_VoterContact_VoterInfo" FromRole="VoterInfo" ToRole="VoterContact" />
+          <NavigationProperty Name="VoterRegisteredCity" Relationship="Models.FK_VoterRegisteredCity_VoterInfo" FromRole="VoterInfo" ToRole="VoterRegisteredCity" />
+        </EntityType>
+        <EntityType Name="VoterRegisteredCity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VoterId" Type="Int32" />
+          <Property Name="CityRef" Type="Int32" />
+          <Property Name="DistrictRef" Type="Int32" />
+          <NavigationProperty Name="VoterInfo" Relationship="Models.FK_VoterRegisteredCity_VoterInfo" FromRole="VoterRegisteredCity" ToRole="VoterInfo" />
+        </EntityType>
         <EntityType Name="CountryTemp">
           <Key>
             <PropertyRef Name="Id" />
@@ -652,6 +890,31 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="Iso" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="TrName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwCarList">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Qutoa" />
+            <PropertyRef Name="PassengerCount" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="CarType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
+          <Property Name="Qutoa" Type="Int32" Nullable="false" />
+          <Property Name="CountryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Destination" Type="Int32" />
+          <Property Name="ServiceStatus" Type="Int32" />
+          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DestinationBox" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassengerCount" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="AddUserId" Type="Int32" />
+          <Property Name="IsVoluntaryService" Type="Boolean" />
         </EntityType>
         <EntityType Name="vwCarSearchQuery">
           <Key>
@@ -706,6 +969,18 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="UserTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" Nullable="false" />
         </EntityType>
+        <Association Name="FK_District_City">
+          <End Role="City" Type="Self.City" Multiplicity="0..1" />
+          <End Role="District" Type="Self.District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="District">
+              <PropertyRef Name="CityRef" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Mail_MailStatus">
           <End Role="MailStatus" Type="Self.MailStatus" Multiplicity="0..1" />
           <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
@@ -730,9 +1005,124 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="SECIMYOLUEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CarService" EntityType="Self.CarService" />
+          <EntitySet Name="CarType" EntityType="Self.CarType" />
+          <EntitySet Name="City" EntityType="Self.City" />
+          <EntitySet Name="Country" EntityType="Self.Country" />
+          <EntitySet Name="Destination" EntityType="Self.Destination" />
+          <EntitySet Name="DestinationPollingDates" EntityType="Self.DestinationPollingDates" />
+          <EntitySet Name="District" EntityType="Self.District" />
+          <EntitySet Name="Mail" EntityType="Self.Mail" />
+          <EntitySet Name="MailError" EntityType="Self.MailError" />
+          <EntitySet Name="MailStatus" EntityType="Self.MailStatus" />
+          <EntitySet Name="PollingBox" EntityType="Self.PollingBox" />
+          <EntitySet Name="PollingClerk" EntityType="Self.PollingClerk" />
+          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" />
+          <EntitySet Name="Right" EntityType="Self.Right" />
+          <EntitySet Name="ServicePassenger" EntityType="Self.ServicePassenger" />
+          <EntitySet Name="SKM" EntityType="Self.SKM" />
+          <EntitySet Name="UserRight" EntityType="Self.UserRight" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" />
+          <EntitySet Name="VoterContact" EntityType="Self.VoterContact" />
+          <EntitySet Name="VoterInfo" EntityType="Self.VoterInfo" />
+          <EntitySet Name="VoterRegisteredCity" EntityType="Self.VoterRegisteredCity" />
+          <EntitySet Name="CountryTemp" EntityType="Self.CountryTemp" />
+          <EntitySet Name="vwCarList" EntityType="Self.vwCarList" />
+          <EntitySet Name="vwCarSearchQuery" EntityType="Self.vwCarSearchQuery" />
+          <EntitySet Name="vwServicePassenger" EntityType="Self.vwServicePassenger" />
+          <EntitySet Name="vwUserList" EntityType="Self.vwUserList" />
+          <AssociationSet Name="FK_District_City" Association="Self.FK_District_City">
+            <End Role="City" EntitySet="City" />
+            <End Role="District" EntitySet="District" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mail_MailStatus" Association="Self.FK_Mail_MailStatus">
+            <End Role="MailStatus" EntitySet="MailStatus" />
+            <End Role="Mail" EntitySet="Mail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MailError_Mail" Association="Self.FK_MailError_Mail">
+            <End Role="Mail" EntitySet="Mail" />
+            <End Role="MailError" EntitySet="MailError" />
+          </AssociationSet>
+          <FunctionImport Name="GetRightsOfTheUser" IsComposable="true" ReturnType="Collection(Models.GetRightsOfTheUser_Result)">
+          <Parameter Name="p1" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetRightsOfTheUserr" IsComposable="true" ReturnType="Collection(Models.GetRightsOfTheUserr_Result)">
+          <Parameter Name="p1" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="vwVoter" EntityType="Models.vwVoter" />
+          <AssociationSet Name="FK_VoterContact_VoterInfo" Association="Models.FK_VoterContact_VoterInfo">
+            <End Role="VoterInfo" EntitySet="VoterInfo" />
+            <End Role="VoterContact" EntitySet="VoterContact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VoterRegisteredCity_VoterInfo" Association="Models.FK_VoterRegisteredCity_VoterInfo">
+            <End Role="VoterInfo" EntitySet="VoterInfo" />
+            <End Role="VoterRegisteredCity" EntitySet="VoterRegisteredCity" />
+          </AssociationSet>
+          <EntitySet Name="User" EntityType="Models.User" />
+          <AssociationSet Name="FK_ResetPassword_User" Association="Models.FK_ResetPassword_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ResetPassword" EntitySet="ResetPassword" />
+          </AssociationSet>
+          <EntitySet Name="vwPollingBox" EntityType="Models.vwPollingBox" />
+          <EntitySet Name="UserCountry" EntityType="Models.UserCountry" />
+        </EntityContainer>
+        <EntityType Name="vwVoter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ForeignNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SurName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_VoterContact_VoterInfo">
+          <End Type="Models.VoterInfo" Role="VoterInfo" Multiplicity="0..1" />
+          <End Type="Models.VoterContact" Role="VoterContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VoterInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VoterContact">
+              <PropertyRef Name="VoterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VoterRegisteredCity_VoterInfo">
+          <End Type="Models.VoterInfo" Role="VoterInfo" Multiplicity="0..1" />
+          <End Type="Models.VoterRegisteredCity" Role="VoterRegisteredCity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VoterInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VoterRegisteredCity">
+              <PropertyRef Name="VoterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SecondName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="GSM" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="TCNo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="VoterId" Type="Int32" />
+          <NavigationProperty Name="ResetPassword" Relationship="Models.FK_ResetPassword_User" FromRole="User" ToRole="ResetPassword" />
+        </EntityType>
         <Association Name="FK_ResetPassword_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="ResetPassword" Type="Self.ResetPassword" Multiplicity="*" />
+          <End Type="Models.User" Role="User" Multiplicity="0..1" />
+          <End Type="Models.ResetPassword" Role="ResetPassword" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
@@ -742,164 +1132,6 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SECIMYOLUEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CarType" EntityType="Self.CarType" />
-          <EntitySet Name="Country" EntityType="Self.Country" />
-          <EntitySet Name="Destination" EntityType="Self.Destination" />
-          <EntitySet Name="Mail" EntityType="Self.Mail" />
-          <EntitySet Name="MailError" EntityType="Self.MailError" />
-          <EntitySet Name="MailStatus" EntityType="Self.MailStatus" />
-          <EntitySet Name="ResetPassword" EntityType="Self.ResetPassword" />
-          <EntitySet Name="Right" EntityType="Self.Right" />
-          <EntitySet Name="ServicePassenger" EntityType="Self.ServicePassenger" />
-          <EntitySet Name="User" EntityType="Self.User" />
-          <EntitySet Name="UserCountry" EntityType="Self.UserCountry" />
-          <EntitySet Name="UserRight" EntityType="Self.UserRight" />
-          <EntitySet Name="UserType" EntityType="Self.UserType" />
-          <EntitySet Name="CountryTemp" EntityType="Self.CountryTemp" />
-          <EntitySet Name="vwCarSearchQuery" EntityType="Self.vwCarSearchQuery" />
-          <EntitySet Name="vwServicePassenger" EntityType="Self.vwServicePassenger" />
-          <EntitySet Name="vwUserList" EntityType="Self.vwUserList" />
-          <AssociationSet Name="FK_Mail_MailStatus" Association="Self.FK_Mail_MailStatus">
-            <End Role="MailStatus" EntitySet="MailStatus" />
-            <End Role="Mail" EntitySet="Mail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MailError_Mail" Association="Self.FK_MailError_Mail">
-            <End Role="Mail" EntitySet="Mail" />
-            <End Role="MailError" EntitySet="MailError" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ResetPassword_User" Association="Self.FK_ResetPassword_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="ResetPassword" EntitySet="ResetPassword" />
-          </AssociationSet>
-          <FunctionImport Name="GetRightsOfTheUser" IsComposable="true" ReturnType="Collection(Models.GetRightsOfTheUser_Result)">
-          <Parameter Name="p1" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetRightsOfTheUserr" IsComposable="true" ReturnType="Collection(Models.GetRightsOfTheUserr_Result)">
-          <Parameter Name="p1" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <EntitySet Name="CarService" EntityType="Models.CarService" />
-          <EntitySet Name="vwCarList" EntityType="Models.vwCarList" />
-          <EntitySet Name="DestinationPollingDates" EntityType="Models.DestinationPollingDates" />
-          <EntitySet Name="PollingList" EntityType="Models.PollingList" />
-          <EntitySet Name="PollingBox" EntityType="Models.PollingBox" />
-          <EntitySet Name="PollingClerk" EntityType="Models.PollingClerk" />
-          <EntitySet Name="vwPollingBox" EntityType="Models.vwPollingBox" />
-        </EntityContainer>
-        <EntityType Name="CarService">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CarTypeId" Type="Int32" />
-          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CountryId" Type="Int32" />
-          <Property Name="Destination" Type="Int32" />
-          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
-          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Qutoa" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="AddUserId" Type="Int32" />
-          <Property Name="CreationDate" Type="DateTime" Precision="3" />
-          <Property Name="DeletedUserId" Type="Int32" />
-          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
-          <Property Name="IsVoluntaryService" Type="Boolean" />
-          <Property Name="MapLatitude" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="MapLongitude" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="vwCarList">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Qutoa" />
-            <PropertyRef Name="PassengerCount" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="CarType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="DepartureDate" Type="DateTime" Precision="3" />
-          <Property Name="Qutoa" Type="Int32" Nullable="false" />
-          <Property Name="CountryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ResponsibleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ResponsiblePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Destination" Type="Int32" />
-          <Property Name="ServiceStatus" Type="Int32" />
-          <Property Name="DepartureHour" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DestinationBox" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PassengerCount" Type="Int32" Nullable="false" />
-          <Property Name="CountryId" Type="Int32" />
-          <Property Name="AddUserId" Type="Int32" />
-          <Property Name="IsVoluntaryService" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="DestinationPollingDates">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DestinationId" Type="Int32" />
-          <Property Name="ElectionStartDate" Type="DateTime" Precision="3" />
-          <Property Name="ElectionEndDate" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="PollingList">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TCKimlikNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Adi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Soyadi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="AnaAdi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="BabaAdi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Cinsiyet" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DogumYeri" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DogumYer" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DogumTarihi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="NufusIl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="NufusIlce" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Ilce" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Mahalle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Sandik_Alani" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Sandik" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Sandik_Sira" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Adres_Genel" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Sokak" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="KapiNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="DaireNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="PostaKodu" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Sehir" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Eyalet" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Ulke" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ISOKod" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="TemsilcilikUlke" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Aciklama" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Telefon" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Longitude" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="PollingBox">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BoxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DestinationId" Type="Int32" />
-          <Property Name="PollingDate" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="PollingClerk">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BoxId" Type="Int32" />
-          <Property Name="AssociateMember" Type="Int32" />
-          <Property Name="AssociateMemberSecondary" Type="Int32" />
-        </EntityType>
         <EntityType Name="vwPollingBox">
           <Key>
             <PropertyRef Name="Id" />
@@ -908,8 +1140,19 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <Property Name="BoxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="DestinationId" Type="Int32" />
           <Property Name="PollingDate" Type="DateTime" Precision="3" />
-          <Property Name="Member" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="MemberSecondary" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Member" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="MemberNameSurname" Type="String" MaxLength="101" FixedLength="false" Unicode="true" />
+          <Property Name="MemberSecondary" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="MemberSecondaryNameSurname" Type="String" MaxLength="101" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="DestinationId" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -917,6 +1160,33 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="SECIMYOLUEntities">
+          <EntitySetMapping Name="CarService">
+            <EntityTypeMapping TypeName="Models.CarService">
+              <MappingFragment StoreEntitySet="CarService">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CarTypeId" ColumnName="CarTypeId" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
+                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
+                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
+                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="DeletedUserId" ColumnName="DeletedUserId" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+                <ScalarProperty Name="IsVoluntaryService" ColumnName="IsVoluntaryService" />
+                <ScalarProperty Name="MapLatitude" ColumnName="MapLatitude" />
+                <ScalarProperty Name="MapLongitude" ColumnName="MapLongitude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CarType">
             <EntityTypeMapping TypeName="Models.CarType">
               <MappingFragment StoreEntitySet="CarType">
@@ -924,6 +1194,15 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EnName" ColumnName="EnName" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="City">
+            <EntityTypeMapping TypeName="Models.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CityCode" ColumnName="CityCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -944,6 +1223,27 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
                 <ScalarProperty Name="CountryId" ColumnName="CountryId" />
                 <ScalarProperty Name="Box" ColumnName="Box" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DestinationPollingDates">
+            <EntityTypeMapping TypeName="Models.DestinationPollingDates">
+              <MappingFragment StoreEntitySet="DestinationPollingDates">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
+                <ScalarProperty Name="ElectionStartDate" ColumnName="ElectionStartDate" />
+                <ScalarProperty Name="ElectionEndDate" ColumnName="ElectionEndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="District">
+            <EntityTypeMapping TypeName="Models.District">
+              <MappingFragment StoreEntitySet="District">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CityRef" ColumnName="CityRef" />
+                <ScalarProperty Name="DistrictCode" ColumnName="DistrictCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -975,6 +1275,26 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
               <MappingFragment StoreEntitySet="MailStatus">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="MailStatus1" ColumnName="MailStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PollingBox">
+            <EntityTypeMapping TypeName="Models.PollingBox">
+              <MappingFragment StoreEntitySet="PollingBox">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
+                <ScalarProperty Name="PollingDate" ColumnName="PollingDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PollingClerk">
+            <EntityTypeMapping TypeName="Models.PollingClerk">
+              <MappingFragment StoreEntitySet="PollingClerk">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BoxId" ColumnName="BoxId" />
+                <ScalarProperty Name="AssociateMember" ColumnName="AssociateMember" />
+                <ScalarProperty Name="AssociateMemberSecondary" ColumnName="AssociateMemberSecondary" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1013,29 +1333,13 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="User">
-            <EntityTypeMapping TypeName="Models.User">
-              <MappingFragment StoreEntitySet="User">
+          <EntitySetMapping Name="SKM">
+            <EntityTypeMapping TypeName="Models.SKM">
+              <MappingFragment StoreEntitySet="SKM">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
-                <ScalarProperty Name="GSM" ColumnName="GSM" />
-                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TCNo" ColumnName="TCNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserCountry">
-            <EntityTypeMapping TypeName="Models.UserCountry">
-              <MappingFragment StoreEntitySet="UserCountry">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="SKMType" ColumnName="SKMType" />
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1057,6 +1361,61 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="VoterContact">
+            <EntityTypeMapping TypeName="Models.VoterContact">
+              <MappingFragment StoreEntitySet="VoterContact">
+                <ScalarProperty Name="ResultText" ColumnName="ResultText" />
+                <ScalarProperty Name="IsProcess" ColumnName="IsProcess" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="VoterId" ColumnName="VoterId" />
+                <ScalarProperty Name="FormatedAddress" ColumnName="FormatedAddress" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Street_Number" ColumnName="Street_Number" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="ApartmentNumber" ColumnName="ApartmentNumber" />
+                <ScalarProperty Name="Route" ColumnName="Route" />
+                <ScalarProperty Name="Locality" ColumnName="Locality" />
+                <ScalarProperty Name="Administrative_Level1" ColumnName="Administrative_Level1" />
+                <ScalarProperty Name="Administrative_Level2" ColumnName="Administrative_Level2" />
+                <ScalarProperty Name="Administrative_Level3" ColumnName="Administrative_Level3" />
+                <ScalarProperty Name="Administrative_Level4" ColumnName="Administrative_Level4" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="ISO" ColumnName="ISO" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VoterInfo">
+            <EntityTypeMapping TypeName="Models.VoterInfo">
+              <MappingFragment StoreEntitySet="VoterInfo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ForeignNumber" ColumnName="ForeignNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SurName" ColumnName="SurName" />
+                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="BirthCity" ColumnName="BirthCity" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="RegisteredCity" ColumnName="RegisteredCity" />
+                <ScalarProperty Name="RegisteredDistrict" ColumnName="RegisteredDistrict" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VoterRegisteredCity">
+            <EntityTypeMapping TypeName="Models.VoterRegisteredCity">
+              <MappingFragment StoreEntitySet="VoterRegisteredCity">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="VoterId" ColumnName="VoterId" />
+                <ScalarProperty Name="CityRef" ColumnName="CityRef" />
+                <ScalarProperty Name="DistrictRef" ColumnName="DistrictRef" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CountryTemp">
             <EntityTypeMapping TypeName="Models.CountryTemp">
               <MappingFragment StoreEntitySet="CountryTemp">
@@ -1064,6 +1423,30 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
                 <ScalarProperty Name="Iso" ColumnName="Iso" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TrName" ColumnName="TrName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwCarList">
+            <EntityTypeMapping TypeName="Models.vwCarList">
+              <MappingFragment StoreEntitySet="vwCarList">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CarType" ColumnName="CarType" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
+                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
+                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
+                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
+                <ScalarProperty Name="DestinationBox" ColumnName="DestinationBox" />
+                <ScalarProperty Name="PassengerCount" ColumnName="PassengerCount" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
+                <ScalarProperty Name="IsVoluntaryService" ColumnName="IsVoluntaryService" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1129,120 +1512,32 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="CarService">
-            <EntityTypeMapping TypeName="Models.CarService">
-              <MappingFragment StoreEntitySet="CarService">
-                <ScalarProperty Name="MapLongitude" ColumnName="MapLongitude" />
-                <ScalarProperty Name="MapLatitude" ColumnName="MapLatitude" />
-                <ScalarProperty Name="IsVoluntaryService" ColumnName="IsVoluntaryService" />
-                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
-                <ScalarProperty Name="DeletedUserId" ColumnName="DeletedUserId" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
-                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
+          <EntitySetMapping Name="vwVoter">
+            <EntityTypeMapping TypeName="Models.vwVoter">
+              <MappingFragment StoreEntitySet="vwVoter">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="SurName" ColumnName="SurName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ForeignNumber" ColumnName="ForeignNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Models.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="VoterId" ColumnName="VoterId" />
+                <ScalarProperty Name="TCNo" ColumnName="TCNo" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
-                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
-                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
-                <ScalarProperty Name="Destination" ColumnName="Destination" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CityName" ColumnName="CityName" />
-                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
-                <ScalarProperty Name="CarTypeId" ColumnName="CarTypeId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="vwCarList">
-            <EntityTypeMapping TypeName="Models.vwCarList">
-              <MappingFragment StoreEntitySet="vwCarList">
-                <ScalarProperty Name="IsVoluntaryService" ColumnName="IsVoluntaryService" />
-                <ScalarProperty Name="AddUserId" ColumnName="AddUserId" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-                <ScalarProperty Name="PassengerCount" ColumnName="PassengerCount" />
-                <ScalarProperty Name="DestinationBox" ColumnName="DestinationBox" />
-                <ScalarProperty Name="DepartureHour" ColumnName="DepartureHour" />
-                <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
-                <ScalarProperty Name="Destination" ColumnName="Destination" />
-                <ScalarProperty Name="ResponsiblePhone" ColumnName="ResponsiblePhone" />
-                <ScalarProperty Name="ResponsibleName" ColumnName="ResponsibleName" />
-                <ScalarProperty Name="CityName" ColumnName="CityName" />
-                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="Qutoa" ColumnName="Qutoa" />
-                <ScalarProperty Name="DepartureDate" ColumnName="DepartureDate" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CarType" ColumnName="CarType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DestinationPollingDates">
-            <EntityTypeMapping TypeName="Models.DestinationPollingDates">
-              <MappingFragment StoreEntitySet="DestinationPollingDates">
-                <ScalarProperty Name="ElectionEndDate" ColumnName="ElectionEndDate" />
-                <ScalarProperty Name="ElectionStartDate" ColumnName="ElectionStartDate" />
-                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PollingList">
-            <EntityTypeMapping TypeName="Models.PollingList">
-              <MappingFragment StoreEntitySet="PollingList">
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
-                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
-                <ScalarProperty Name="TemsilcilikUlke" ColumnName="TemsilcilikUlke" />
-                <ScalarProperty Name="ISOKod" ColumnName="ISOKod" />
-                <ScalarProperty Name="Ulke" ColumnName="Ulke" />
-                <ScalarProperty Name="Eyalet" ColumnName="Eyalet" />
-                <ScalarProperty Name="Sehir" ColumnName="Sehir" />
-                <ScalarProperty Name="PostaKodu" ColumnName="PostaKodu" />
-                <ScalarProperty Name="DaireNo" ColumnName="DaireNo" />
-                <ScalarProperty Name="KapiNo" ColumnName="KapiNo" />
-                <ScalarProperty Name="Sokak" ColumnName="Sokak" />
-                <ScalarProperty Name="Adres_Genel" ColumnName="Adres_Genel" />
-                <ScalarProperty Name="Sandik_Sira" ColumnName="Sandik_Sira" />
-                <ScalarProperty Name="Sandik" ColumnName="Sandik" />
-                <ScalarProperty Name="Sandik_Alani" ColumnName="Sandik_Alani" />
-                <ScalarProperty Name="Mahalle" ColumnName="Mahalle" />
-                <ScalarProperty Name="Ilce" ColumnName="Ilce" />
-                <ScalarProperty Name="NufusIlce" ColumnName="NufusIlce" />
-                <ScalarProperty Name="NufusIl" ColumnName="NufusIl" />
-                <ScalarProperty Name="DogumTarihi" ColumnName="DogumTarihi" />
-                <ScalarProperty Name="DogumYer" ColumnName="DogumYer" />
-                <ScalarProperty Name="DogumYeri" ColumnName="DogumYeri" />
-                <ScalarProperty Name="Cinsiyet" ColumnName="Cinsiyet" />
-                <ScalarProperty Name="BabaAdi" ColumnName="BabaAdi" />
-                <ScalarProperty Name="AnaAdi" ColumnName="AnaAdi" />
-                <ScalarProperty Name="Soyadi" ColumnName="Soyadi" />
-                <ScalarProperty Name="Adi" ColumnName="Adi" />
-                <ScalarProperty Name="TCKimlikNo" ColumnName="TCKimlikNo" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PollingBox">
-            <EntityTypeMapping TypeName="Models.PollingBox">
-              <MappingFragment StoreEntitySet="PollingBox">
-                <ScalarProperty Name="PollingDate" ColumnName="PollingDate" />
-                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
-                <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PollingClerk">
-            <EntityTypeMapping TypeName="Models.PollingClerk">
-              <MappingFragment StoreEntitySet="PollingClerk">
-                <ScalarProperty Name="AssociateMemberSecondary" ColumnName="AssociateMemberSecondary" />
-                <ScalarProperty Name="AssociateMember" ColumnName="AssociateMember" />
-                <ScalarProperty Name="BoxId" ColumnName="BoxId" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="GSM" ColumnName="GSM" />
+                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1250,11 +1545,23 @@ warning 6002: The table/view 'SECIMYOLU.dbo.vwUserList' does not have a primary 
           <EntitySetMapping Name="vwPollingBox">
             <EntityTypeMapping TypeName="Models.vwPollingBox">
               <MappingFragment StoreEntitySet="vwPollingBox">
+                <ScalarProperty Name="MemberSecondaryNameSurname" ColumnName="MemberSecondaryNameSurname" />
                 <ScalarProperty Name="MemberSecondary" ColumnName="MemberSecondary" />
+                <ScalarProperty Name="MemberNameSurname" ColumnName="MemberNameSurname" />
                 <ScalarProperty Name="Member" ColumnName="Member" />
                 <ScalarProperty Name="PollingDate" ColumnName="PollingDate" />
                 <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
                 <ScalarProperty Name="BoxNumber" ColumnName="BoxNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCountry">
+            <EntityTypeMapping TypeName="Models.UserCountry">
+              <MappingFragment StoreEntitySet="UserCountry">
+                <ScalarProperty Name="DestinationId" ColumnName="DestinationId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

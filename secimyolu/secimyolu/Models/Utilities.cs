@@ -33,7 +33,7 @@ namespace secimyolu.Models
             List<Country> countryList = Current.Context.Country.ToList();
             foreach (var item in countryList.OrderBy(f => f.Name).ToList())
             {
-                optionStr += "<option value=\"" + item.Id + "\" " + (selVal == item.Id ? selStr : " ") + ">" + item.Name + "</option>";
+                optionStr += "<option value=\"" + item.Id + "\" " + (selVal == item.Id ? selStr : " ") + ">" + item.TrName + "</option>";
             }
             return optionStr;
         }

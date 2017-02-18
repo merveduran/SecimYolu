@@ -130,7 +130,33 @@
             //$('.ErrorField').css('display', 'none');
         }, 4000);
     </script>
+    <script>
+        function ErrorText(a) {
+            $('body').append('<div id="ErrorTextDiv" class="ErrorField">\
+                        <div class="infoFail"><i class="glyphicon glyphicon-remove"></i></div>\
+                        <div class="text">'+ a + '</div>\
+                      </div>');
+            $('#ErrorTextDiv').fadeIn("slow");
+            $('#ErrorTextDiv').animate({ "top": 250, "opacity": "1" }, "slow");
 
+            setTimeout(function () {
+                $('.ErrorField').fadeOut("slow");
+            }, 3000);
+        }
+
+        function SuccessText(a) {
+            $('body').append('<div id="SuccessTextDiv" class="ErrorField">\
+                        <div class="infoSuccess"><i class="fa fa-check"></i></div>\
+                        <div class="text">'+ a + '</div>\
+                      </div>');
+            $('#SuccessTextDiv').fadeIn("slow");
+            $('#SuccessTextDiv').animate({ "top": 250, "opacity": "1" }, "slow");
+
+            setTimeout(function () {
+                $('.ErrorField').fadeOut("slow");
+            }, 3000);
+        }
+    </script>
     <div class="container body-content">
         @RenderBody()
     </div>

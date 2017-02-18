@@ -12,11 +12,13 @@ namespace secimyolu.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserCountry
+    public partial class vwVoter
     {
         public int Id { get; set; }
-        public Nullable<int> UserId { get; set; }
-        public Nullable<int> CountryId { get; set; }
-        public Nullable<int> DestinationId { get; set; }
+        public string ForeignNumber { get; set; }
+        public string Name { get; set; }
+        public string SurName { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
     }
 }

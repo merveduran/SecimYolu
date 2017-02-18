@@ -24,6 +24,8 @@ namespace secimyolu.Models
         public string Password { get; set; }
         public int BoxId { get; set; }
         public int MemberType { get; set; }
+        public int VoterId { get; set; }
+        
     }
 
   public class ResetPasswordMail
@@ -46,5 +48,12 @@ namespace secimyolu.Models
         public string Description { get; set; }
         public double Lng { get; set; }
         public double Lat { get; set; }
+    }
+
+
+    public class DestinationBoxModel
+    {
+        public List<vwPollingBox> pollingBox { get; set; }
+        public DateTime pollingDate { get; set; }
     }
 }

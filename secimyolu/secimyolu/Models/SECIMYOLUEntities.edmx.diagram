@@ -4,34 +4,43 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="de4eea2a21a1400c861ef400f9d6f74d" Name="Diagram1">
+      <Diagram DiagramId="00e14ff80ef2422db6c3df02b6e23cf9" Name="Diagram1">
+        <EntityTypeShape EntityType="Models.CarService" Width="1.5" PointX="5.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.CarType" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.Country" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.Destination" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.City" Width="1.5" PointX="5.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.Country" Width="1.5" PointX="7.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.Destination" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.DestinationPollingDates" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.District" Width="1.5" PointX="8" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.Mail" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MailError" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.MailStatus" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.PollingBox" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.PollingClerk" Width="1.5" PointX="10.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Models.ResetPassword" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.Right" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.ServicePassenger" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.User" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.UserCountry" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.UserRight" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.UserType" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.CountryTemp" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.vwCarSearchQuery" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.vwServicePassenger" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.vwUserList" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.Right" Width="1.5" PointX="9.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.ServicePassenger" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.SKM" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.UserRight" Width="1.5" PointX="11.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.UserType" Width="1.5" PointX="11.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.VoterContact" Width="1.5" PointX="11.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.VoterInfo" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.VoterRegisteredCity" Width="1.5" PointX="13.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.CountryTemp" Width="1.5" PointX="4.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.vwCarList" Width="1.5" PointX="13.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.vwCarSearchQuery" Width="1.5" PointX="13.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.vwServicePassenger" Width="1.5" PointX="0.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.vwUserList" Width="1.5" PointX="15.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="Models.FK_District_City" ManuallyRouted="false" />
         <AssociationConnector Association="Models.FK_Mail_MailStatus" ManuallyRouted="false" />
         <AssociationConnector Association="Models.FK_MailError_Mail" ManuallyRouted="false" />
-        <AssociationConnector Association="Models.FK_ResetPassword_User" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="Models.CarService" Width="1.5" PointX="3.375" PointY="13.75" />
-        <EntityTypeShape EntityType="Models.vwCarList" Width="1.5" PointX="5.375" PointY="13.75" />
-        <EntityTypeShape EntityType="Models.DestinationPollingDates" Width="1.5" PointX="12.375" PointY="6.75" />
-        <EntityTypeShape EntityType="Models.PollingList" Width="1.5" PointX="9.375" PointY="13.75" />
-        <EntityTypeShape EntityType="Models.PollingBox" Width="1.5" PointX="13.375" PointY="9.75" />
-        <EntityTypeShape EntityType="Models.PollingClerk" Width="1.5" PointX="11.375" PointY="13.75" />
-        <EntityTypeShape EntityType="Models.vwPollingBox" Width="1.5" PointX="13.375" PointY="12.75" />
+        <EntityTypeShape EntityType="Models.vwVoter" Width="1.5" PointX="7.375" PointY="13.75" />
+        <AssociationConnector Association="Models.FK_VoterContact_VoterInfo" />
+        <AssociationConnector Association="Models.FK_VoterRegisteredCity_VoterInfo" />
+        <EntityTypeShape EntityType="Models.User" Width="1.5" PointX="0.75" PointY="3.875" />
+        <AssociationConnector Association="Models.FK_ResetPassword_User" />
+        <EntityTypeShape EntityType="Models.vwPollingBox" Width="1.5" PointX="3.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Models.UserCountry" Width="1.5" PointX="16.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

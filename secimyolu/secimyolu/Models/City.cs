@@ -12,28 +12,19 @@ namespace secimyolu.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class City
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public City()
         {
-            this.ResetPassword = new HashSet<ResetPassword>();
+            this.District = new HashSet<District>();
         }
     
         public int Id { get; set; }
+        public Nullable<int> CityCode { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; }
-        public string SecondName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string FacebookId { get; set; }
-        public string GSM { get; set; }
-        public int UserTypeId { get; set; }
-        public bool Status { get; set; }
-        public string TCNo { get; set; }
-        public Nullable<int> VoterId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResetPassword> ResetPassword { get; set; }
+        public virtual ICollection<District> District { get; set; }
     }
 }

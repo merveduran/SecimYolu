@@ -27,30 +27,36 @@ namespace secimyolu.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<CarService> CarService { get; set; }
         public virtual DbSet<CarType> CarType { get; set; }
+        public virtual DbSet<City> City { get; set; }
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<Destination> Destination { get; set; }
+        public virtual DbSet<DestinationPollingDates> DestinationPollingDates { get; set; }
+        public virtual DbSet<District> District { get; set; }
         public virtual DbSet<Mail> Mail { get; set; }
         public virtual DbSet<MailError> MailError { get; set; }
         public virtual DbSet<MailStatus> MailStatus { get; set; }
+        public virtual DbSet<PollingBox> PollingBox { get; set; }
+        public virtual DbSet<PollingClerk> PollingClerk { get; set; }
         public virtual DbSet<ResetPassword> ResetPassword { get; set; }
         public virtual DbSet<Right> Right { get; set; }
         public virtual DbSet<ServicePassenger> ServicePassenger { get; set; }
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserCountry> UserCountry { get; set; }
+        public virtual DbSet<SKM> SKM { get; set; }
         public virtual DbSet<UserRight> UserRight { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
+        public virtual DbSet<VoterContact> VoterContact { get; set; }
+        public virtual DbSet<VoterInfo> VoterInfo { get; set; }
+        public virtual DbSet<VoterRegisteredCity> VoterRegisteredCity { get; set; }
         public virtual DbSet<CountryTemp> CountryTemp { get; set; }
+        public virtual DbSet<vwCarList> vwCarList { get; set; }
         public virtual DbSet<vwCarSearchQuery> vwCarSearchQuery { get; set; }
         public virtual DbSet<vwServicePassenger> vwServicePassenger { get; set; }
         public virtual DbSet<vwUserList> vwUserList { get; set; }
-        public virtual DbSet<CarService> CarService { get; set; }
-        public virtual DbSet<vwCarList> vwCarList { get; set; }
-        public virtual DbSet<DestinationPollingDates> DestinationPollingDates { get; set; }
-        public virtual DbSet<PollingList> PollingList { get; set; }
-        public virtual DbSet<PollingBox> PollingBox { get; set; }
-        public virtual DbSet<PollingClerk> PollingClerk { get; set; }
+        public virtual DbSet<vwVoter> vwVoter { get; set; }
+        public virtual DbSet<User> User { get; set; }
         public virtual DbSet<vwPollingBox> vwPollingBox { get; set; }
+        public virtual DbSet<UserCountry> UserCountry { get; set; }
     
         [DbFunction("SECIMYOLUEntities", "GetRightsOfTheUser")]
         public virtual IQueryable<GetRightsOfTheUser_Result> GetRightsOfTheUser(Nullable<int> p1)

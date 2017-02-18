@@ -47,10 +47,9 @@ namespace secimyolu.Controllers
 
             if (UserType == Constants.USER_TYPE_BSKM)
             {
-                List<int> avaibleCountryList = Current.Context.UserCountry.Where(f => f.UserId == Current.getUserId).Select(f => (int)f.CountryId).ToList();
-                regList = regList.Where(f => avaibleCountryList.Contains((int)f.CountryId));
+                List<int> avaibleDestinationList = Current.Context.UserCountry.Where(f => f.UserId == Current.getUserId).Select(f => (int)f.DestinationId).ToList();
+                regList = regList.Where(f => avaibleDestinationList.Contains((int)f.Destination));
             }
-
 
 
             if (!String.IsNullOrEmpty(carType))
@@ -364,16 +363,25 @@ namespace secimyolu.Controllers
 
         public ActionResult AddAssociateMember(string tck)
         {
-            PollingList pollingList = Current.Context.PollingList.FirstOrDefault(f => f.TCKimlikNo == tck);
-            if (pollingList == null)
+            vwVoter voter = Current.Context.vwVoter.FirstOrDefault(f => f.ForeignNumber == tck);
+            if (voter == null)
             {
-                pollingList = new PollingList();
-                pollingList.TCKimlikNo = tck;
+                voter = new vwVoter();
+                voter.ForeignNumber = tck;
             }
-            return PartialView(pollingList);
+            return PartialView(voter);
         }
 
-        public bool SaveAssociateMember(UserBoxModel boxModel)
+        public ActionResult PartialBoxDetail(int boxId)
+        {
+            DestinationBoxModel destinationBox = new DestinationBoxModel();
+            PollingBox pollingBox = Current.Context.PollingBox.FirstOrDefault(w => w.Id == boxId);
+            destinationBox.pollingDate = pollingBox.PollingDate.Value;
+            destinationBox.pollingBox = Current.Context.vwPollingBox.Where(w => w.DestinationId == pollingBox.DestinationId && w.PollingDate == pollingBox.PollingDate).ToList();
+            return PartialView(destinationBox);
+        }
+
+        public string SaveAssociateMember(UserBoxModel boxModel)
         {
             try
             {
@@ -386,10 +394,18 @@ namespace secimyolu.Controllers
                     user.UserTypeId = Constants.USER_TYPE_POLLING_CLERK;
                     user.Name = boxModel.Name;
                     user.Surname = boxModel.Surname;
+                    user.Status = true;
                     Current.Context.User.Add(user);
                 }
                 user.Email = boxModel.Email;
                 user.GSM = boxModel.Gsm;
+                if (boxModel.VoterId != 0)
+                {
+                    VoterContact voterContact = Current.Context.VoterContact.FirstOrDefault(f => f.VoterId == boxModel.VoterId);
+                    voterContact.Email = boxModel.Email;
+                    voterContact.Phone = boxModel.Gsm;
+                    user.VoterId = boxModel.VoterId;
+                }
                 Current.Context.SaveChanges();
 
                 var box = Current.Context.PollingClerk.FirstOrDefault(f => f.BoxId == boxModel.BoxId);
@@ -406,11 +422,11 @@ namespace secimyolu.Controllers
                 if (box.Id == 0)
                     Current.Context.PollingClerk.Add(box);
                 Current.Context.SaveChanges();
-                return true;
+                return (user.Name + " " + user.Surname);
             }
             catch (Exception)
             {
-                return false;
+                return "";
             }
         }
         #endregion

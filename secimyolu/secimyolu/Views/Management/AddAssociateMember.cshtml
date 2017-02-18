@@ -1,7 +1,19 @@
-﻿@model secimyolu.Models.PollingList
+﻿@using secimyolu.Models
+@model vwVoter
 @{
     ViewBag.Title = "GÖREVLİ BİLGİLERİ";
     Layout = null;
+    if (Model.Id == 0)
+    {
+        var user = Current.Context.User.FirstOrDefault(f => f.TCNo == Model.ForeignNumber);
+        if (user!= null)
+        {
+            Model.Name = user.Name;
+            Model.SurName = user.Surname;
+            Model.Email = user.Email;
+            Model.Phone = user.GSM;
+        }
+    }
 }
 
 <script src="~/Scripts/jquery-ui.min.js"></script>
@@ -19,31 +31,31 @@
         <div class="col-md-6">
             <div class="paper-input">
                 <label>Ad</label>
-                <input type="text" class="text-input floating-label" id="name" name="Name" value="@Model.Adi" @(Model.Adi != null ? "readonly": "")>
+                <input type="text" class="text-input floating-label" id="name" value="@Model.Name" @(Model.Name != null ? "readonly": "")>
             </div>
         </div>
         <div class="col-md-6">
             <div class="paper-input">
                 <label>Soyad</label>
-                <input type="text" class="text-input floating-label" id="surname" name="Surname" value="@Model.Soyadi" @(Model.Soyadi != null ? "readonly": "")>
+                <input type="text" class="text-input floating-label" id="surname" value="@Model.SurName" @(Model.SurName != null ? "readonly": "")>
             </div>
         </div>
         <div class="col-md-6">
             <div class="paper-input">
                 <label>TC Kimlik No</label>
-                <input type="text" class="text-input floating-label" id="tckNo" name="TCNo" value="@(Model.TCKimlikNo)" @(Model.TCKimlikNo != null ? "readonly": "")>
+                <input type="text" class="text-input floating-label" id="tckNo" value="@(Model.ForeignNumber)" @(Model.ForeignNumber != null ? "readonly": "")>
             </div>
         </div>
         <div class="col-md-6">
             <div class="paper-input">
                 <label>Cep Telefonu</label>
-                <input type="text" class="text-input floating-label" id="mobilePhone" name="GSM" value="@Model.Telefon" >
+                <input type="text" class="text-input floating-label" id="mobilePhone" value="@(Model.Phone)" >
             </div>
         </div>
         <div class="col-md-6">
             <div class="paper-input">
                 <label>E-posta</label>
-                <input type="text" class="text-input floating-label" id="email" name="Email" value="">
+                <input type="text" class="text-input floating-label" id="email" value="@(Model.Email)">
             </div>
         </div>
         <div class="col-md-6">
@@ -64,6 +76,7 @@
         curUser.Gsm = $('#mobilePhone').val();
         curUser.BoxId = boxid;
         curUser.MemberType = memberType;
+        curUser.VoterId = '@Model.Id';
 
         var ActionUrl = '@Url.Action("SaveAssociateMember", "Management", new {area = ""})';
         $.ajax({
@@ -72,12 +85,31 @@
             data: curUser,
             async: false,
             success: function(data) {
-                if (data == 'True') {
-                    $('#MemberInfo').modal("toggle");
+                if (data != '') {
+                    UpdatePollingBoxInfo(boxid);
+                    //if (memberType == 0) {
+                    //    $('#inpMemberInfo' + boxid).val(data);
+                    //}
+                    //else {
+                    //    $('#inpMemberSecInfo' + boxid).val(data);
+                    //}
+                    SuccessText('Sandık görevlisi başarıyla eklenmiştir.');
+                }
+                else {
+                    ErrorText('Sandık görevlisi eklenirken hata oluştu!');
+                    if (memberType == 0) {
+                        $('#inpMember' + boxid).val('');
+                    }
+                    else {
+                        $('#inpMemberSec' + boxid).val('');
+                    }
+                    
                 }
             }
         });
     }
+
+   
 </script>
 <script type="text/javascript">
     var name1 = new LiveValidation('name', { onlyOnSubmit: 'true', onValid: function () { } });

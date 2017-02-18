@@ -260,6 +260,9 @@
     <Compile Include="Models\CarType.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\City.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Country.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
@@ -272,6 +275,9 @@
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DestinationPollingDates.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\District.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FacebookLoginModel.cs" />
@@ -295,9 +301,6 @@
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PollingClerk.cs">
-      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PollingList.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResetPassword.cs">
@@ -324,6 +327,9 @@
     <Compile Include="Models\ServicePassenger.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SKM.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
@@ -338,6 +344,15 @@
     </Compile>
     <Compile Include="Models\Utilities.cs" />
     <Compile Include="Models\ViewRenderer.cs" />
+    <Compile Include="Models\VoterContact.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VoterInfo.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VoterRegisteredCity.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\vwCarList.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
@@ -351,6 +366,9 @@
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vwUserList.cs">
+      <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vwVoter.cs">
       <DependentUpon>SECIMYOLUEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Wrapper.cs" />
@@ -399,6 +417,7 @@
     <Content Include="Views\Management\BoxList.cshtml" />
     <Content Include="Views\Management\BoxDetail.cshtml" />
     <Content Include="Views\Management\AddAssociateMember.cshtml" />
+    <Content Include="Views\Management\PartialBoxDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -18,5 +18,6 @@ namespace secimyolu.Models
         public Nullable<int> CountryId { get; set; }
         public string Box { get; set; }
         public string Address { get; set; }
+        public string Type { get; set; }
     }
 }

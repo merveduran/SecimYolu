@@ -19,6 +19,8 @@ namespace secimyolu.Models
         public Nullable<int> DestinationId { get; set; }
         public Nullable<System.DateTime> PollingDate { get; set; }
         public string Member { get; set; }
+        public string MemberNameSurname { get; set; }
         public string MemberSecondary { get; set; }
+        public string MemberSecondaryNameSurname { get; set; }
     }
 }

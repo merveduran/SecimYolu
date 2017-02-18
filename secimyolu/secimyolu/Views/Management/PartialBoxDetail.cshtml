@@ -1,0 +1,41 @@
+﻿@using secimyolu.Models
+@model DestinationBoxModel
+@{
+    var pollingdate = Model.pollingDate;
+    var indx = Model.pollingDate.Day;
+}
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab">
+        <h4 class="panel-title collapsed" role="tab" role="button" data-toggle="collapse" data-parent="#accordion@(indx)" href="#collapse@(indx)" aria-expanded="true" aria-controls="collapse@(indx)">
+            <i class="fa fa-calendar"></i> @pollingdate.ToShortDateString()
+            <span id="countryCount" class="badge pull-right">@(Model.pollingBox.Count(c => c.Member != null && c.MemberSecondary != null))/@(Model.pollingBox.Count())</span>
+        </h4>
+    </div>
+    <div id="collapse@(indx)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1" style="height: 0px;">
+        <div class="panel-body">
+            <table class="table table-bordered table-responsive display  dt-responsive nowrap">
+                <thead>
+                    <tr>
+                        <th>Sandık No</th>
+                        <th>Asıl Görevli</th>
+                        <th>Yedek Görevli</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var box in Model.pollingBox.Where(w => w.PollingDate == pollingdate))
+                    {
+                        <tr>
+                            <td>@box.BoxNumber</td>
+                            <td><input type="text" id="inpMember@(box.Id)" value="@box.Member" style="width: 50%" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id, 0,@indx); }" maxlength="11" /><input id="inpMemberInfo@(box.Id)" value="@box.MemberNameSurname" class="text-input floating-label inputIcon" type="text" readonly="readonly" placeholder="Görevli Ad Soyad" /></td>
+                            <td><input type="text" id="inpMemberSec@(box.Id)" value="@box.MemberSecondary" style="width: 50%" class="text-input floating-label" placeholder="TC Kimlik numarası giriniz" onkeypress="return isNumberKey(event);" onkeyup="if (this.value.length == 11) { AddAssociateMember(this.value, @box.Id,1,@indx);}" maxlength="11" /><input id="inpMemberSecInfo@(box.Id)" value="@box.MemberSecondaryNameSurname" class="text-input floating-label inputIcon" type="text" readonly="readonly" placeholder="Görevli Ad Soyad" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+
+
